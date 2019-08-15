@@ -1,0 +1,81 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{7906C327-FC72-4D77-BC0D-8B443BD4BA6F}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>CardReader</RootNamespace>
+    <AssemblyName>CardReader</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>Key.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Commands\Command.cs" />
+    <Compile Include="CardTerminalClient.cs" />
+    <Compile Include="Commands\CommandSet.cs" />
+    <Compile Include="Commands\Destination.cs" />
+    <Compile Include="CT-API\CherrySt2052Api.cs" />
+    <Compile Include="CT-API\Orga6141Api.cs" />
+    <Compile Include="CT-API\ReinertSctCyberJackApi.cs" />
+    <Compile Include="Extensions.cs" />
+    <Compile Include="CT-API\ICardTerminalApi.cs" />
+    <Compile Include="CtReturnCode.cs" />
+    <Compile Include="Results\EgkResult.cs" />
+    <Compile Include="Results\eGK\IGeschuetzteVersichertendaten.cs" />
+    <Compile Include="Results\eGK\IAllgemeineVersicherungsdaten.cs" />
+    <Compile Include="Results\eGK\IPersoenlicheVersichertendaten.cs" />
+    <Compile Include="Results\KvkResult.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Results\eGK\v5.1\AllgemeineVersicherungsdaten.cs" />
+    <Compile Include="Results\eGK\v5.1\GeschuetzteVersichertendaten.cs" />
+    <Compile Include="Results\eGK\v5.1\PersoenlicheVersichertendaten.cs" />
+    <Compile Include="Results\eGK\v5.2\GeschuetzteVersichertendaten.cs" />
+    <Compile Include="Results\eGK\v5.2\PersoenlicheVersichertendaten.cs" />
+    <Compile Include="Results\eGK\v5.2\AllgemeineVersicherungsdaten.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Key.snk" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(SolutionDir)\Release.Build.targets" Condition=" '$(Configuration)' == 'Release' " />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

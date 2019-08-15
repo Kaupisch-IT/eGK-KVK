@@ -1,0 +1,42 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "eGK", "eGK\eGK.csproj", "{B14AC94B-9F1F-4A53-998D-54C8AF08AB2E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CardReader", "CardReader\CardReader.csproj", "{7906C327-FC72-4D77-BC0D-8B443BD4BA6F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|Mixed Platforms = Debug|Mixed Platforms
+		Debug|x86 = Debug|x86
+		Release|Any CPU = Release|Any CPU
+		Release|Mixed Platforms = Release|Mixed Platforms
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7906C327-FC72-4D77-BC0D-8B443BD4BA6F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7906C327-FC72-4D77-BC0D-8B443BD4BA6F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7906C327-FC72-4D77-BC0D-8B443BD4BA6F}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{7906C327-FC72-4D77-BC0D-8B443BD4BA6F}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{7906C327-FC72-4D77-BC0D-8B443BD4BA6F}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{7906C327-FC72-4D77-BC0D-8B443BD4BA6F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7906C327-FC72-4D77-BC0D-8B443BD4BA6F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7906C327-FC72-4D77-BC0D-8B443BD4BA6F}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{7906C327-FC72-4D77-BC0D-8B443BD4BA6F}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{7906C327-FC72-4D77-BC0D-8B443BD4BA6F}.Release|x86.ActiveCfg = Release|Any CPU
+		{B14AC94B-9F1F-4A53-998D-54C8AF08AB2E}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{B14AC94B-9F1F-4A53-998D-54C8AF08AB2E}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{B14AC94B-9F1F-4A53-998D-54C8AF08AB2E}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{B14AC94B-9F1F-4A53-998D-54C8AF08AB2E}.Debug|x86.ActiveCfg = Debug|x86
+		{B14AC94B-9F1F-4A53-998D-54C8AF08AB2E}.Debug|x86.Build.0 = Debug|x86
+		{B14AC94B-9F1F-4A53-998D-54C8AF08AB2E}.Release|Any CPU.ActiveCfg = Release|x86
+		{B14AC94B-9F1F-4A53-998D-54C8AF08AB2E}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{B14AC94B-9F1F-4A53-998D-54C8AF08AB2E}.Release|Mixed Platforms.Build.0 = Release|x86
+		{B14AC94B-9F1F-4A53-998D-54C8AF08AB2E}.Release|x86.ActiveCfg = Release|x86
+		{B14AC94B-9F1F-4A53-998D-54C8AF08AB2E}.Release|x86.Build.0 = Release|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
