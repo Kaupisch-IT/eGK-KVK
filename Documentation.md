@@ -13,13 +13,13 @@ Die `ICardTerminalApi`-Schnittstelle dient dem Aufruf der nativen CT-API-Methode
 ```csharp
 public class CherrySt2052Api : ICardTerminalApi
 {
-   [DllImport("ctpcsc32kv.dll",EntryPoint = "CT_init")](DllImport(_ctpcsc32kv.dll_,EntryPoint-=-_CT_init_))
+   [DllImport("ctpcsc32kv.dll",EntryPoint = "CT_init")](DllImport(ctpcsc32kv.dll,EntryPoint=CT_init))
    private static extern sbyte CT_init(ushort ctn,ushort pn);
 
-   [DllImport("ctpcsc32kv.dll",EntryPoint = "CT_close")](DllImport(_ctpcsc32kv.dll_,EntryPoint-=-_CT_close_))
+   [DllImport("ctpcsc32kv.dll",EntryPoint = "CT_close")](DllImport(ctpcsc32kv.dll,EntryPoint=CT_close))
    private static extern sbyte CT_close(ushort ctn);
 
-   [DllImport("ctpcsc32kv.dll",EntryPoint = "CT_data")](DllImport(_ctpcsc32kv.dll_,EntryPoint-=-_CT_data_))
+   [DllImport("ctpcsc32kv.dll",EntryPoint = "CT_data")](DllImport(ctpcsc32kv.dll,EntryPoint=CT_data))
    private static extern sbyte CT_data(ushort ctn,ref byte dad,ref byte sad,ushort lenc,ref byte command,ref ushort ulenr,ref byte response);
 
 
