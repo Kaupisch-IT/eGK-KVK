@@ -13,13 +13,13 @@ Die `ICardTerminalApi`-Schnittstelle dient dem Aufruf der nativen CT-API-Methode
 ```csharp
 public class CherrySt2052Api : ICardTerminalApi
 {
-   [DllImport("ctpcsc32kv.dll",EntryPoint = "CT_init")](DllImport(ctpcsc32kv.dll,EntryPoint=CT_init))
+   [DllImport("ctpcsc32kv.dll",EntryPoint = "CT_init")]
    private static extern sbyte CT_init(ushort ctn,ushort pn);
 
-   [DllImport("ctpcsc32kv.dll",EntryPoint = "CT_close")](DllImport(ctpcsc32kv.dll,EntryPoint=CT_close))
+   [DllImport("ctpcsc32kv.dll",EntryPoint = "CT_close")]
    private static extern sbyte CT_close(ushort ctn);
 
-   [DllImport("ctpcsc32kv.dll",EntryPoint = "CT_data")](DllImport(ctpcsc32kv.dll,EntryPoint=CT_data))
+   [DllImport("ctpcsc32kv.dll",EntryPoint = "CT_data")]
    private static extern sbyte CT_data(ushort ctn,ref byte dad,ref byte sad,ushort lenc,ref byte command,ref ushort ulenr,ref byte response);
 
 
@@ -61,19 +61,19 @@ Eine recht ausführliche Doku zu den eGK-Kommandos findet sich in [Integrationsa
 
 Die `CommandSet`-Klasse enthält alle verfügbaren Kommandos, deren Ziel und Quelle sowie Bytecode. Ein `Command` wird in der `CardTerminalClient`-Klasse dann folgendermaßen verarbeitet:
 ```csharp
-public byte[]() ExecuteCommand(Command command)
+public byte[] ExecuteCommand(Command command)
 {
    ushort responseLength = ushort.MaxValue;
-   byte[]() response = new byte[responseLength](responseLength);
+   byte[] response = new byte[responseLength];
 
    byte sourceAddress = 2;
    byte destinationAddress = command.DestinationAddress;
-   byte[]() bytecode = command.Bytecode;
+   byte[] bytecode = command.Bytecode;
 
-   CtReturnCode returnCode = (CtReturnCode)this.cardTerminalApi.Data(this.terminalID,ref destinationAddress,ref sourceAddress,(ushort)bytecode.Length,ref bytecode[0](0)(0),ref responseLength,ref response[0](0)(0));
+   CtReturnCode returnCode = (CtReturnCode)this.cardTerminalApi.Data(this.terminalID,ref destinationAddress,ref sourceAddress,(ushort)bytecode.Length,ref bytecode[0],ref responseLength,ref response[0]);
    if (returnCode==CtReturnCode.OK)
    {
-      byte[]() result = new byte[responseLength](responseLength);
+      byte[] result = new byte[responseLength];
       Array.Copy(response,result,responseLength);
       return result;
    }
@@ -127,15 +127,15 @@ Man muss also den Bytecode durchgehen, sich den Tag merken, dann die Länge ermi
 
 Im Code sieht das dann folgendermaßen aus (zu finden in der `KvkResult`-Klasse):
 ```csharp
-private Dictionary<byte,string> Decode(byte[]() bytes)
+private Dictionary<byte,string> Decode(byte[] bytes)
 {
    Dictionary<byte,string> result = new Dictionary<byte,string>();
    Encoding encoding = Encoding.GetEncoding("DIN_66003");
 
-   int start = (bytes[0](0)(0)(0)==0x82 || bytes[0](0)(0)(0)==0x92 || bytes[0](0)(0)(0)==0xa2) ? 30 : 0;
+   int start = (bytes[0]==0x82 || bytes[0]==0x92 || bytes[0]==0xa2) ? 30 : 0;
    for (int i=start;i<bytes.Length-1-2;i++) //letzte 2 Bytes (ReturnCode) auslassen
    {
-      byte tag = bytes[i++](i++);
+      byte tag = bytes[i++];
       int length = this.ReadLength(bytes,ref i);
       string value = encoding.GetString(bytes,i+1,length);
 
@@ -149,13 +149,13 @@ private Dictionary<byte,string> Decode(byte[]() bytes)
    return result;
 }
 
-private int ReadLength(byte[]() bytes,ref int i)
+private int ReadLength(byte[] bytes,ref int i)
 {
-   byte firstByte = bytes[i](i);
+   byte firstByte = bytes[i];
    if (firstByte==0x81) // 128..255
-      return bytes[++i](++i);
+      return bytes[++i];
    else if (firstByte==0x82) // 256..65535
-      return (bytes[++i](++i)(++i)<<8) + bytes[++i](++i)(++i);
+      return (bytes[++i]<<8) + bytes[++i];
    else // 0..127
       return firstByte;
 }
@@ -167,8 +167,8 @@ Die Daten der eGK bestehen aus den Patientendaten (PD) und den Versichertendaten
 ```csharp
 public EgkResult ReadEGK()
 {
-   byte[]() pdData = this.ExecuteCommand(CommandSet.ReadPD).ExpectStatusBytes("9000","6282");
-   byte[]() vdData = this.ExecuteCommand(CommandSet.ReadVD).ExpectStatusBytes("9000","6282");
+   byte[] pdData = this.ExecuteCommand(CommandSet.ReadPD).ExpectStatusBytes("9000","6282");
+   byte[] vdData = this.ExecuteCommand(CommandSet.ReadVD).ExpectStatusBytes("9000","6282");
    return new EgkResult(pdData,vdData);
 }
 ```
@@ -187,11 +187,11 @@ Aufgrund verschiedener Schemata für die auf Gesundheitskarte enthaltenen, XML-k
 
 Implementiert ist dies in der `EgkResult`-Klasse:
 ```csharp
-private void DecodePD(byte[]() bytes)
+private void DecodePD(byte[] bytes)
 {
-	int length = (bytes[0](0)<<8) + bytes[1](1);
+	int length = (bytes[0]<<8) + bytes[1];
 
-	byte[]() compressedData = new byte[length](length);
+	byte[] compressedData = new byte[length];
 	Array.Copy(bytes,2,compressedData,0,compressedData.Length);
 
 	this.PersoenlicheVersichertendaten = this.Decompress<IPersoenlicheVersichertendaten>(compressedData,new Dictionary<string,Type>
@@ -204,12 +204,12 @@ private void DecodePD(byte[]() bytes)
 
 private void DecodeVD(byte[]() bytes)
 {
-	int offsetStartVD = (bytes[0](0)<<8) + bytes[1](1);
-	int offsetEndVD = (bytes[2](2)<<8) + bytes[3](3);
-	int offsetStartGVD = (bytes[4](4)<<8) + bytes[5](5);
-	int offsetEndGVD = (bytes[6](6)<<8) + bytes[7](7);
+	int offsetStartVD = (bytes[0]<<8) + bytes[1];
+	int offsetEndVD = (bytes[2]<<8) + bytes[3];
+	int offsetStartGVD = (bytes[4]<<8) + bytes[5];
+	int offsetEndGVD = (bytes[6]<<8) + bytes[7];
 
-	byte[]() compressedDataVD = new byte[offsetEndVD-offsetStartVD](offsetEndVD-offsetStartVD);
+	byte[] compressedDataVD = new byte[offsetEndVD-offsetStartVD];
 	Array.Copy(bytes,offsetStartVD,compressedDataVD,0,compressedDataVD.Length);
 	this.AllgemeineVersicherungsdaten = this.Decompress<IAllgemeineVersicherungsdaten>(compressedDataVD,new Dictionary<string,Type>
 	{
@@ -217,7 +217,7 @@ private void DecodeVD(byte[]() bytes)
 		{  "5.2.0", typeof(AllgemeineVersicherungsdaten52) },
 	});
 #if false
-	byte[]() compressedDataGVD = new byte[offsetEndGVD-offsetStartGVD](offsetEndGVD-offsetStartGVD);
+	byte[] compressedDataGVD = new byte[offsetEndGVD-offsetStartGVD];
 	Array.Copy(bytes,offsetStartGVD,compressedDataGVD,0,compressedDataGVD.Length);
 	this.GeschuetzteVersichertendaten = this.Decompress<IGeschuetzteVersichertendaten>(compressedDataGVD,new Dictionary<string,Type>
 	{
@@ -228,7 +228,7 @@ private void DecodeVD(byte[]() bytes)
 }
 
 
-private T Decompress<T>(byte[]() compressedData,Dictionary<string,Type> actualTypeMapping)
+private T Decompress<T>(byte[] compressedData,Dictionary<string,Type> actualTypeMapping)
 {
 	using (MemoryStream memoryStream = new MemoryStream(compressedData))
 	using (GZipStream gzipStream = new GZipStream(memoryStream,CompressionMode.Decompress))
@@ -242,7 +242,7 @@ private T Decompress<T>(byte[]() compressedData,Dictionary<string,Type> actualTy
 		if (!actualTypeMapping.ContainsKey(version))
 			throw new NotImplementedException(version);
 
-		XmlSerializer xmlSerializer = new XmlSerializer(actualTypeMapping[version](version));
+		XmlSerializer xmlSerializer = new XmlSerializer(actualTypeMapping[version]);
 		using (TextReader textReader = new StringReader(xmlContent))
 			return (T)xmlSerializer.Deserialize(textReader);
 	}
