@@ -1,6 +1,5 @@
 ﻿using System.Windows;
 using CardReader;
-using CardReader.Commands;
 using CardReader.Results;
 using Newtonsoft.Json;
 
@@ -10,7 +9,7 @@ namespace eGK
 	{
 		static void Main()
 		{
-			using (var cardTerminalClient = new CardTerminalClient("ctacs.dll"))
+			using (CardTerminalClient cardTerminalClient = new CardTerminalClient("ctacs.dll"))
 			{
 				cardTerminalClient.ResetCT();
 
@@ -32,7 +31,7 @@ namespace eGK
 					MessageBox.Show(json);
 				}
 
-				cardTerminalClient.ExecuteCommand(CommandSet.EjectICC).ExpectStatusBytes("9000");
+				cardTerminalClient.EjectICC();
 			}
 		}
 	}
