@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Diagnostics;
 using CardReader.Commands;
 using CardReader.Results;
 
 namespace CardReader
 {
-	public class CardTerminalClient : IDisposable
+	[DebuggerStepThrough]
+	public sealed class CardTerminalClient : IDisposable
 	{
 		private readonly CtApi cardTerminalApi;
 		private readonly ushort terminalID;
@@ -26,6 +28,7 @@ namespace CardReader
 		public void Dispose()
 		{
 			this.cardTerminalApi.Close(this.terminalID);
+			this.cardTerminalApi.Dispose();
 		}
 
 
