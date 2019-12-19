@@ -6,14 +6,14 @@ namespace CardReader
 {
 	public class CardTerminalClient : IDisposable
 	{
-		private readonly ICardTerminalApi cardTerminalApi;
+		private readonly CtApi cardTerminalApi;
 		private readonly ushort terminalID;
 		private readonly ushort portNumber;
 
 
-		public CardTerminalClient(ICardTerminalApi cardTerminalApi,ushort portNumber = 1,ushort terminalID = 1)
+		public CardTerminalClient(string path,ushort portNumber = 1,ushort terminalID = 1)
 		{
-			this.cardTerminalApi = cardTerminalApi;
+			this.cardTerminalApi = new CtApi(path);
 			this.portNumber = portNumber;
 			this.terminalID = terminalID;
 

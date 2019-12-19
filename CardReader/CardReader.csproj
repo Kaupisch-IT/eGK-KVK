@@ -47,11 +47,8 @@
     <Compile Include="CardTerminalClient.cs" />
     <Compile Include="Commands\CommandSet.cs" />
     <Compile Include="Commands\Destination.cs" />
-    <Compile Include="CT-API\CherrySt2052Api.cs" />
-    <Compile Include="CT-API\Orga6141Api.cs" />
-    <Compile Include="CT-API\ReinertSctCyberJackApi.cs" />
+    <Compile Include="CtApi.cs" />
     <Compile Include="Extensions.cs" />
-    <Compile Include="CT-API\ICardTerminalApi.cs" />
     <Compile Include="CtReturnCode.cs" />
     <Compile Include="Results\EgkResult.cs" />
     <Compile Include="Results\eGK\IGeschuetzteVersichertendaten.cs" />

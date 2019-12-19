@@ -10,8 +10,7 @@ namespace eGK
 	{
 		static void Main()
 		{
-			//using (var cardTerminalClient = new CardTerminalClient(new ReinertSctCyberJackApi()))
-			using (var cardTerminalClient = new CardTerminalClient(new CherrySt2052Api()))
+			using (var cardTerminalClient = new CardTerminalClient("ctacs.dll"))
 			{
 				cardTerminalClient.ResetCT();
 
