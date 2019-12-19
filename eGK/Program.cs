@@ -22,7 +22,7 @@ namespace eGK
 					string json = JsonConvert.SerializeObject(kvkResult);
 					MessageBox.Show(json);
 				}
-				else
+				else if (result=="9001" || result=="6201")
 				{
 					cardTerminalClient.SelectEGK();
 					EgkResult egkResult = cardTerminalClient.ReadEGK();

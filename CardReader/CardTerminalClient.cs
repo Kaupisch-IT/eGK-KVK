@@ -61,7 +61,7 @@ namespace CardReader
 
 		public string RequestICC()
 		{
-			return this.ExecuteCommand(CommandSet.RequestICC).ExpectStatusBytes("9000","9001","6201").GetStatusBytes();
+			return this.ExecuteCommand(CommandSet.RequestICC).ExpectStatusBytes("9000","9001","6200","6201").GetStatusBytes();
 		}
 
 		public void SelectKVK()
@@ -92,7 +92,7 @@ namespace CardReader
 
 		public void EjectICC()
 		{
-			this.ExecuteCommand(CommandSet.EjectICC).ExpectStatusBytes("9000","6200");
+			this.ExecuteCommand(CommandSet.EjectICC).ExpectStatusBytes("9000","9001","6200");
 		}		
 	}
 }
