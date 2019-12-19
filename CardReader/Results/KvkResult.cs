@@ -50,62 +50,55 @@ namespace CardReader.Results
 		}
 
 
-		public string this[byte tag]
-		{
-			get
-			{
-				string result;
-				return (this.values.TryGetValue(tag,out result)) ? result : null;
-			}
-		}
+		public string this[byte tag] => (this.values.TryGetValue(tag,out string result)) ? result : null;
 
 
 		public string KrankenKassenName
-		{ get { return this[0x80]; } }
+		 => this[0x80];
 
 		public string KrankenKassenNummer
-		{ get { return this[0x81]; } }
+		 => this[0x81];
 
 		public string VertragskassenNummer
-		{ get { return this[0x8F]; } }
+		 => this[0x8F];
 
 		public string VersichertenNummer
-		{ get { return this[0x82]; } }
+		 => this[0x82];
 
 		public string VersichertenStatus
-		{ get { return this[0x83]; } }
+		 => this[0x83];
 
 		public string StatusErgänzung
-		{ get { return this[0x90]; } }
+		 => this[0x90];
 
 		public string Titel
-		{ get { return this[0x84]; } }
+		 => this[0x84];
 
 		public string VorName
-		{ get { return this[0x85]; } }
+		 => this[0x85];
 
 		public string NamensZusatz_VorsatzWort
-		{ get { return this[0x86]; } }
+		 => this[0x86];
 
 		public string FamilienName
-		{ get { return this[0x87]; } }
+		 => this[0x87];
 
 		public string GeburtsDatum
-		{ get { return this[0x88]; } }
+		 => this[0x88];
 
 		public string StraßenName_HausNummer
-		{ get { return this[0x89]; } }
+		 => this[0x89];
 
 		public string WohnsitzLänderCode
-		{ get { return this[0x8A]; } }
+		 => this[0x8A];
 
 		public string Postleitzahl
-		{ get { return this[0x8B]; } }
+		 => this[0x8B];
 
 		public string OrtsName
-		{ get { return this[0x8C]; } }
+		 => this[0x8C];
 
 		public string GültigkeitsDatum
-		{ get { return this[0x8D]; } }
+		 => this[0x8D];
 	}
 }
