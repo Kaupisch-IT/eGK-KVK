@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
 using System.Text;
@@ -54,15 +55,21 @@ namespace CardReader.Results
 				{  "5.1.0", typeof(AllgemeineVersicherungsdaten51) },
 				{  "5.2.0", typeof(AllgemeineVersicherungsdaten52) },
 			});
-#if false
-			byte[] compressedDataGVD = new byte[offsetEndGVD-offsetStartGVD];
-			Array.Copy(bytes,offsetStartGVD,compressedDataGVD,0,compressedDataGVD.Length);
-			this.GeschuetzteVersichertendaten = this.Decompress<IGeschuetzteVersichertendaten>(compressedDataGVD,new Dictionary<string,Type>
+
+			try
 			{
-				{  "5.1.0", typeof(GeschuetzteVersichertendaten51) },
-				{  "5.2.0", typeof(GeschuetzteVersichertendaten52) },
-			});
-#endif
+				byte[] compressedDataGVD = new byte[offsetEndGVD-offsetStartGVD];
+				Array.Copy(bytes,offsetStartGVD,compressedDataGVD,0,compressedDataGVD.Length);
+				this.GeschuetzteVersichertendaten = this.Decompress<IGeschuetzteVersichertendaten>(compressedDataGVD,new Dictionary<string,Type>
+				{
+					{  "5.1.0", typeof(GeschuetzteVersichertendaten51) },
+					{  "5.2.0", typeof(GeschuetzteVersichertendaten52) },
+				});
+			}
+			catch (Exception exception)
+			{
+				Debug.WriteLine(exception);
+			}
 		}
 
 
