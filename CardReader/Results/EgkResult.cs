@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
 using System.Text;
@@ -49,26 +48,25 @@ namespace CardReader.Results
 			int offsetEndGVD = (bytes[6]<<8) + bytes[7];
 
 			byte[] compressedDataVD = new byte[offsetEndVD-offsetStartVD];
-			Array.Copy(bytes,offsetStartVD,compressedDataVD,0,compressedDataVD.Length);
-			this.AllgemeineVersicherungsdaten = this.Decompress<IAllgemeineVersicherungsdaten>(compressedDataVD,new Dictionary<string,Type>
+			if (compressedDataVD.Length>0)
 			{
-				{  "5.1.0", typeof(AllgemeineVersicherungsdaten51) },
-				{  "5.2.0", typeof(AllgemeineVersicherungsdaten52) },
-			});
+				Array.Copy(bytes,offsetStartVD,compressedDataVD,0,compressedDataVD.Length);
+				this.AllgemeineVersicherungsdaten = this.Decompress<IAllgemeineVersicherungsdaten>(compressedDataVD,new Dictionary<string,Type>
+				{
+					{  "5.1.0", typeof(AllgemeineVersicherungsdaten51) },
+					{  "5.2.0", typeof(AllgemeineVersicherungsdaten52) },
+				});
+			}
 
-			try
+			byte[] compressedDataGVD = new byte[offsetEndGVD-offsetStartGVD];
+			if (compressedDataGVD.Length>0)
 			{
-				byte[] compressedDataGVD = new byte[offsetEndGVD-offsetStartGVD];
 				Array.Copy(bytes,offsetStartGVD,compressedDataGVD,0,compressedDataGVD.Length);
 				this.GeschuetzteVersichertendaten = this.Decompress<IGeschuetzteVersichertendaten>(compressedDataGVD,new Dictionary<string,Type>
 				{
 					{  "5.1.0", typeof(GeschuetzteVersichertendaten51) },
 					{  "5.2.0", typeof(GeschuetzteVersichertendaten52) },
 				});
-			}
-			catch (Exception exception)
-			{
-				Debug.WriteLine(exception);
 			}
 		}
 
