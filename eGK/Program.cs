@@ -13,23 +13,12 @@ namespace eGK
 			{
 				cardTerminalClient.ResetCT();
 
-				string result = cardTerminalClient.RequestICC();
-				if (result=="9000")
-				{
-					cardTerminalClient.SelectKVK();
-					KvkResult kvkResult = cardTerminalClient.ReadKVK();
+				cardTerminalClient.RequestICC();
+				cardTerminalClient.SelectEGK();
+				EgkResult egkResult = cardTerminalClient.ReadEGK();
 
-					string json = JsonConvert.SerializeObject(kvkResult);
-					MessageBox.Show(json);
-				}
-				else if (result=="9001" || result=="6201")
-				{
-					cardTerminalClient.SelectEGK();
-					EgkResult egkResult = cardTerminalClient.ReadEGK();
-
-					string json = JsonConvert.SerializeObject(egkResult);
-					MessageBox.Show(json);
-				}
+				string json = JsonConvert.SerializeObject(egkResult);
+				MessageBox.Show(json);
 
 				cardTerminalClient.EjectICC();
 			}

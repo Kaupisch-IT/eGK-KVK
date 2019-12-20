@@ -48,20 +48,19 @@
     <Compile Include="Commands\CommandSet.cs" />
     <Compile Include="Commands\Destination.cs" />
     <Compile Include="CtApi.cs" />
+    <Compile Include="eGK-Data\IAllgemeineVersicherungsdaten.cs" />
+    <Compile Include="eGK-Data\IGeschuetzteVersichertendaten.cs" />
+    <Compile Include="eGK-Data\IPersoenlicheVersichertendaten.cs" />
+    <Compile Include="eGK-Data\v5.1\AllgemeineVersicherungsdaten.cs" />
+    <Compile Include="eGK-Data\v5.1\GeschuetzteVersichertendaten.cs" />
+    <Compile Include="eGK-Data\v5.1\PersoenlicheVersichertendaten.cs" />
+    <Compile Include="eGK-Data\v5.2\AllgemeineVersicherungsdaten.cs" />
+    <Compile Include="eGK-Data\v5.2\GeschuetzteVersichertendaten.cs" />
+    <Compile Include="eGK-Data\v5.2\PersoenlicheVersichertendaten.cs" />
+    <Compile Include="EgkResult.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="CtReturnCode.cs" />
-    <Compile Include="Results\EgkResult.cs" />
-    <Compile Include="Results\eGK\IGeschuetzteVersichertendaten.cs" />
-    <Compile Include="Results\eGK\IAllgemeineVersicherungsdaten.cs" />
-    <Compile Include="Results\eGK\IPersoenlicheVersichertendaten.cs" />
-    <Compile Include="Results\KvkResult.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Results\eGK\v5.1\AllgemeineVersicherungsdaten.cs" />
-    <Compile Include="Results\eGK\v5.1\GeschuetzteVersichertendaten.cs" />
-    <Compile Include="Results\eGK\v5.1\PersoenlicheVersichertendaten.cs" />
-    <Compile Include="Results\eGK\v5.2\GeschuetzteVersichertendaten.cs" />
-    <Compile Include="Results\eGK\v5.2\PersoenlicheVersichertendaten.cs" />
-    <Compile Include="Results\eGK\v5.2\AllgemeineVersicherungsdaten.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Key.snk" />

@@ -59,20 +59,10 @@ namespace CardReader
 			this.ExecuteCommand(CommandSet.ResetCT).ExpectStatusBytes("9000","9500");
 		}
 
+
 		public string RequestICC()
 		{
 			return this.ExecuteCommand(CommandSet.RequestICC).ExpectStatusBytes("9000","9001","6200","6201").GetStatusBytes();
-		}
-
-		public void SelectKVK()
-		{
-			this.ExecuteCommand(CommandSet.SelectKVK).ExpectStatusBytes("9000");
-		}
-
-		public KvkResult ReadKVK()
-		{
-			var bytes = this.ExecuteCommand(CommandSet.ReadKVK).ExpectStatusBytes("9000","6282");
-			return new KvkResult(bytes);
 		}
 
 
