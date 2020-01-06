@@ -78,17 +78,17 @@ namespace CardReader
 			IntPtr ctInitFunctionHandle = CtApi.GetProcAddress(this.libraryHandle,"CT_init");
 			if (ctInitFunctionHandle == IntPtr.Zero)
 				throw new InvalidOperationException("GetProcAddress CT_init");
-			this.Init = (CT_init)Marshal.GetDelegateForFunctionPointer(ctInitFunctionHandle,typeof(CT_init));
+			this.Init = Marshal.GetDelegateForFunctionPointer<CT_init>(ctInitFunctionHandle);
 
 			IntPtr ctDataFunctionHandle = CtApi.GetProcAddress(this.libraryHandle,"CT_data");
 			if (ctDataFunctionHandle == IntPtr.Zero)
 				throw new InvalidOperationException("GetProcAddress CT_data");
-			this.Data = (CT_data)Marshal.GetDelegateForFunctionPointer(ctDataFunctionHandle,typeof(CT_data));
+			this.Data = Marshal.GetDelegateForFunctionPointer<CT_data>(ctDataFunctionHandle);
 
 			IntPtr ctCloseFunctionHandle = CtApi.GetProcAddress(this.libraryHandle,"CT_close");
 			if (ctCloseFunctionHandle == IntPtr.Zero)
 				throw new InvalidOperationException("GetProcAddress CT_close");
-			this.Close = (CT_close)Marshal.GetDelegateForFunctionPointer(ctCloseFunctionHandle,typeof(CT_close));
+			this.Close = Marshal.GetDelegateForFunctionPointer<CT_close>(ctCloseFunctionHandle);
 		}
 
 
