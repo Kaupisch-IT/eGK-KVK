@@ -17,7 +17,7 @@ namespace eGK
 				cardTerminalClient.SelectEGK();
 				EgkResult egkResult = cardTerminalClient.ReadEGK();
 
-				string json = JsonConvert.SerializeObject(egkResult);
+				string json = JsonConvert.SerializeObject(egkResult,Formatting.Indented);
 				MessageBox.Show(json);
 
 				cardTerminalClient.EjectICC();

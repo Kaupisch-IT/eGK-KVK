@@ -43,10 +43,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Commands\Command.cs" />
+    <Compile Include="CtCommand.cs" />
     <Compile Include="CardTerminalClient.cs" />
-    <Compile Include="Commands\CommandSet.cs" />
-    <Compile Include="Commands\Destination.cs" />
     <Compile Include="CtApi.cs" />
     <Compile Include="eGK-Data\IAllgemeineVersicherungsdaten.cs" />
     <Compile Include="eGK-Data\IGeschuetzteVersichertendaten.cs" />
