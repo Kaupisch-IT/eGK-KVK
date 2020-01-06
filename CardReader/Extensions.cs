@@ -28,6 +28,10 @@ namespace CardReader
 		public static byte[] ExpectStatusBytes(this byte[] bytes,params string[] hexReturnCodes)
 		{
 			string actual = bytes.GetStatusBytes();
+#if DEBUG
+			string methodName = new StackTrace().GetFrame(1).GetMethod().Name;
+			Debug.WriteLine(methodName.PadRight(12)+" "+actual+" ("+String.Join(", ",hexReturnCodes)+")");
+#endif			
 			if (!hexReturnCodes.Contains(actual))
 				throw new Exception("Tatsächlicher Rückgabewert: "+actual+"; Erwartet: "+String.Join(", ",hexReturnCodes));
 
