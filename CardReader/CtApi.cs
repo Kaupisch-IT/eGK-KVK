@@ -28,7 +28,7 @@ namespace CardReader
 		/// <summary>Mit der Funktion CT_init wird die zur Kommunikation benötigte Host-Schnittstelle ausgewählt, an welcher das CardTerminal angeschlossen ist, wobei automatisch die Defaultwerte für die Kommunikation eingestellt werden.</summary>
 		/// <param name="ctn">Logische Card-Terminal Number</param>
 		/// <param name="pn">Port Number der physikalischen	Schnittstelle</param>
-		[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+		[UnmanagedFunctionPointer(CallingConvention.StdCall)]
 		public delegate sbyte CT_init(ushort ctn,ushort pn);
 
 		/// <summary>Die Funktion CT_data dient dem Senden von Chipkarten- bzw.CardTerminal-Kommandos und liefert die Antwort auf das Kommando an das aufrufende Programm zurück.</summary>
@@ -39,13 +39,13 @@ namespace CardReader
 		/// <param name="command">Chipkarten bzw. CT-Kommando</param>
 		/// <param name="ulenr">Übermittlung der max. Puffergröße des response Feldes an die Funktion und Rückgabe der tatsächlichen Länge der Antwort in Byte</param>
 		/// <param name="response">Antwort auf das Kommando</param>
-		[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+		[UnmanagedFunctionPointer(CallingConvention.StdCall)]
 		public delegate sbyte CT_data(ushort ctn,ref byte dad,ref byte sad,ushort lenc,ref byte command,ref ushort ulenr,ref byte response);
 
 		/// <summary>Die Funktion CT_close bildet das Äquivalent zur Funktion CT_init. Sie beendet die Kommunikation zum jeweiligen CardTerminal,welches mit CT_init einer logischen Card-Terminal Number zugewiesen wurde. Die Funktion muss vor Ende des Programms aufgerufen werden, um ggf. belegte Ressourcen freizugeben.</summary>
 		/// <param name="ctn">Logische Card-Terminal Number</param>
 		/// <returns></returns>
-		[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+		[UnmanagedFunctionPointer(CallingConvention.StdCall)]
 		public delegate sbyte CT_close(ushort ctn);
 
 
