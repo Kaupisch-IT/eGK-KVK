@@ -5,11 +5,11 @@ using System.IO.Compression;
 using System.Text;
 using System.Xml;
 using System.Xml.Serialization;
-using CardReader.Results.Egk.AllgemeineVersicherungsdaten;
-using CardReader.Results.Egk.GeschuetzteVersichertendaten;
-using CardReader.Results.Egk.PersoenlicheVersichertendaten;
+using CardReader.Egk.AllgemeineVersicherungsdaten;
+using CardReader.Egk.GeschuetzteVersichertendaten;
+using CardReader.Egk.PersoenlicheVersichertendaten;
 
-namespace CardReader.Results
+namespace CardReader
 {
 	public class EgkResult
 	{

@@ -1,4 +1,4 @@
-﻿namespace CardReader.Results.Egk.PersoenlicheVersichertendaten
+﻿namespace CardReader.Egk.PersoenlicheVersichertendaten
 {
 	public interface IPersoenlicheVersichertendaten
 	{

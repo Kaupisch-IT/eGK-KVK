@@ -15,7 +15,7 @@ namespace CardReader
 		{
 			return Convert.ToString(value,2).PadLeft(8,'0');
 		}
-		
+
 		public static string GetStatusBytes(this byte[] bytes)
 		{
 			if (bytes==null || bytes.Length<2)
@@ -23,18 +23,16 @@ namespace CardReader
 			else
 				return bytes[bytes.Length-2].ToHexString()+bytes[bytes.Length-1].ToHexString();
 		}
-		
-		[DebuggerStepThrough]
+
 		public static byte[] ExpectStatusBytes(this byte[] bytes,params string[] hexReturnCodes)
 		{
-			string actual = bytes.GetStatusBytes();
 #if DEBUG
+			string actual = bytes.GetStatusBytes();
 			string methodName = new StackTrace().GetFrame(1).GetMethod().Name;
-			Debug.WriteLine(methodName.PadRight(12)+" "+actual+" ("+String.Join(", ",hexReturnCodes)+")");
-#endif			
-			if (!hexReturnCodes.Contains(actual))
-				throw new Exception("Tatsächlicher Rückgabewert: "+actual+"; Erwartet: "+String.Join(", ",hexReturnCodes));
+			bool isWarning = !hexReturnCodes.Contains(actual);
 
+			Debug.WriteLine(methodName.PadRight(12)+" "+actual+" (expected: "+String.Join(", ",hexReturnCodes)+")",(isWarning) ? "Warning" : null);
+#endif
 			return bytes;
 		}
 	}

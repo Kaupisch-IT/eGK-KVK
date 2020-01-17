@@ -45,6 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CardResult.cs" />
     <Compile Include="CtCommand.cs" />
     <Compile Include="CardTerminalClient.cs" />
     <Compile Include="CtApi.cs" />
@@ -60,6 +61,7 @@
     <Compile Include="EgkResult.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="CtReturnCode.cs" />
+    <Compile Include="KvkResult.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

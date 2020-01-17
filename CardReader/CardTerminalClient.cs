@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using CardReader.Commands;
-using CardReader.Results;
+using CardReader;
 
 namespace CardReader
 {
@@ -78,7 +78,19 @@ namespace CardReader
 			byte[] vdData = this.ExecuteCommand(CtCommand.ReadVD).ExpectStatusBytes("9000","6282"/*,"6f00"*/);
 			return new EgkResult(pdData,vdData);  
 		}
-		
+
+
+		public void SelectKVK()
+		{
+			this.ExecuteCommand(CtCommand.GetStatusCtmdo).ExpectStatusBytes("9000");
+		}
+
+		public KvkResult ReadKVK()
+		{
+			var bytes = this.ExecuteCommand(CtCommand.ReadKVK).ExpectStatusBytes("9000","6282");
+			return new KvkResult(bytes);
+		}
+
 
 		public void EjectICC()
 		{

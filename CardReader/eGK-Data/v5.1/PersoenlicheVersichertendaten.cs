@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Xml.Serialization;
-using CardReader.Results.Egk.PersoenlicheVersichertendaten;
+using CardReader.Egk.PersoenlicheVersichertendaten;
 
-namespace CardReader.Results.Egk.PersoenlicheVersichertendaten
+namespace CardReader.Egk.PersoenlicheVersichertendaten
 {
 	[Serializable]
 	[XmlType(AnonymousType = true,Namespace = "http://ws.gematik.de/fa/vsds/UC_PersoenlicheVersichertendatenXML/v5.1")]

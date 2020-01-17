@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Xml.Serialization;
-using CardReader.Results.Egk.GeschuetzteVersichertendaten;
+using CardReader.Egk.GeschuetzteVersichertendaten;
 
-namespace CardReader.Results.Egk.GeschuetzteVersichertendaten
+namespace CardReader.Egk.GeschuetzteVersichertendaten
 {
 	[Serializable]
 	[XmlType(AnonymousType = true,Namespace = "http://ws.gematik.de/fa/vsdm/vsd/v5.2")]

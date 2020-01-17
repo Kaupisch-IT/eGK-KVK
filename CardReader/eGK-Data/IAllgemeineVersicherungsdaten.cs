@@ -1,4 +1,4 @@
-﻿namespace CardReader.Results.Egk.AllgemeineVersicherungsdaten
+﻿namespace CardReader.Egk.AllgemeineVersicherungsdaten
 {
 	public interface IAllgemeineVersicherungsdaten
 	{
