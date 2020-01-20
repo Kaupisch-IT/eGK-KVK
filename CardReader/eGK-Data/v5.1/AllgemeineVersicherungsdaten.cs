@@ -104,9 +104,16 @@ namespace CardReader.Egk.AllgemeineVersicherungsdaten
 	[XmlType(AnonymousType = true,Namespace = "http://ws.gematik.de/fa/vsds/UC_AllgemeineVersicherungsdatenXML/v5.1")]
 	public class Zusatzinfos51 : IZusatzinfos
 	{
-		[XmlElement("ZusatzinfosGKV",typeof(ZusatzinfosGKV51))]
-		[XmlElement("ZusatzinfosPKV",typeof(ZusatzinfosPKV51))]
-		public object Item { get; set; }
+		/// <summary> Diese Datenobjekte werden ausschließlich für GKV-Versicherte realisiert. </summary>
+		[XmlElement("ZusatzinfosGKV")]
+		public ZusatzinfosGKV51 ZusatzinfosGKV { get; set; }
+
+		/// <summary> Diese Datenobjekte werden ausschließlich für PKV-Versicherte realisiert. </summary>
+		[XmlElement("ZusatzinfosPKV")]
+		public ZusatzinfosPKV51 ZusatzinfosPKV { get; set; }
+
+
+		IZusatzinfosGKV IZusatzinfos.ZusatzinfosGKV { get { return this.ZusatzinfosGKV; } }
 	}
 
 

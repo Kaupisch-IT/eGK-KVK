@@ -110,7 +110,7 @@ namespace CardReader.Egk.AllgemeineVersicherungsdaten
 		public ZusatzinfosGKV52 ZusatzinfosGKV { get; set; }
 
 
-		object IZusatzinfos.Item { get { return this.ZusatzinfosGKV; } }
+		IZusatzinfosGKV IZusatzinfos.ZusatzinfosGKV { get { return this.ZusatzinfosGKV; } }
 	}
 
 

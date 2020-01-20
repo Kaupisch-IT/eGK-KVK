@@ -62,7 +62,7 @@
 
 	public interface IZusatzinfos
 	{
-		object Item { get; }
+		IZusatzinfosGKV ZusatzinfosGKV { get; }
 	}
 
 
