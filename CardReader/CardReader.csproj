@@ -49,12 +49,6 @@
     <Compile Include="CtCommand.cs" />
     <Compile Include="CardTerminalClient.cs" />
     <Compile Include="CtApi.cs" />
-    <Compile Include="eGK-Data\IAllgemeineVersicherungsdaten.cs" />
-    <Compile Include="eGK-Data\IGeschuetzteVersichertendaten.cs" />
-    <Compile Include="eGK-Data\IPersoenlicheVersichertendaten.cs" />
-    <Compile Include="eGK-Data\v5.1\AllgemeineVersicherungsdaten.cs" />
-    <Compile Include="eGK-Data\v5.1\GeschuetzteVersichertendaten.cs" />
-    <Compile Include="eGK-Data\v5.1\PersoenlicheVersichertendaten.cs" />
     <Compile Include="eGK-Data\v5.2\AllgemeineVersicherungsdaten.cs" />
     <Compile Include="eGK-Data\v5.2\GeschuetzteVersichertendaten.cs" />
     <Compile Include="eGK-Data\v5.2\PersoenlicheVersichertendaten.cs" />

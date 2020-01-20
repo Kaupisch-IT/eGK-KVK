@@ -5,28 +5,25 @@ using System.Xml.Serialization;
 namespace CardReader.Egk.PersoenlicheVersichertendaten
 {
 	[Serializable]
-	[XmlType(AnonymousType = true,Namespace = "http://ws.gematik.de/fa/vsdm/vsd/v5.2")]
-	[XmlRoot("UC_PersoenlicheVersichertendatenXML",Namespace = "http://ws.gematik.de/fa/vsdm/vsd/v5.2",IsNullable = false)]
+	[XmlType(AnonymousType = true)]
+	[XmlRoot("UC_PersoenlicheVersichertendatenXML",IsNullable = false)]
 	[DebuggerDisplay("{Versicherter.Versicherten_ID} {Versicherter.Person.Vorname} {Versicherter.Person.Nachname}")]
-	public class PersoenlicheVersichertendaten52 : IPersoenlicheVersichertendaten
+	public class PersoenlicheVersichertendaten
 	{
 		/// <summary> Die Versicherten-ID ist der 10-stellige unveränderliche Teil der 30-stelligen Krankenversichertennummer. </summary>
 		[XmlElement("Versicherter")]
-		public Versicherter52 Versicherter { get; set; }
+		public Versicherter Versicherter { get; set; }
 
 		[XmlAttribute("CDM_VERSION")]
 		public string CDM_VERSION { get; set; }
-
-
-		IVersicherter IPersoenlicheVersichertendaten.Versicherter { get { return this.Versicherter; } }
 	}
 
 
 
 	[Serializable]
-	[XmlType(AnonymousType = true,Namespace = "http://ws.gematik.de/fa/vsdm/vsd/v5.2")]
+	[XmlType(AnonymousType = true)]
 	[DebuggerDisplay("{Versicherten_ID} {Person.Vorname} {Person.Nachname}")]
-	public class Versicherter52 : IVersicherter
+	public class Versicherter
 	{
 		/// <summary> Die Versicherten-ID ist der 10-stellige unveränderliche Teil der 30-stelligen Krankenversichertennummer. </summary>
 		[XmlElement("Versicherten_ID")]
@@ -34,18 +31,15 @@ namespace CardReader.Egk.PersoenlicheVersichertendaten
 
 		/// <summary> Gibt das Geburtsdatum des Versicherten in dem Format "YYYYMMDD" (ISO-8601)  an. </summary>
 		[XmlElement("Person")]
-		public Person52 Person { get; set; }
-
-
-		IPerson IVersicherter.Person { get { return this.Person; } }
+		public Person Person { get; set; }
 	}
 
 
 
 	[Serializable]
-	[XmlType(AnonymousType = true,Namespace = "http://ws.gematik.de/fa/vsdm/vsd/v5.2")]
+	[XmlType(AnonymousType = true)]
 	[DebuggerDisplay("{Vorname} {Nachname}")]
-	public class Person52 : IPerson
+	public class Person
 	{
 		/// <summary> Gibt das Geburtsdatum des Versicherten in dem Format "YYYYMMDD" (ISO-8601)  an. </summary>
 		[XmlElement("Geburtsdatum")]
@@ -83,23 +77,19 @@ namespace CardReader.Egk.PersoenlicheVersichertendaten
 
 		/// <summary> Gibt die Postleitzahl der Strassen- oder Postfachadresse an. </summary>
 		[XmlElement("PostfachAdresse")]
-		public PostfachAdresse52 PostfachAdresse { get; set; }
+		public PostfachAdresse PostfachAdresse { get; set; }
 
 		/// <summary> Gibt die Postleitzahl der Strassen- oder Postfachadresse an. </summary>
 		[XmlElement("StrassenAdresse")]
-		public StrassenAdresse52 StrassenAdresse { get; set; }
-
-
-		IPostfachAdresse IPerson.PostfachAdresse { get { return this.PostfachAdresse; } }
-		IStrassenAdresse IPerson.StrassenAdresse { get { return this.StrassenAdresse; } }
+		public StrassenAdresse StrassenAdresse { get; set; }
 	}
 
 
 
 	[Serializable]
-	[XmlType(AnonymousType = true,Namespace = "http://ws.gematik.de/fa/vsdm/vsd/v5.2")]
+	[XmlType(AnonymousType = true)]
 	[DebuggerDisplay("{Postfach} {Land.Wohnsitzlaendercode}-{Postleitzahl} {Ort}")]
-	public class PostfachAdresse52 : IPostfachAdresse
+	public class PostfachAdresse
 	{
 		/// <summary> Gibt die Postleitzahl der Strassen- oder Postfachadresse an. </summary>
 		[XmlElement("Postleitzahl")]
@@ -114,24 +104,19 @@ namespace CardReader.Egk.PersoenlicheVersichertendaten
 		public string Postfach { get; set; }
 
 		/// <summary>
-		/// Versicherter:
-		/// Das Land, in dem der Versicherte seinen Wohnsitz hat gem.  Anlage 8 (Staatsangehörigkeit und Länder-kennzeichen für Auslandsanschriften) V. 2.27 vom 8.11.06 (siehe Fachkonzept VSDM)
-		/// Kostenträger:
-		/// Der Kostenträgerländercode vom Kostenträger des Versicherten gem.  Anlage 8 (Staatsangehörigkeit und Länderkennzeichen für Auslandsanschriften) V. 2.27 vom 8.11.06 (siehe Fachkonzept VSDM).
+		/// Versicherter: Das Land, in dem der Versicherte seinen Wohnsitz hat gem.  Anlage 8 (Staatsangehörigkeit und Länder-kennzeichen für Auslandsanschriften) V. 2.27 vom 8.11.06 (siehe Fachkonzept VSDM)
+		/// Kostenträger: Der Kostenträgerländercode vom Kostenträger des Versicherten gem.  Anlage 8 (Staatsangehörigkeit und Länderkennzeichen für Auslandsanschriften) V. 2.27 vom 8.11.06 (siehe Fachkonzept VSDM).
 		/// </summary>
 		[XmlElement("Land")]
-		public Land52 Land { get; set; }
-
-
-		ILand IPostfachAdresse.Land { get { return this.Land; } }
+		public Land Land { get; set; }
 	}
 
 
 
 	[Serializable]
-	[XmlType(AnonymousType = true,Namespace = "http://ws.gematik.de/fa/vsdm/vsd/v5.2")]
+	[XmlType(AnonymousType = true)]
 	[DebuggerDisplay("{Strasse} {Hausnummer} {Anschriftenzusatz} {Land.Wohnsitzlaendercode}-{Postleitzahl} {Ort}")]
-	public class StrassenAdresse52 : IStrassenAdresse
+	public class StrassenAdresse
 	{
 		/// <summary> Gibt die Postleitzahl der Strassen- oder Postfachadresse an. </summary>
 		[XmlElement("Postleitzahl")]
@@ -142,13 +127,11 @@ namespace CardReader.Egk.PersoenlicheVersichertendaten
 		public string Ort { get; set; }
 
 		/// <summary>
-		/// Versicherter:
-		/// Das Land, in dem der Versicherte seinen Wohnsitz hat gem.  Anlage 8 (Staatsangehörigkeit und Länder-kennzeichen für Auslandsanschriften) V. 2.27 vom 8.11.06 (siehe Fachkonzept VSDM)
-		/// Kostenträger:
-		/// Der Kostenträgerländercode vom Kostenträger des Versicherten gem.  Anlage 8 (Staatsangehörigkeit und Länderkennzeichen für Auslandsanschriften) V. 2.27 vom 8.11.06 (siehe Fachkonzept VSDM).
+		/// Versicherter: Das Land, in dem der Versicherte seinen Wohnsitz hat gem.  Anlage 8 (Staatsangehörigkeit und Länder-kennzeichen für Auslandsanschriften) V. 2.27 vom 8.11.06 (siehe Fachkonzept VSDM)
+		/// Kostenträger: Der Kostenträgerländercode vom Kostenträger des Versicherten gem.  Anlage 8 (Staatsangehörigkeit und Länderkennzeichen für Auslandsanschriften) V. 2.27 vom 8.11.06 (siehe Fachkonzept VSDM).
 		/// </summary>
 		[XmlElement("Land")]
-		public Land52 Land { get; set; }
+		public Land Land { get; set; }
 
 		/// <summary> Gibt den Namen der Strasse der Person an. </summary>
 		[XmlElement("Strasse")]
@@ -161,17 +144,14 @@ namespace CardReader.Egk.PersoenlicheVersichertendaten
 		/// <summary> Gibt die relevanten Zusätze zur Anschrift an. </summary>
 		[XmlElement("Anschriftenzusatz")]
 		public string Anschriftenzusatz { get; set; }
-
-
-		ILand IStrassenAdresse.Land { get { return this.Land; } }
 	}
 
 
 
 	[Serializable]
-	[XmlType(Namespace = "http://ws.gematik.de/fa/vsdm/vsd/v5.2")]
+	[XmlType(AnonymousType = true)]
 	[DebuggerDisplay("{Wohnsitzlaendercode}")]
-	public class Land52 : ILand
+	public class Land
 	{
 		/// <summary> Gibt das Land zu der Strassen- oder Postfachadresse an (siehe Fachkonzept VSDM). </summary>
 		[XmlElement("Wohnsitzlaendercode")]

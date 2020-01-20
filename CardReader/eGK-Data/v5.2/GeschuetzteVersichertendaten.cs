@@ -4,16 +4,26 @@ using System.Xml.Serialization;
 namespace CardReader.Egk.GeschuetzteVersichertendaten
 {
 	[Serializable]
-	[XmlType(AnonymousType = true,Namespace = "http://ws.gematik.de/fa/vsdm/vsd/v5.2")]
-	[XmlRoot("UC_GeschuetzteVersichertendatenXML",Namespace = "http://ws.gematik.de/fa/vsdm/vsd/v5.2",IsNullable = false)]
-	public class GeschuetzteVersichertendaten52 : IGeschuetzteVersichertendaten
+	[XmlType(AnonymousType = true)]
+	[XmlRoot("UC_GeschuetzteVersichertendatenXML",IsNullable = false)]
+	public class GeschuetzteVersichertendaten
 	{
 		/// <summary>
 		/// Gibt an, ob für den Versicherten eine Befreiung nach § 62 SGB V vorliegt.
 		/// Dieses Datenfeld ist besonders schützenswert und daher nicht frei auslesbar, sondern nur berechtigten Personen zugänglich.
 		/// </summary>
 		[XmlElement("Zuzahlungsstatus")]
-		public Zuzahlungsstatus52 Zuzahlungsstatus { get; set; }
+		public Zuzahlungsstatus Zuzahlungsstatus { get; set; }
+
+
+		/// <summary> Gibt die Zugehörigkeit des Versicherten zu einer besonderen Personengruppe an. (nur v5.1)</summary>
+		[XmlElement("Besondere_Personengruppe")]
+		public string BesonderePersonengruppe51 { get; set; }
+
+		/// <summary> Gibt die Zugehörigkeit des Versicherten zu einer besonderen Personengruppe an. (nur v5.2)</summary>
+		[XmlElement("BesonderePersonengruppe",DataType = "integer")]
+		public string BesonderePersonengruppe52 { get; set; }
+
 
 		/// <summary> 
 		/// Gibt die Zugehoerigkeit des Versicherten zu einer besonderen Personengruppe an. Die Kennzeichnung erfolgt gemaess der Schluesseltabelle.
@@ -23,12 +33,12 @@ namespace CardReader.Egk.GeschuetzteVersichertendaten
 		/// Inland, Abrechnung nach Aufwand, 
 		/// 8 = SVA-Kennzeichnung, pauschal,
 		/// 9 = Empfänger von Gesundheitsleistungen nach §§ 4 und 6 des Asylbewerberleistungsgesetzes(AsylbLG). 
+		/// (nur v5.2)
 		/// </summary>
-		[XmlElement("BesonderePersonengruppe",DataType = "integer")]
-		public string BesonderePersonengruppe { get; set; }
+		public string BesonderePersonengruppe => this.BesonderePersonengruppe51 ?? this.BesonderePersonengruppe52;
 
 		/// <summary> Gibt die Teilnahme des Versicherten an einem Disease Management Program an. Die Kennzeichnung erfolgt gemäß der Schlüsseltabelle. </summary>
-		[XmlElement("DMP_Kennzeichnung",DataType = "integer")]
+		[XmlElement("DMP_Kennzeichnung")]
 		public string DMP_Kennzeichnung { get; set; }
 
 		/// <summary> 
@@ -38,31 +48,30 @@ namespace CardReader.Egk.GeschuetzteVersichertendaten
 		/// 1 = aerztlicher Selektivvertrag liegt vor
 		/// 0 = aerztlicher Selektivvertrag liegt nicht vor
 		/// 9 = aerztliches Selektivvertragskennzeichen wird nicht genutzt
+		/// (nur v5.2)
 		/// </summary>
 		[XmlElement("Selektivvertraege")]
-		public Selektivvertraege52 Selektivvertraege { get; set; }
+		public Selektivvertraege Selektivvertraege { get; set; }
 
 		/// <summary> 
 		/// Dieses Feld dient ausschließlich zur Angabe des ruhenden Leistungsanpruchs nach § 16 Abs. 3a und § 16 Abs. 1 bis 3 SGB V.
 		/// Mögliche Ausprägungen des ruhenden Leistungsanspruchs sind:
 		/// 1 = vollständig
 		/// 2 = eingeschränkt
+		/// (nur v5.2)
 		/// </summary>
 		[XmlElement("RuhenderLeistungsanspruch")]
-		public RuhenderLeistungsanspruch52 RuhenderLeistungsanspruch { get; set; }
+		public RuhenderLeistungsanspruch RuhenderLeistungsanspruch { get; set; }
 
 		[XmlAttribute("CDM_VERSION")]
 		public string CDM_VERSION { get; set; }
-
-
-		IZuzahlungsstatus IGeschuetzteVersichertendaten.Zuzahlungsstatus { get { return this.Zuzahlungsstatus; } }
 	}
 
 
 
 	[Serializable]
-	[XmlType(AnonymousType = true,Namespace = "http://ws.gematik.de/fa/vsdm/vsd/v5.2")]
-	public class Zuzahlungsstatus52 : IZuzahlungsstatus
+	[XmlType(AnonymousType = true)]
+	public class Zuzahlungsstatus
 	{
 		/// <summary>
 		/// Gibt an, ob für den Versicherten eine Befreiung nach § 62 SGB V vorliegt.
@@ -80,10 +89,10 @@ namespace CardReader.Egk.GeschuetzteVersichertendaten
 	}
 
 
-
+	/// <summary> (nur v5.2) </summary>
 	[Serializable]
-	[XmlType(AnonymousType = true,Namespace = "http://ws.gematik.de/fa/vsdm/vsd/v5.2")]
-	public class Selektivvertraege52
+	[XmlType(AnonymousType = true)]
+	public class Selektivvertraege
 	{
 		/// <summary> 
 		/// Gibt an, ob fuer den Versicherten ein aerztlicher Selektivvertrag vorliegt.
@@ -126,10 +135,10 @@ namespace CardReader.Egk.GeschuetzteVersichertendaten
 	}
 
 
-
+	/// <summary> (nur v5.2) </summary>
 	[Serializable]
-	[XmlType(AnonymousType = true,Namespace = "http://ws.gematik.de/fa/vsdm/vsd/v5.2")]
-	public class RuhenderLeistungsanspruch52
+	[XmlType(AnonymousType = true)]
+	public class RuhenderLeistungsanspruch
 	{
 		/// <summary>
 		/// Gibt den Beginn des Versicherungsschutzes (hier: Leistungsanspruch) des Versicherten bei dem unter Klasse Kostenträger angegebenen Kostenträger an. 
