@@ -51,14 +51,14 @@ namespace CardReader.Egk.AllgemeineVersicherungsdaten
 		public string Beginn { get; set; }
 
 		/// <summary>
-		/// Gibt das Ende des Versicherungsschutzes (hier: Leistungsanspruch) des Ver-sicherten bei dem unter Klasse Kostenträger angegebenen Kostenträger an. 
+		/// Gibt das Ende des Versicherungsschutzes (hier: Leistungsanspruch) des Versicherten bei dem unter Klasse Kostenträger angegebenen Kostenträger an. 
 		/// Format: YYYYMMDD (ISO-8601)
 		/// </summary>
 		[XmlElement("Ende")]
 		public string Ende { get; set; }
 
-		/// <summary> Gibt den Kostenträger des Versicherten an. Es handelt sich um das bundesweit gültige Institutionskennzeichen (IK) des jeweiligen Kostenträgers. </summary>
-		[XmlElement("Kostentraeger")]
+		/// <summary> Gibt den Kostenträger des Versicherten an. Es handelt sich um das bundesweit gültige Institutions-Kennzeichen (IK) des jeweiligen Kostenträgers. </summary>
+		[XmlElement("Kostenträger")]
 		public Kostentraeger Kostentraeger { get; set; }
 	}
 
@@ -68,7 +68,7 @@ namespace CardReader.Egk.AllgemeineVersicherungsdaten
 	[XmlType(AnonymousType = true)]
 	public class Kostentraeger
 	{
-		/// <summary> Gibt den Kostenträger des Versicherten an. Es handelt sich um das bundesweit gültige Institutionskennzeichen (IK) des jeweiligen Kostenträgers. </summary>
+		/// <summary> Gibt den Kostenträger des Versicherten an. Es handelt sich um das bundesweit gültige Institutions-Kennzeichen (IK) des jeweiligen Kostenträgers. </summary>
 		[XmlElement("Kostentraegerkennung",DataType = "integer")]
 		public string Kostentraegerkennung { get; set; }
 
@@ -133,9 +133,9 @@ namespace CardReader.Egk.AllgemeineVersicherungsdaten
 	public class Zusatzinfos_Abrechnung_GKV
 	{
 		/// <summary> 
-		/// Gibt an, ob der Kostentraeger den Nachweis der Inanspruchnahme von Leistungen der Abrechnungsart Kostenerstattung auf der eGK speichert. 
+		/// Gibt an, ob der Kostenträger den Nachweis der Inanspruchnahme von Leistungen der Abrechnungsart Kostenerstattung auf der eGK speichert. 
 		/// vorhanden = Nachweis wird genutzt; 
-		/// nichtvorhanden = Nachweis wird nicht genutzt 
+		/// nicht vorhanden = Nachweis wird nicht genutzt 
 		/// (nur v5.2)
 		/// </summary>
 		[XmlElement("Kostenerstattung")]
@@ -148,14 +148,14 @@ namespace CardReader.Egk.AllgemeineVersicherungsdaten
 
 		/// <summary>
 		/// Gibt an, ob der Versicherte die Kostenerstattung für stationäre Behandlung nach § 13 SGB V gewählt hat.
-		/// Die Kostenerstattung stationär kann den Wert = 1 nur annehmen, wenn Kos-tenerstattung ambulant = 1.
+		/// Die Kostenerstattung stationär kann den Wert = 1 nur annehmen, wenn Kostenerstattung ambulant = 1.
 		/// (nur v5.1)
 		/// </summary>
 		[Obsolete("nur v5.1")]
 		[XmlElement("Kostenerstattung_stationaer",DataType = "integer")]
 		public string Kostenerstattung_stationaer { get; set; }
 
-		/// <summary> Das Kennzeichen WOP ist gemäß § 2 Abs. 2 der Vereinbarung zur Festset-zung des Durchschnittsbetrages gemäß Artikel 2 § 2 Abs. 2 des Gesetzes zur Einführung des Wohnortprinzips bei Honorarvereinbarungen für Ärzte und Zahnärzte und zur Krankenversichertenkarte gemäß § 291 Abs. 2 Fünftes So-zialgesetzbuch (SGB V) erforderlich </summary>
+		/// <summary> Das Kennzeichen WOP ist gemäß § 2 Abs. 2 der Vereinbarung zur Festsetzung des Durchschnittsbetrages gemäß Artikel 2 § 2 Abs. 2 des Gesetzes zur Einführung des Wohnortprinzips bei Honorarvereinbarungen für Ärzte und Zahnärzte und zur Krankenversichertenkarte gemäß § 291 Abs. 2 Fünftes So-zialgesetzbuch (SGB V) erforderlich </summary>
 		[XmlElement("WOP")]
 		public string WOP { get; set; }
 	}
@@ -203,33 +203,33 @@ namespace CardReader.Egk.AllgemeineVersicherungsdaten
 	public class Kostenerstattung
 	{
 		/// <summary> 
-		/// Gibt die vom Versicherten gewaehlte Kostenerstattung fuer die aerztliche Versorgung an.
-		/// 1 (true) = Kostenerstattung fuer aerztliche Versorgung
-		/// 0 (false) = keine Kostenerstattung fuer aerztliche Versorgung</summary>
+		/// Gibt die vom Versicherten gewählte Kostenerstattung für die ärztliche Versorgung an.
+		/// 1 (true) = Kostenerstattung für ärztliche Versorgung
+		/// 0 (false) = keine Kostenerstattung für ärztliche Versorgung</summary>
 
 		[XmlElement("AerztlicheVersorgung")]
 		public bool AerztlicheVersorgung { get; set; }
 
 		/// <summary> 
-		/// Gibt die vom Versicherten gewaehlte Kostenerstattung fuer zahnaerztliche Versorgung an.
-		/// 1 (true) = Kostenerstattung fuer zahnaerztliche Versorgung
-		/// 0 (false) = keine Kostenerstattung fuer zahnaerztliche Versorgung
+		/// Gibt die vom Versicherten gewählte Kostenerstattung für zahnärztliche Versorgung an.
+		/// 1 (true) = Kostenerstattung für zahnärztliche Versorgung
+		/// 0 (false) = keine Kostenerstattung für zahnärztliche Versorgung
 		/// </summary>
 		[XmlElement("ZahnaerztlicheVersorgung")]
 		public bool ZahnaerztlicheVersorgung { get; set; }
 
 		/// <summary> 
-		/// Gibt die vom Versicherten gewaehlte Kostenerstattung fuer den stationaeren Bereich an.
-		/// 1 (true) = Kostenerstattung fuer stationaeren Bereich 
-		/// 0 (false) = keine Kostenerstattung fuer stationaeren Bereich
+		/// Gibt die vom Versicherten gewählte Kostenerstattung für den stationaeren Bereich an.
+		/// 1 (true) = Kostenerstattung für stationären Bereich 
+		/// 0 (false) = keine Kostenerstattung für stationaeren Bereich
 		/// </summary>
 		[XmlElement("StationaererBereich")]
 		public bool StationaererBereich { get; set; }
 
 		/// <summary> 
-		/// Gibt die vom Versicherten gewaehlte Kostenerstattung fuer veranlasste Leistungen an.
-		/// 1 (true) = Kostenerstattung fuer veranlasste Leistungen
-		/// 0 (false) = keine Kostenerstattung fuer veranlasste Leistungen
+		/// Gibt die vom Versicherten gewählte Kostenerstattung für veranlasste Leistungen an.
+		/// 1 (true) = Kostenerstattung für veranlasste Leistungen
+		/// 0 (false) = keine Kostenerstattung für veranlasste Leistungen
 		/// </summary>
 		[XmlElement("VeranlassteLeistungen")]
 		public bool VeranlassteLeistungen { get; set; }

@@ -67,22 +67,22 @@ namespace CardReader
 			=> this.KvKResult?.GeburtsDatum 
 			?? this.EgkResult?.PersoenlicheVersichertendaten?.Versicherter?.Person?.Geburtsdatum;
 
-		/// <summary> Gibt den Namen der Strasse der Person an. </summary>
+		/// <summary> Gibt den Namen der Straße der Person an. </summary>
 		public string Strasse_Hausnummer
 			=> this.KvKResult?.StraßenName_HausNummer 
 			?? Join(this.EgkResult?.PersoenlicheVersichertendaten?.Versicherter?.Person?.StrassenAdresse.Strasse,this.EgkResult?.PersoenlicheVersichertendaten?.Versicherter?.Person?.StrassenAdresse.Hausnummer);
 
-		/// <summary> Gibt das Land zu der Strassen- oder Postfachadresse an (wenn nicht vorhanden: Deutschland). </summary>
+		/// <summary> Gibt das Land zu der Straßen- oder Postfachadresse an (wenn nicht vorhanden: Deutschland). </summary>
 		public string Wohnsitzlaendercode
 			=> this.KvKResult?.WohnsitzLänderCode
 			?? this.EgkResult?.PersoenlicheVersichertendaten?.Versicherter?.Person?.StrassenAdresse?.Land?.Wohnsitzlaendercode;
 
-		/// <summary> Gibt die Postleitzahl der Strassen- oder Postfachadresse an. </summary>
+		/// <summary> Gibt die Postleitzahl der Straßen- oder Postfachadresse an. </summary>
 		public string Postleitzahl
 			=> this.KvKResult?.Postleitzahl 
 			?? this.EgkResult?.PersoenlicheVersichertendaten?.Versicherter?.Person?.StrassenAdresse.Postleitzahl;
 
-		/// <summary> Gibt den Ort zur Strassen- oder Postfachadresse an. </summary>
+		/// <summary> Gibt den Ort zur Straßen- oder Postfachadresse an. </summary>
 		public string Ort
 			=> this.KvKResult?.OrtsName 
 			?? this.EgkResult?.PersoenlicheVersichertendaten?.Versicherter?.Person?.StrassenAdresse.Ort;

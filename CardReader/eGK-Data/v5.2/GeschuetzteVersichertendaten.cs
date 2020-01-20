@@ -26,7 +26,7 @@ namespace CardReader.Egk.GeschuetzteVersichertendaten
 
 
 		/// <summary> 
-		/// Gibt die Zugehoerigkeit des Versicherten zu einer besonderen Personengruppe an. Die Kennzeichnung erfolgt gemaess der Schluesseltabelle.
+		/// Gibt die Zugehörigkeit des Versicherten zu einer besonderen Personengruppe an. Die Kennzeichnung erfolgt gemäß der Schlüsseltabelle.
 		/// 4 = BSHG(Bundessozialhilfegesetz) § 264 SGB V,
 		/// 6 = BVG(Gesetz über die Versorgung der Opfer des Krieges), 
 		/// 7 = SVA-Kennzeichnung für zwischenstaatliches Krankenversicherungsrecht: - Personen mit Wohnsitz im
@@ -42,12 +42,12 @@ namespace CardReader.Egk.GeschuetzteVersichertendaten
 		public string DMP_Kennzeichnung { get; set; }
 
 		/// <summary> 
-		/// Gibt an, ob fuer den Versicherten ein aerztlicher Selektivvertrag vorliegt.
-		/// Dieses Datenfeld ist besonders schuetzenswert und daher nicht frei auslesbar, sondern nur berechtigten Personen zugaenglich.
-		/// Schluesselverzeichnis:
-		/// 1 = aerztlicher Selektivvertrag liegt vor
-		/// 0 = aerztlicher Selektivvertrag liegt nicht vor
-		/// 9 = aerztliches Selektivvertragskennzeichen wird nicht genutzt
+		/// Gibt an, ob für den Versicherten ein ärztlicher Selektivvertrag vorliegt.
+		/// Dieses Datenfeld ist besonders schützenswert und daher nicht frei auslesbar, sondern nur berechtigten Personen zugänglich.
+		/// Schlüsselverzeichnis:
+		/// 1 = ärztlicher Selektivvertrag liegt vor
+		/// 0 = ärztlicher Selektivvertrag liegt nicht vor
+		/// 9 = ärztliches Selektivvertragskennzeichen wird nicht genutzt
 		/// (nur v5.2)
 		/// </summary>
 		[XmlElement("Selektivvertraege")]
@@ -95,40 +95,40 @@ namespace CardReader.Egk.GeschuetzteVersichertendaten
 	public class Selektivvertraege
 	{
 		/// <summary> 
-		/// Gibt an, ob fuer den Versicherten ein aerztlicher Selektivvertrag vorliegt.
-		/// Dieses Datenfeld ist besonders schuetzenswert und daher nicht frei auslesbar, sondern nur berechtigten Personen zugaenglich.
-		/// Schluesselverzeichnis:
-		/// 1 = aerztlicher Selektivvertrag liegt vor
-		/// 0 = aerztlicher Selektivvertrag liegt nicht vor
-		/// 9 = aerztliches Selektivvertragskennzeichen wird nicht genutzt
+		/// Gibt an, ob für den Versicherten ein ärztlicher Selektivvertrag vorliegt.
+		/// Dieses Datenfeld ist besonders schützenswert und daher nicht frei auslesbar, sondern nur berechtigten Personen zugänglich.
+		/// Schlüsselverzeichnis:
+		/// 1 = ärztlicher Selektivvertrag liegt vor
+		/// 0 = ärztlicher Selektivvertrag liegt nicht vor
+		/// 9 = ärztliches Selektivvertragskennzeichen wird nicht genutzt
 		/// </summary>
 		[XmlElement("Aerztlich",DataType = "integer")]
 		public string Aerztlich { get; set; }
 
 		/// <summary> 
-		/// Gibt an, ob fuer den Versicherten ein zahnaerztlicher Selektivvertrag vorliegt.
-		/// Dieses Datenfeld ist besonders schuetzenswert und daher nicht frei auslesbar, sondern nur berechtigten Personen zugaenglich.
-		/// Schluesselverzeichnis:
-		/// 1 = zahnaerztlicher Selektivvertrag liegt vor
-		/// 0 = zahnaerztlicher Selektivvertrag liegt nicht vor
-		/// 9 = zahnaerztliches Selektivvertragskennzeichen wird nicht genutzt
+		/// Gibt an, ob für den Versicherten ein zahnärztlicher Selektivvertrag vorliegt.
+		/// Dieses Datenfeld ist besonders schützenswert und daher nicht frei auslesbar, sondern nur berechtigten Personen zugänglich.
+		/// Schlüsselverzeichnis:
+		/// 1 = zahnärztlicher Selektivvertrag liegt vor
+		/// 0 = zahnärztlicher Selektivvertrag liegt nicht vor
+		/// 9 = zahnärztliches Selektivvertragskennzeichen wird nicht genutzt
 		/// </summary>
 		[XmlElement("Zahnaerztlich",DataType = "integer")]
 		public string Zahnaerztlich { get; set; }
 
 		/// <summary> 
-		/// Gibt die Paragraphen des  SGB V an, in denen Selektivvertraege beschrieben sind.
-		/// Die Angaben gelten fuer folgende Selektivvertraege:
+		/// Gibt die Paragraphen des  SGB V an, in denen Selektivverträge beschrieben sind.
+		/// Die Angaben gelten für folgende Selektivverträge:
 		/// 1. Stelle: Hausarztzentrierte Versorgung(§73b)
-		/// 2. Stelle: Besondere ambulante aerztliche Versorgung(§73c)
+		/// 2. Stelle: Besondere ambulante ärztliche Versorgung(§73c)
 		/// 3. Stelle: Strukturierte Behandlungsprogramme(§137f)
 		/// 4. Stelle: Integrierte Versorgung(§140a)
-		/// Die Stellen 1 und 3 koennen den Wert = 1 (true) nur annehmen, wenn Aerztlich = 1 (true) ist.
+		/// Die Stellen 1 und 3 können den Wert = 1 (true) nur annehmen, wenn Aerztlich = 1 (true) ist.
 		/// 
-		/// Die Stellen 2 und 4 koennen sowohl zur Kennzeichnung aerztlicher als auch zahnaerztlicher Selektivvertraege genutzt werden.
+		/// Die Stellen 2 und 4 können sowohl zur Kennzeichnung ärztlicher als auch zahnärztlicher Selektivverträge genutzt werden.
 		/// Beispiel: 1000
-		/// Es liegt ein Selektivvertrag fuer die Hausarztzentrierte Versorgung nach §73b vor.
-		/// In der Testphase koennen die Krankenkassen im geschuetzten Bereich die Paragraphen des SGB V,in denen Selektivvertraege beschrieben sind (§§73b, 73c, 137f, 140a), im Rahmen der offenen Speicherkapazitaet abbilden. 
+		/// Es liegt ein Selektivvertrag für die hausarztzentrierte Versorgung nach §73b vor.
+		/// In der Testphase können die Krankenkassen im geschützten Bereich die Paragraphen des SGB V,in denen Selektivverträge beschrieben sind (§§73b, 73c, 137f, 140a), im Rahmen der offenen Speicherkapazität abbilden. 
 		/// </summary>
 		[XmlElement("Art")]
 		public string Art { get; set; }
@@ -148,7 +148,7 @@ namespace CardReader.Egk.GeschuetzteVersichertendaten
 		public string Beginn { get; set; }
 
 		/// <summary>
-		/// Gibt das Ende des Versicherungsschutzes (hier: Leistungsanspruch) des Ver-sicherten bei dem unter Klasse Kostenträger angegebenen Kostenträger an. 
+		/// Gibt das Ende des Versicherungsschutzes (hier: Leistungsanspruch) des Versicherten bei dem unter Klasse Kostenträger angegebenen Kostenträger an. 
 		/// Format: YYYYMMDD (ISO-8601)
 		/// </summary>
 		[XmlElement("Ende")]

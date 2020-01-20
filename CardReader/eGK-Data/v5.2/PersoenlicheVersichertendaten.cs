@@ -57,7 +57,7 @@ namespace CardReader.Egk.PersoenlicheVersichertendaten
 		public string Nachname { get; set; }
 
 		/// <summary>
-		/// Gibt das Geschlecht des Versicherten an gemäss entsprechender Schlüsseltabelle.
+		/// Gibt das Geschlecht des Versicherten an gemäß entsprechender Schlüsseltabelle.
 		/// "M" = männlich, "W" = weiblich
 		/// </summary>
 		[XmlElement("Geschlecht")]
@@ -75,11 +75,11 @@ namespace CardReader.Egk.PersoenlicheVersichertendaten
 		[XmlElement("Titel")]
 		public string Titel { get; set; }
 
-		/// <summary> Gibt die Postleitzahl der Strassen- oder Postfachadresse an. </summary>
+		/// <summary> Gibt die Postleitzahl der Straßen- oder Postfachadresse an. </summary>
 		[XmlElement("PostfachAdresse")]
 		public PostfachAdresse PostfachAdresse { get; set; }
 
-		/// <summary> Gibt die Postleitzahl der Strassen- oder Postfachadresse an. </summary>
+		/// <summary> Gibt die Postleitzahl der Straßen- oder Postfachadresse an. </summary>
 		[XmlElement("StrassenAdresse")]
 		public StrassenAdresse StrassenAdresse { get; set; }
 	}
@@ -91,11 +91,11 @@ namespace CardReader.Egk.PersoenlicheVersichertendaten
 	[DebuggerDisplay("{Postfach} {Land.Wohnsitzlaendercode}-{Postleitzahl} {Ort}")]
 	public class PostfachAdresse
 	{
-		/// <summary> Gibt die Postleitzahl der Strassen- oder Postfachadresse an. </summary>
+		/// <summary> Gibt die Postleitzahl der Straßen- oder Postfachadresse an. </summary>
 		[XmlElement("Postleitzahl")]
 		public string Postleitzahl { get; set; }
 
-		/// <summary> Gibt den Ort zur Strassen- oder Postfachadresse an. </summary>
+		/// <summary> Gibt den Ort zur Straßen- oder Postfachadresse an. </summary>
 		[XmlElement("Ort")]
 		public string Ort { get; set; }
 
@@ -104,7 +104,7 @@ namespace CardReader.Egk.PersoenlicheVersichertendaten
 		public string Postfach { get; set; }
 
 		/// <summary>
-		/// Versicherter: Das Land, in dem der Versicherte seinen Wohnsitz hat gem.  Anlage 8 (Staatsangehörigkeit und Länder-kennzeichen für Auslandsanschriften) V. 2.27 vom 8.11.06 (siehe Fachkonzept VSDM)
+		/// Versicherter: Das Land, in dem der Versicherte seinen Wohnsitz hat gem.  Anlage 8 (Staatsangehörigkeit und Länderkennzeichen für Auslandsanschriften) V. 2.27 vom 8.11.06 (siehe Fachkonzept VSDM)
 		/// Kostenträger: Der Kostenträgerländercode vom Kostenträger des Versicherten gem.  Anlage 8 (Staatsangehörigkeit und Länderkennzeichen für Auslandsanschriften) V. 2.27 vom 8.11.06 (siehe Fachkonzept VSDM).
 		/// </summary>
 		[XmlElement("Land")]
@@ -115,29 +115,29 @@ namespace CardReader.Egk.PersoenlicheVersichertendaten
 
 	[Serializable]
 	[XmlType(AnonymousType = true)]
-	[DebuggerDisplay("{Strasse} {Hausnummer} {Anschriftenzusatz} {Land.Wohnsitzlaendercode}-{Postleitzahl} {Ort}")]
+	[DebuggerDisplay("{Straße} {Hausnummer} {Anschriftenzusatz} {Land.Wohnsitzlaendercode}-{Postleitzahl} {Ort}")]
 	public class StrassenAdresse
 	{
-		/// <summary> Gibt die Postleitzahl der Strassen- oder Postfachadresse an. </summary>
+		/// <summary> Gibt die Postleitzahl der Straßen- oder Postfachadresse an. </summary>
 		[XmlElement("Postleitzahl")]
 		public string Postleitzahl { get; set; }
 
-		/// <summary> Gibt den Ort zur Strassen- oder Postfachadresse an. </summary>
+		/// <summary> Gibt den Ort zur Straßen- oder Postfachadresse an. </summary>
 		[XmlElement("Ort")]
 		public string Ort { get; set; }
 
 		/// <summary>
-		/// Versicherter: Das Land, in dem der Versicherte seinen Wohnsitz hat gem.  Anlage 8 (Staatsangehörigkeit und Länder-kennzeichen für Auslandsanschriften) V. 2.27 vom 8.11.06 (siehe Fachkonzept VSDM)
+		/// Versicherter: Das Land, in dem der Versicherte seinen Wohnsitz hat gem.  Anlage 8 (Staatsangehörigkeit und Länderkennzeichen für Auslandsanschriften) V. 2.27 vom 8.11.06 (siehe Fachkonzept VSDM)
 		/// Kostenträger: Der Kostenträgerländercode vom Kostenträger des Versicherten gem.  Anlage 8 (Staatsangehörigkeit und Länderkennzeichen für Auslandsanschriften) V. 2.27 vom 8.11.06 (siehe Fachkonzept VSDM).
 		/// </summary>
 		[XmlElement("Land")]
 		public Land Land { get; set; }
 
-		/// <summary> Gibt den Namen der Strasse der Person an. </summary>
-		[XmlElement("Strasse")]
+		/// <summary> Gibt den Namen der Straße der Person an. </summary>
+		[XmlElement("Straße")]
 		public string Strasse { get; set; }
 
-		/// <summary> Gibt die Hausnummer in der Strasse der Person an. </summary>
+		/// <summary> Gibt die Hausnummer in der Straße der Person an. </summary>
 		[XmlElement("Hausnummer")]
 		public string Hausnummer { get; set; }
 
@@ -153,7 +153,7 @@ namespace CardReader.Egk.PersoenlicheVersichertendaten
 	[DebuggerDisplay("{Wohnsitzlaendercode}")]
 	public class Land
 	{
-		/// <summary> Gibt das Land zu der Strassen- oder Postfachadresse an (siehe Fachkonzept VSDM). </summary>
+		/// <summary> Gibt das Land zu der Straßen- oder Postfachadresse an (siehe Fachkonzept VSDM). </summary>
 		[XmlElement("Wohnsitzlaendercode")]
 		public string Wohnsitzlaendercode { get; set; }
 	}
