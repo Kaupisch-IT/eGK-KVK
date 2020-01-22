@@ -21,16 +21,12 @@ namespace KaupischIT.CardReader
 		}
 
 
-		public byte[] ExecuteCommand(CtCommand command)
+		public byte[] ExecuteCommand(byte dad,byte sad,byte[] command)
 		{
 			ushort responseLength = ushort.MaxValue;
 			byte[] response = new byte[responseLength];
 
-			byte sourceAddress = 2;
-			byte destinationAddress = command.DestinationAddress;
-			byte[] bytecode = command.Bytecode;
-
-			this.cardTerminalApi.Data(this.terminalID,ref destinationAddress,ref sourceAddress,(ushort)bytecode.Length,ref bytecode[0],ref responseLength,ref response[0]);
+			this.cardTerminalApi.Data(this.terminalID,ref dad,ref sad,(ushort)command.Length,ref command[0],ref responseLength,ref response[0]);
 
 			byte[] result = new byte[responseLength];
 			Array.Copy(response,result,responseLength);
@@ -44,48 +40,64 @@ namespace KaupischIT.CardReader
 		}
 
 
-
+		/// <summary> Kartenleser zurücksetzen </summary>
 		public void ResetCT()
 		{
-			this.ExecuteCommand(CtCommand.ResetCT).ExpectStatusBytes("9000","9500");
+			this.ExecuteCommand(sad: 2,dad: 1,command: new byte[] { 0x20,0x11,0x00,0x00,0x00 })
+				.ExpectStatusBytes("9000","9500");
 		}
 
 
-		public string RequestICC()
+		/// <summary> Kartenanforderung </summary>
+		public void RequestICC()
 		{
-			return this.ExecuteCommand(CtCommand.RequestICC).ExpectStatusBytes("9000","9001","6200","6201").GetStatusBytes();
+			this.ExecuteCommand(sad: 2,dad: 1,command: new byte[] { 0x20,0x12,0x01,0x00,0x00 })
+				.ExpectStatusBytes("9000","9001","6200","6201").GetStatusBytes();
+		}
+
+		/// <summary> Karte auswerfen </summary>
+		public void EjectICC()
+		{
+			this.ExecuteCommand(sad: 2,dad: 1,command: new byte[] { 0x20,0x15,0x01,0x00 })
+				.ExpectStatusBytes("9000","9001","6200");
 		}
 
 
+		/// <summary> eGGK-Applikation selektieren </summary>
 		public void SelectEGK()
 		{
-			this.ExecuteCommand(CtCommand.SelectEGK).ExpectStatusBytes("9000");
+			this.ExecuteCommand(sad: 2,dad: 0,command: new byte[] { 0x00,0xa4,0x04,0x0c,0x06,0xd2,0x76,0x00,0x00,0x01,0x02 })
+				.ExpectStatusBytes("9000");
 		}
 
 
+		/// <summary> VST-Template und VD-Template lesen </summary>
 		public EgkResult ReadEGK()
 		{
-			byte[] pdData = this.ExecuteCommand(CtCommand.ReadPD).ExpectStatusBytes("9000","6282");
-			byte[] vdData = this.ExecuteCommand(CtCommand.ReadVD).ExpectStatusBytes("9000","6282","6f00");
+			byte[] pdData = this.ExecuteCommand(sad: 2,dad: 0,command: new byte[] { 0x00,0xb0,0x81,0x00,0x00,0x00,0x00 })
+				.ExpectStatusBytes("9000","6282");
+
+			byte[] vdData = this.ExecuteCommand(sad: 2,dad: 0,command: new byte[] { 0x00,0xb0,0x82,0x00,0x00,0x00,0x00 })
+				.ExpectStatusBytes("9000","6282","6f00");
+
 			return new EgkResult(pdData,vdData);
 		}
 
 
+		/// <summary> KVK-Applikation selektieren </summary>
 		public void SelectKVK()
 		{
-			this.ExecuteCommand(CtCommand.GetStatusCtmdo).ExpectStatusBytes("9000");
+			this.ExecuteCommand(sad: 2,dad: 0,command: new byte[] { 0x00,0xa4,0x04,0x00,0x06,0xd2,0x76,0x00,0x00,0x01,0x01 })
+				.ExpectStatusBytes("9000");
 		}
 
+		/// <summary> KVK-Template lesen </summary>
 		public KvkResult ReadKVK()
 		{
-			var bytes = this.ExecuteCommand(CtCommand.ReadKVK).ExpectStatusBytes("9000","6282");
-			return new KvkResult(bytes);
-		}
+			byte[] kvkData = this.ExecuteCommand(sad: 2,dad: 0,command: new byte[] { 0x00,0xb0,0x00,0x00,0x00 })
+				.ExpectStatusBytes("9000","6282");
 
-
-		public void EjectICC()
-		{
-			this.ExecuteCommand(CtCommand.EjectICC).ExpectStatusBytes("9000","9001","6200");
+			return new KvkResult(kvkData);
 		}
 	}
 }

@@ -46,7 +46,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CardResult.cs" />
-    <Compile Include="CtCommand.cs" />
     <Compile Include="CardTerminalClient.cs" />
     <Compile Include="CtApi.cs" />
     <Compile Include="CtException.cs" />
