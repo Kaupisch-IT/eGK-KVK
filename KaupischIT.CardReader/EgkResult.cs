@@ -5,11 +5,11 @@ using System.IO.Compression;
 using System.Text;
 using System.Xml;
 using System.Xml.Serialization;
-using CardReader.Egk.AllgemeineVersicherungsdaten;
-using CardReader.Egk.GeschuetzteVersichertendaten;
-using CardReader.Egk.PersoenlicheVersichertendaten;
+using KaupischIT.CardReader.Egk.AllgemeineVersicherungsdaten;
+using KaupischIT.CardReader.Egk.GeschuetzteVersichertendaten;
+using KaupischIT.CardReader.Egk.PersoenlicheVersichertendaten;
 
-namespace CardReader
+namespace KaupischIT.CardReader
 {
 	public class EgkResult
 	{

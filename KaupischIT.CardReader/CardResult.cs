@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace CardReader
+namespace KaupischIT.CardReader
 {
 	public class CardResult
 	{

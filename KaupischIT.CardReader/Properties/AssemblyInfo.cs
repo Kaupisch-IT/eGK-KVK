@@ -1,15 +1,14 @@
 ﻿using System.Reflection;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 // Allgemeine Informationen über eine Assembly werden über die folgenden 
 // Attribute gesteuert. Ändern Sie diese Attributwerte, um die Informationen zu ändern,
 // die mit einer Assembly verknüpft sind.
-[assembly: AssemblyTitle("CardReader")]
+[assembly: AssemblyTitle("KaupischIT.CardReader")]
 [assembly: AssemblyDescription("Stellt Funktionen bereit, um Daten von Krankenversichertenkarten & elektronischen Gesundheitskarten auszulesen")]
-[assembly: AssemblyCompany("Kaupisch ITC-Solution")]
-[assembly: AssemblyProduct("CardReader")]
-[assembly: AssemblyCopyright("Copyright © Kaupisch ITC-Solution 2012")]
+[assembly: AssemblyCompany("Kaupisch IT-Systeme GmbH")]
+[assembly: AssemblyProduct("KaupischIT.CardReader")]
+[assembly: AssemblyCopyright("Copyright © Kaupisch IT-Systeme GmbH")]
 
 // Durch Festlegen von ComVisible auf "false" werden die Typen in dieser Assembly unsichtbar 
 // für COM-Komponenten. Wenn Sie auf einen Typ in dieser Assembly von 
@@ -30,4 +29,3 @@ using System.Runtime.InteropServices;
 // übernehmen, indem Sie "*" eingeben:
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyFileVersion("1.0.0.0")]

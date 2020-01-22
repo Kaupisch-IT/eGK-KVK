@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Xml.Serialization;
 
-namespace CardReader.Egk.AllgemeineVersicherungsdaten
+namespace KaupischIT.CardReader.Egk.AllgemeineVersicherungsdaten
 {
 	[Serializable]
 	[XmlType(AnonymousType = true)]

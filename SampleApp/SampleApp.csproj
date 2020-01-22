@@ -49,7 +49,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\CardReader\CardReader.csproj">
+    <ProjectReference Include="..\KaupischIT.CardReader\KaupischIT.CardReader.csproj">
       <Project>{7906C327-FC72-4D77-BC0D-8B443BD4BA6F}</Project>
       <Name>CardReader</Name>
     </ProjectReference>

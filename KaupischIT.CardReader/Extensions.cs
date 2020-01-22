@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Diagnostics;
 
-namespace CardReader
+namespace KaupischIT.CardReader
 {
 	public static class Extensions
 	{

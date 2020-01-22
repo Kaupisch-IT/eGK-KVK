@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
-using CardReader.Commands;
 
-namespace CardReader
+namespace KaupischIT.CardReader
 {
 	[DebuggerStepThrough]
 	public sealed class CardTerminalClient : IDisposable

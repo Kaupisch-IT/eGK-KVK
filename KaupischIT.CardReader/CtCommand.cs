@@ -1,5 +1,5 @@
 ﻿
-namespace CardReader.Commands
+namespace KaupischIT.CardReader
 {
 	public class CtCommand
 	{

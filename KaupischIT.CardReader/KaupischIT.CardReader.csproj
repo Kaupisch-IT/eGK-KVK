@@ -8,8 +8,8 @@
     <ProjectGuid>{7906C327-FC72-4D77-BC0D-8B443BD4BA6F}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>CardReader</RootNamespace>
-    <AssemblyName>CardReader</AssemblyName>
+    <RootNamespace>KaupischIT.CardReader</RootNamespace>
+    <AssemblyName>KaupischIT.CardReader</AssemblyName>
     <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />

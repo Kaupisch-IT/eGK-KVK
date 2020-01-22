@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
-using CardReader;
 using Newtonsoft.Json;
 
-namespace eGK
+namespace KaupischIT.CardReader
 {
 	class Program
 	{

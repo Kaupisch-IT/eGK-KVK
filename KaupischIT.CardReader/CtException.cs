@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
 
-namespace CardReader
+namespace KaupischIT.CardReader
 {
 	/// <summary>
 	///  Die Ausnahme, die ausgelöst wird, wenn ein Fehler beim Aufruf von Card-Terminal-Funktionen auftritt

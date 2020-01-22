@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using System.Text;
 
-namespace CardReader
+namespace KaupischIT.CardReader
 {
 	[DebuggerDisplay("{VorName} {FamilienName}, {KrankenKassenName}")]
 	public class KvkResult

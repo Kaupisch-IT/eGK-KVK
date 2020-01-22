@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using System.Xml.Serialization;
 
-namespace CardReader.Egk.PersoenlicheVersichertendaten
+namespace KaupischIT.CardReader.Egk.PersoenlicheVersichertendaten
 {
 	[Serializable]
 	[XmlType(AnonymousType = true)]

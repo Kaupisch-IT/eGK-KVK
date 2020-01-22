@@ -2,7 +2,7 @@
 using System.IO;
 using System.Runtime.InteropServices;
 
-namespace CardReader
+namespace KaupischIT.CardReader
 {
 	/// <summary>
 	/// Stellt Kartenterminal-(Card-Terminal)-Funktionen bereit, die benötigt werden, um auf einfache Weise das Handling und die Kommunikation mit Chipkarten realisieren zu können. 
