@@ -49,12 +49,12 @@
     <Compile Include="CtCommand.cs" />
     <Compile Include="CardTerminalClient.cs" />
     <Compile Include="CtApi.cs" />
+    <Compile Include="CtException.cs" />
     <Compile Include="eGK-Data\AllgemeineVersicherungsdaten.cs" />
     <Compile Include="eGK-Data\GeschuetzteVersichertendaten.cs" />
     <Compile Include="eGK-Data\PersoenlicheVersichertendaten.cs" />
     <Compile Include="EgkResult.cs" />
     <Compile Include="Extensions.cs" />
-    <Compile Include="CtReturnCode.cs" />
     <Compile Include="KvkResult.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

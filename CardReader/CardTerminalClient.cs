@@ -18,16 +18,7 @@ namespace CardReader
 			this.portNumber = portNumber;
 			this.terminalID = terminalID;
 
-			CtReturnCode returnCode = (CtReturnCode)this.cardTerminalApi.Init(this.terminalID,this.portNumber);
-			if (returnCode!=CtReturnCode.OK)
-				throw new Exception(returnCode.ToString());
-		}
-
-
-		public void Dispose()
-		{
-			this.cardTerminalApi.Close(this.terminalID);
-			this.cardTerminalApi.Dispose();
+			this.cardTerminalApi.Init(this.terminalID,this.portNumber);
 		}
 
 
@@ -40,15 +31,17 @@ namespace CardReader
 			byte destinationAddress = command.DestinationAddress;
 			byte[] bytecode = command.Bytecode;
 
-			CtReturnCode returnCode = (CtReturnCode)this.cardTerminalApi.Data(this.terminalID,ref destinationAddress,ref sourceAddress,(ushort)bytecode.Length,ref bytecode[0],ref responseLength,ref response[0]);
-			if (returnCode==CtReturnCode.OK)
-			{
-				byte[] result = new byte[responseLength];
-				Array.Copy(response,result,responseLength);
-				return result;
-			}
-			else
-				throw new Exception(returnCode.ToString());
+			this.cardTerminalApi.Data(this.terminalID,ref destinationAddress,ref sourceAddress,(ushort)bytecode.Length,ref bytecode[0],ref responseLength,ref response[0]);
+
+			byte[] result = new byte[responseLength];
+			Array.Copy(response,result,responseLength);
+			return result;
+		}
+
+		public void Dispose()
+		{
+			this.cardTerminalApi.Close(this.terminalID);
+			this.cardTerminalApi.Dispose();
 		}
 
 
@@ -74,8 +67,8 @@ namespace CardReader
 		public EgkResult ReadEGK()
 		{
 			byte[] pdData = this.ExecuteCommand(CtCommand.ReadPD).ExpectStatusBytes("9000","6282");
-			byte[] vdData = this.ExecuteCommand(CtCommand.ReadVD).ExpectStatusBytes("9000","6282"/*,"6f00"*/);
-			return new EgkResult(pdData,vdData);  
+			byte[] vdData = this.ExecuteCommand(CtCommand.ReadVD).ExpectStatusBytes("9000","6282","6f00");
+			return new EgkResult(pdData,vdData);
 		}
 
 
@@ -94,6 +87,6 @@ namespace CardReader
 		public void EjectICC()
 		{
 			this.ExecuteCommand(CtCommand.EjectICC).ExpectStatusBytes("9000","9001","6200");
-		}		
+		}
 	}
 }

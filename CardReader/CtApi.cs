@@ -28,8 +28,11 @@ namespace CardReader
 		/// <summary>Mit der Funktion CT_init wird die zur Kommunikation benötigte Host-Schnittstelle ausgewählt, an welcher das CardTerminal angeschlossen ist, wobei automatisch die Defaultwerte für die Kommunikation eingestellt werden.</summary>
 		/// <param name="ctn">Logische Card-Terminal Number</param>
 		/// <param name="pn">Port Number der physikalischen	Schnittstelle</param>
+		public void Init(ushort ctn,ushort pn)
+			=> this.CheckReturnCode(this.ctInit(ctn,pn));
 		[UnmanagedFunctionPointer(CallingConvention.StdCall)]
-		public delegate sbyte CT_init(ushort ctn,ushort pn);
+		private delegate sbyte CT_init(ushort ctn,ushort pn);
+		private readonly CT_init ctInit;
 
 		/// <summary>Die Funktion CT_data dient dem Senden von Chipkarten- bzw.CardTerminal-Kommandos und liefert die Antwort auf das Kommando an das aufrufende Programm zurück.</summary>
 		/// <param name="ctn">Logische Card Terminal Number</param>
@@ -39,30 +42,20 @@ namespace CardReader
 		/// <param name="command">Chipkarten bzw. CT-Kommando</param>
 		/// <param name="ulenr">Übermittlung der max. Puffergröße des response Feldes an die Funktion und Rückgabe der tatsächlichen Länge der Antwort in Byte</param>
 		/// <param name="response">Antwort auf das Kommando</param>
+		public void Data(ushort ctn,ref byte dad,ref byte sad,ushort lenc,ref byte command,ref ushort ulenr,ref byte response)
+			=> this.CheckReturnCode(this.ctData(ctn,ref dad,ref sad,lenc,ref command,ref ulenr,ref response));
 		[UnmanagedFunctionPointer(CallingConvention.StdCall)]
-		public delegate sbyte CT_data(ushort ctn,ref byte dad,ref byte sad,ushort lenc,ref byte command,ref ushort ulenr,ref byte response);
+		private delegate sbyte CT_data(ushort ctn,ref byte dad,ref byte sad,ushort lenc,ref byte command,ref ushort ulenr,ref byte response);
+		private readonly CT_data ctData;
+
 
 		/// <summary>Die Funktion CT_close bildet das Äquivalent zur Funktion CT_init. Sie beendet die Kommunikation zum jeweiligen CardTerminal,welches mit CT_init einer logischen Card-Terminal Number zugewiesen wurde. Die Funktion muss vor Ende des Programms aufgerufen werden, um ggf. belegte Ressourcen freizugeben.</summary>
 		/// <param name="ctn">Logische Card-Terminal Number</param>
-		/// <returns></returns>
+		public void Close(ushort ctn)
+			=> this.CheckReturnCode(this.ctClose(ctn));
 		[UnmanagedFunctionPointer(CallingConvention.StdCall)]
-		public delegate sbyte CT_close(ushort ctn);
-
-
-		/// <summary>
-		/// Initiieren der Host/CT-Verbindung
-		/// </summary>
-		public CT_init Init { get; private set; }
-
-		/// <summary>
-		/// Senden eines Kommandosan ein CardTerminal bzw.an eine Chipkarte undRückgabe der Antwort
-		/// </summary>
-		public CT_data Data { get; private set; }
-
-		/// <summary>
-		/// Beenden der Host/CT-Verbindung
-		/// </summary>
-		public CT_close Close { get; private set; }
+		private delegate sbyte CT_close(ushort ctn);
+		private readonly CT_close ctClose;
 
 
 		/// <summary>
@@ -78,19 +71,44 @@ namespace CardReader
 			IntPtr ctInitFunctionHandle = CtApi.GetProcAddress(this.libraryHandle,"CT_init");
 			if (ctInitFunctionHandle == IntPtr.Zero)
 				throw new InvalidOperationException("GetProcAddress CT_init");
-			this.Init = Marshal.GetDelegateForFunctionPointer<CT_init>(ctInitFunctionHandle);
+			this.ctInit = Marshal.GetDelegateForFunctionPointer<CT_init>(ctInitFunctionHandle);
 
 			IntPtr ctDataFunctionHandle = CtApi.GetProcAddress(this.libraryHandle,"CT_data");
 			if (ctDataFunctionHandle == IntPtr.Zero)
 				throw new InvalidOperationException("GetProcAddress CT_data");
-			this.Data = Marshal.GetDelegateForFunctionPointer<CT_data>(ctDataFunctionHandle);
+			this.ctData = Marshal.GetDelegateForFunctionPointer<CT_data>(ctDataFunctionHandle);
 
 			IntPtr ctCloseFunctionHandle = CtApi.GetProcAddress(this.libraryHandle,"CT_close");
 			if (ctCloseFunctionHandle == IntPtr.Zero)
 				throw new InvalidOperationException("GetProcAddress CT_close");
-			this.Close = Marshal.GetDelegateForFunctionPointer<CT_close>(ctCloseFunctionHandle);
+			this.ctClose = Marshal.GetDelegateForFunctionPointer<CT_close>(ctCloseFunctionHandle);
 		}
 
+
+		/// <summary>
+		/// Prüft den Rückgabewert von CT-Funktionen und wirft ggf. entsprechende Ausnahmen
+		/// </summary>
+		/// <param name="returnCode"></param>
+		private void CheckReturnCode(sbyte returnCode)
+		{
+			switch (returnCode)
+			{
+				case 0:   // OK         
+					return;
+				case -1:  // ERR_INVALID
+					throw new CtException(returnCode,"invalid argument");
+				case -8:  // ERR_CT
+					throw new CtException(returnCode,"card terminal error");
+				case -10: // ERR_TRANS
+					throw new CtException(returnCode,"transmission error");
+				case -11: // ERR_MEMORY
+					throw new CtException(returnCode,"memory error");
+				case -127:// ERR_HOST
+					throw new CtException(returnCode,"function would be cancelled");
+				case -128:// ERR_HTSI
+					throw new CtException(returnCode,"HTSi error");
+			}
+		}
 
 		/// <summary>
 		/// Gibt verwendete Ressourcen wieder frei

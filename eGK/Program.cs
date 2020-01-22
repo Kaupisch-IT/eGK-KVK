@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using CardReader;
 using Newtonsoft.Json;
 
@@ -6,6 +7,7 @@ namespace eGK
 {
 	class Program
 	{
+		[SuppressMessage("Design","CA1031:Do not catch general exception types")]
 		static void Main()
 		{
 			CardResult result = new CardResult();
