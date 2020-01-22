@@ -16,17 +16,17 @@ namespace CardReader
 		/// <summary> Gibt die Bezeichnung und Ort der ausstellenden Krankenkasse/des ausstellenden Kostenträgers an. </summary>
 		public string KostentraegerName
 			=> this.KvKResult?.KrankenKassenName
-			?? this.EgkResult?.AllgemeineVersicherungsdaten?.Versicherter?.Versicherungsschutz?.Kostentraeger.Name;
+			?? this.EgkResult?.AllgemeineVersicherungsdaten?.Versicherter?.Versicherungsschutz?.Kostentraeger?.Name;
 
 		/// <summary> Gibt die Krankenkasse/den Kostenträger des Versicherten an. Es handelt sich um das bundesweit gültige Institutions-Kennzeichen (IK) des jeweiligen Kostenträgers. </summary>
 		public string Kostentraegerkennung
 			=> this.KvKResult?.KrankenKassenNummer
-			?? this.EgkResult?.AllgemeineVersicherungsdaten?.Versicherter?.Versicherungsschutz?.Kostentraeger.Kostentraegerkennung;
+			?? this.EgkResult?.AllgemeineVersicherungsdaten?.Versicherter?.Versicherungsschutz?.Kostentraeger?.Kostentraegerkennung;
 
 		/// <summary> Die Versicherten-ID ist der 10-stellige unveränderliche Teil der 30-stelligen Krankenversichertennummer. </summary>
 		public string VersichertenID
 			=> this.KvKResult?.VersichertenNummer 
-			?? this.EgkResult?.PersoenlicheVersichertendaten?.Versicherter.Versicherten_ID;
+			?? this.EgkResult?.PersoenlicheVersichertendaten?.Versicherter?.Versicherten_ID;
 
 		/// <summary> Gibt die Versichertenart (Mitglied, Familienversicherter oder Rentner ) des Versicherten gemäß Schlüsseltabelle an. </summary>
 		public string Versichertenstatus
@@ -70,7 +70,7 @@ namespace CardReader
 		/// <summary> Gibt den Namen der Straße der Person an. </summary>
 		public string Strasse_Hausnummer
 			=> this.KvKResult?.StraßenName_HausNummer 
-			?? Join(this.EgkResult?.PersoenlicheVersichertendaten?.Versicherter?.Person?.StrassenAdresse.Strasse,this.EgkResult?.PersoenlicheVersichertendaten?.Versicherter?.Person?.StrassenAdresse.Hausnummer);
+			?? Join(this.EgkResult?.PersoenlicheVersichertendaten?.Versicherter?.Person?.StrassenAdresse?.Strasse,this.EgkResult?.PersoenlicheVersichertendaten?.Versicherter?.Person?.StrassenAdresse?.Hausnummer);
 
 		/// <summary> Gibt das Land zu der Straßen- oder Postfachadresse an (wenn nicht vorhanden: Deutschland). </summary>
 		public string Wohnsitzlaendercode
@@ -80,12 +80,12 @@ namespace CardReader
 		/// <summary> Gibt die Postleitzahl der Straßen- oder Postfachadresse an. </summary>
 		public string Postleitzahl
 			=> this.KvKResult?.Postleitzahl 
-			?? this.EgkResult?.PersoenlicheVersichertendaten?.Versicherter?.Person?.StrassenAdresse.Postleitzahl;
+			?? this.EgkResult?.PersoenlicheVersichertendaten?.Versicherter?.Person?.StrassenAdresse?.Postleitzahl;
 
 		/// <summary> Gibt den Ort zur Straßen- oder Postfachadresse an. </summary>
 		public string Ort
 			=> this.KvKResult?.OrtsName 
-			?? this.EgkResult?.PersoenlicheVersichertendaten?.Versicherter?.Person?.StrassenAdresse.Ort;
+			?? this.EgkResult?.PersoenlicheVersichertendaten?.Versicherter?.Person?.StrassenAdresse?.Ort;
 
 		/// <summary> Gibt bei befristeter Gültigkeit der Karte den Monat des Fristablaufs an. Üblich bei ausreichend langer Mitgliedschaft sind Gültigkeitsdauern von fünf bis zehn Jahren oder auch mehr. </summary>	
 		public string VersicherungsschutzEnde
