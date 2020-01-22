@@ -134,7 +134,7 @@ namespace CardReader.Egk.PersoenlicheVersichertendaten
 		public Land Land { get; set; }
 
 		/// <summary> Gibt den Namen der Straße der Person an. </summary>
-		[XmlElement("Straße")]
+		[XmlElement("Strasse")]
 		public string Strasse { get; set; }
 
 		/// <summary> Gibt die Hausnummer in der Straße der Person an. </summary>

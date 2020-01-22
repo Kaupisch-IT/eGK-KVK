@@ -58,7 +58,7 @@ namespace CardReader.Egk.AllgemeineVersicherungsdaten
 		public string Ende { get; set; }
 
 		/// <summary> Gibt den Kostenträger des Versicherten an. Es handelt sich um das bundesweit gültige Institutions-Kennzeichen (IK) des jeweiligen Kostenträgers. </summary>
-		[XmlElement("Kostenträger")]
+		[XmlElement("Kostentraeger")]
 		public Kostentraeger Kostentraeger { get; set; }
 	}
 
