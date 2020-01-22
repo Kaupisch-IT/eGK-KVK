@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
 using CardReader.Commands;
-using CardReader;
 
 namespace CardReader
 {
