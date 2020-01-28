@@ -88,25 +88,24 @@ namespace KaupischIT.CardReader
 		/// <summary>
 		/// Prüft den Rückgabewert von CT-Funktionen und wirft ggf. entsprechende Ausnahmen
 		/// </summary>
-		/// <param name="returnCode"></param>
 		private void CheckReturnCode(sbyte returnCode)
 		{
 			switch (returnCode)
 			{
 				case 0:   // OK         
-					return;
+					return; // "Funktionsaufruf war erfolgreich"
 				case -1:  // ERR_INVALID
-					throw new CtException(returnCode,"invalid argument");
+					throw new CtException(returnCode,"Parameter oder Wert verwendet, der (auch temporär) ungeeignet, nicht spezifiziert oder dessen Äquivalent nicht implementiert ist");
 				case -8:  // ERR_CT
-					throw new CtException(returnCode,"card terminal error");
+					throw new CtException(returnCode,"Auf das Kartenterminal kann temporär nicht zugegriffen werden (Bearbeitung anderer oder interner Prozesse). Problem kann anwendungstechnisch gelöst werden.");
 				case -10: // ERR_TRANS
-					throw new CtException(returnCode,"transmission error");
+					throw new CtException(returnCode,"Übertragungsfehler im Sinne von mechanischen, elektrischen und protokolltechnischen Ausfällen; Neuinitialisierung des CT erforderlich(z.B.CardTerminal ist nicht angeschlossen oder ausgeschaltet).");
 				case -11: // ERR_MEMORY
-					throw new CtException(returnCode,"memory error");
+					throw new CtException(returnCode,"Speicherzuordnungsfehler aufgetreten (z.B. wenn die Datenmenge größer ist als der zur Verfügung gestellte Puffer).");
 				case -127:// ERR_HOST
-					throw new CtException(returnCode,"function would be cancelled");
+					throw new CtException(returnCode,"Vom Host/Betriebssystem wurde dem HTSI ein Fehler signalisiert, was einen Funktionsabbruch zur Folge hat; Neuinitialisierung des CT erforderlich");
 				case -128:// ERR_HTSI
-					throw new CtException(returnCode,"HTSi error");
+					throw new CtException(returnCode,"nicht näher spezifizierter Fehler, den das HTSI nicht interpretieren kann und die zu einem Abbruch der Funktion geführt haben; Neuinitialisierung des CT erforderlich.");
 			}
 		}
 
