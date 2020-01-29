@@ -176,10 +176,10 @@ namespace KaupischIT.CardReader
 		// mit dem Select-Kommando kann eine Applikation, ein Ordner oder eine Datei durch ihren/seinen Bezeichner (AID/FID) selektiert werden.
 		private static readonly Dictionary<string,string> selectFileStatusBytes = new Dictionary<string,string>
 		{
-			{ "9000", "Command successful erfolgreiche Selektion eines Files" },
-			{ "6283", "Warning: FileDeactivated selektiertes File ist logisch oder physikalisch deaktiviert" },
-			{ "6a82", "Error: FileNotFound zu selektierendes File wurde nicht gefunden" },
-			{ "6900", "Error: Command not allowed Mobiles Kartenterminal: Autorisierung fehlt" },
+			{ "9000", "Command successful - erfolgreiche Selektion eines Files" },
+			{ "6283", "Warning: FileDeactivated - selektiertes File ist logisch oder physikalisch deaktiviert" },
+			{ "6a82", "Error: FileNotFound - zu selektierendes File wurde nicht gefunden" },
+			{ "6900", "Error: Command not allowed - Mobiles Kartenterminal: Autorisierung fehlt" },
 		};
 
 
@@ -238,16 +238,16 @@ namespace KaupischIT.CardReader
 		// Read Binary mit Short File Identifier (SFID) kombiniert die Selektion einer Datei mit dem Lesen aus dieser Datei.
 		private static readonly Dictionary<string,string> readBinaryStatusBytes = new Dictionary<string,string>
 		{
-			{ "9000", "Command successful" },
-			{ "6282", "Warning: EndOfFileWarning weniger Daten vorhanden, als mittels Ne angefordert" },
-			{ "6281", "Warning: CorruptDataWarning möglicherweise sind die Antwortdaten korrupt" },
-			{ "6700", "Error: WrongLength Die Anzahl der angeforderten Daten übersteigt die maximale Puffergröße." },
-			{ "6a82", "Error: FileNotFound per shortFileIdentifier adressiertes EF nicht gefunden" },
-			{ "6986", "Error: NoCurrentEF es ist kein EF ausgewählt" },
-			{ "6982", "Error: SecurityStatusNotSatisfied Zugriffsregel nicht erfüllt" },
-			{ "6981", "Error: WrongFileType ausgewähltes EF ist nicht transparent" },
-			{ "6b00", "Error: OffsetTooBig Parameter offset in Kommando APDU ist zu groß" },
-			{ "6900", "Error: Command not allowed Mobiles Kartenterminal: Autorisierung fehlt" },
+			{ "9000", "Command successful - Datei gelesen" },
+			{ "6282", "Warning: EndOfFileWarning - weniger Daten vorhanden, als mittels Ne angefordert" },
+			{ "6281", "Warning: CorruptDataWarning - möglicherweise sind die Antwortdaten korrupt" },
+			{ "6700", "Error: WrongLength - Die Anzahl der angeforderten Daten übersteigt die maximale Puffergröße." },
+			{ "6a82", "Error: FileNotFound - per shortFileIdentifier adressiertes EF nicht gefunden" },
+			{ "6986", "Error: NoCurrentEF - es ist kein EF ausgewählt" },
+			{ "6982", "Error: SecurityStatusNotSatisfied - Zugriffsregel nicht erfüllt" },
+			{ "6981", "Error: WrongFileType - ausgewähltes EF ist nicht transparent" },
+			{ "6b00", "Error: OffsetTooBig - Parameter offset in Kommando APDU ist zu groß" },
+			{ "6900", "Error: Command not allowed - Mobiles Kartenterminal: Autorisierung fehlt" },
 		};
 	}
 }
