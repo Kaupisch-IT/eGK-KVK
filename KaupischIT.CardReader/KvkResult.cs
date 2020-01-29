@@ -4,30 +4,49 @@ using System.Text;
 
 namespace KaupischIT.CardReader
 {
+	/// <summary>
+	/// Stellt Daten einer Krankenversichertenkarte (KVK) bzw. Card für Privatversicherte (PKV-Card) bereit
+	/// </summary>
 	[DebuggerDisplay("{VorName} {FamilienName}, {KrankenKassenName}")]
 	public class KvkResult
 	{
-		private readonly Dictionary<byte,string> values;
+		private readonly Dictionary<byte,string> values; // beinhaltet die ausgelesenen Schlüssel-Wert-Paare der KVK-Daten
 
+
+		/// <summary>
+		/// Initialisiert eine neue Instanz der KvkResult-Klasse und dekodiert die übergebenen Krankenversichertendaten
+		/// </summary>
+		/// <param name="bytes">die Rohdaten aus dem KVK-Template der Krankenversichertenkarte</param>
 		public KvkResult(byte[] bytes)
 		{
 			this.values = this.Decode(bytes);
 		}
 
 
+		/// <summary>
+		/// Dekodiert die in den Rohdaten enthaltenen Schlüssel-Wert-Paare mit den Krankenversichertendaten einer KVK
+		/// </summary>
 		private Dictionary<byte,string> Decode(byte[] bytes)
 		{
+			// Die Rohdaten enthalten sowohl Metadaten (Tag, Länge) als auch die eigentlichen Nutzdaten 
+			// Die Nutzdaten sind als Schlüssel-Wert-Paare abgelegt
 			Dictionary<byte,string> result = new Dictionary<byte,string>();
 			Encoding encoding = Encoding.GetEncoding("DIN_66003");
 
+			// Falls das erste Byte 82, 92 oder A2 ist (jeweils Hexadezimaldarstellung), kommt als erstes ATR und Directory. Die ersten 30 Bytes können dann ignoriert/übersprungen werden.
 			int start = (bytes[0]==0x82 || bytes[0]==0x92 || bytes[0]==0xa2) ? 30 : 0;
+
+			// dann kommen die eigentlichen Daten
 			for (int i = start; i<bytes.Length-1-2; i++) //letzte 2 Bytes (ReturnCode) auslassen
 			{
-				byte tag = bytes[i++];
-				int length = this.ReadLength(bytes,ref i);
-				string value = encoding.GetString(bytes,i+1,length);
+				// als Codierungstechnik für Datenobjekte werden die "Basic Encoding Rules (BER)" der ISO-Codierungskonvention "Abstract Syntax Notation One (ASN.1)" verwendet.
+				// Ein Datenobjekt besteht demnach aus:
+				byte tag = bytes[i++];                                  // einem Datenobjekt-Kennzeichen ("Tag")
+				int length = this.ReadLength(bytes,ref i);              // einer Längenangabe ("Length") und
+				string value = encoding.GetString(bytes,i+1,length);    // einem Datenobjekt-Wert("Value").
 
-				if (tag!=0x60)
+				// alle gefundenen Schlüssel-Wert-Paare ablegen
+				if (tag!=0x60) // VersichertenDatenTemplate (Container-Element) ignorieren
 				{
 					result.Add(tag,value);
 					i += length;
@@ -38,8 +57,16 @@ namespace KaupischIT.CardReader
 		}
 
 
+		/// <summary>
+		/// Ermittelt die Längenangabe im den KVK-Rohdaten (in einem bis drei Bytes codiert) und ändert den übergebenen Zeiger um das entsprechende Offset
+		/// </summary>
 		private int ReadLength(byte[] bytes,ref int i)
 		{
+			// Die Länge ist in 1-3 Bytes codiert:
+			//	Length 0 .. 127: one byte coding the length
+			//	Length 128 .. 255: 1st byte: bit b8 = 1, b7-b1= 0000001 (number of subsequent length bytes); 2nd byte: Length
+			//	Length 256 .. 65535: 1st byte: bit b8 = 1,b7-b1= 0000010; 2nd + 3rd byte: Length
+
 			byte firstByte = bytes[i];
 			if (firstByte==0x81) // 128..255
 				return bytes[++i];
@@ -50,9 +77,11 @@ namespace KaupischIT.CardReader
 		}
 
 
-		public string this[byte tag]
-			=>  (this.values.TryGetValue(tag,out string result)) ? result : null;
-
+		/// <summary>
+		/// Ruft den Wert mit dem angegebenen Schlüssel/Tag aus den Krankenversichertendaten ab
+		/// </summary>
+		private string this[byte tag]
+			=> (this.values.TryGetValue(tag,out string result)) ? result : null;
 
 
 
@@ -97,7 +126,7 @@ namespace KaupischIT.CardReader
 		public string NamensZusatz_VorsatzWort
 			=> this[0x86];
 
-		/// <summary> Gibt den Familienname an.n </summary>
+		/// <summary> Gibt den Familienname an. </summary>
 		public string FamilienName
 			=> this[0x87];
 

@@ -219,9 +219,9 @@ namespace KaupischIT.CardReader.Egk.AllgemeineVersicherungsdaten
 		public bool ZahnaerztlicheVersorgung { get; set; }
 
 		/// <summary> 
-		/// Gibt die vom Versicherten gewählte Kostenerstattung für den stationaeren Bereich an.
+		/// Gibt die vom Versicherten gewählte Kostenerstattung für den stationären Bereich an.
 		/// 1 (true) = Kostenerstattung für stationären Bereich 
-		/// 0 (false) = keine Kostenerstattung für stationaeren Bereich
+		/// 0 (false) = keine Kostenerstattung für stationären Bereich
 		/// </summary>
 		[XmlElement("StationaererBereich")]
 		public bool StationaererBereich { get; set; }

@@ -37,9 +37,9 @@ namespace KaupischIT.CardReader
 		/// <param name="sad">Source Address - Sender des Kommandos</param>
 		/// <param name="command">Chipkarten- bzw. Kartenterminal-Kommando</param>
 		/// <returns>eine Bytefolge mit der Antwort auf das Kommando</returns>
-		public byte[] ExecuteCommand(byte dad,byte sad,byte[] command)
+		private byte[] ExecuteCommand(byte dad,byte sad,byte[] command)
 		{
-			ushort responseLength = ushort.MaxValue;
+			ushort responseLength = UInt16.MaxValue;
 			byte[] response = new byte[responseLength];
 
 			// Senden eines Kommandos an ein CardTerminal bzw. an eine Chipkarte und Rückgabe der Antwort
@@ -62,7 +62,6 @@ namespace KaupischIT.CardReader
 		}
 
 
-
 		/// <summary> 
 		/// Versetzt das Gerät in einen definierten Grundzustand
 		/// </summary>
@@ -83,6 +82,7 @@ namespace KaupischIT.CardReader
 					{ "6400", "Reset not successful" },
 				});
 		}
+
 
 		/// <summary> 
 		/// Fordert eine eingelegte Chipkarte an und leitet folgende Auslesevorgänge ein
@@ -109,6 +109,7 @@ namespace KaupischIT.CardReader
 				})
 				.GetStatusBytes();
 		}
+
 
 		/// <summary> 
 		/// Beendet einen Auslesevorgang und wirft die Chipkarte aus
@@ -148,9 +149,10 @@ namespace KaupischIT.CardReader
 					0x00,0xa4,0x04,0x0c,0x06,
 					0xd2,0x76,0x00,0x00,0x01,0x02
 				})
-				.CheckStatusBytes(selectFileStatusBytes)
+				.CheckStatusBytes(CardTerminalClient.selectFileStatusBytes)
 				.GetStatusBytes();
 		}
+
 
 		/// <summary>
 		/// Wählt den Container mit den KVK-Daten für folgende Auslesevorgänge aus.
@@ -166,9 +168,10 @@ namespace KaupischIT.CardReader
 					// SELECT FILE (KVK)
 					0x00,0xa4,0x04,0x00,0x06,0xd2,0x76,0x00,0x00,0x01,0x01
 				})
-				.CheckStatusBytes(selectFileStatusBytes)
+				.CheckStatusBytes(CardTerminalClient.selectFileStatusBytes)
 				.GetStatusBytes();
 		}
+
 
 		// mit dem Select-Kommando kann eine Applikation, ein Ordner oder eine Datei durch ihren/seinen Bezeichner (AID/FID) selektiert werden.
 		private static readonly Dictionary<string,string> selectFileStatusBytes = new Dictionary<string,string>
@@ -194,7 +197,7 @@ namespace KaupischIT.CardReader
 					// READ BINARY (Personal Data) 
 					0x00,0xb0,0x81,0x00,0x00,0x00,0x00
 				})
-				.CheckStatusBytes(readBinaryStatusBytes);
+				.CheckStatusBytes(CardTerminalClient.readBinaryStatusBytes);
 
 			// allgemeine Versicherungsdaten (VD) lesen
 			byte[] vdData = this.ExecuteCommand(
@@ -205,11 +208,11 @@ namespace KaupischIT.CardReader
 					// READ BINARY (Insurance Data)
 					0x00,0xb0,0x82,0x00,0x00,0x00,0x00
 				})
-				.CheckStatusBytes(readBinaryStatusBytes);
+				.CheckStatusBytes(CardTerminalClient.readBinaryStatusBytes);
 
-			// (Bei den gelesenen Daten handelt es sich um gezippte XML-Dateien)
 			return new EgkResult(pdData,vdData);
 		}
+
 
 		/// <summary>
 		/// Liest den KVK-Datensatz aus.
@@ -225,10 +228,11 @@ namespace KaupischIT.CardReader
 					// READ BINARY (KVK)
 					0x00,0xb0,0x00,0x00,0x00
 				})
-				.CheckStatusBytes(readBinaryStatusBytes);
+				.CheckStatusBytes(CardTerminalClient.readBinaryStatusBytes);
 
 			return new KvkResult(kvkData);
 		}
+
 
 		// Read Binary liest die gewünschte Anzahl von Bytes aus einer zuvor selektierten Datei.
 		// Read Binary mit Short File Identifier (SFID) kombiniert die Selektion einer Datei mit dem Lesen aus dieser Datei.

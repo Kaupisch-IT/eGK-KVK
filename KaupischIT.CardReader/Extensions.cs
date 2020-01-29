@@ -7,16 +7,16 @@ namespace KaupischIT.CardReader
 {
 	public static class Extensions
 	{
+		/// <summary> Wandelt das übergebene Byte in eine Zeichenfolge in Hexadezimaldarstellung um </summary>
 		public static string ToHexString(this byte value)
 		{
 			return Convert.ToString(value,16).PadLeft(2,'0');
 		}
 
-		public static string ToBinaryString(this byte value)
-		{
-			return Convert.ToString(value,2).PadLeft(8,'0');
-		}
 
+		/// <summary>
+		/// Ruft die Zwei-Byte-Statuswort am Ende der zurückgelieferten Antwort der CT-API in Hexadezimaldarstellung ab
+		/// </summary>
 		public static string GetStatusBytes(this byte[] bytes)
 		{
 			if (bytes==null || bytes.Length<2)

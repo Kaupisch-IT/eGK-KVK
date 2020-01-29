@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
 
@@ -8,6 +9,7 @@ namespace KaupischIT.CardReader
 	/// Stellt Kartenterminal-(Card-Terminal)-Funktionen bereit, die benötigt werden, um auf einfache Weise das Handling und die Kommunikation mit Chipkarten realisieren zu können. 
 	/// Die CT-API Software sollte vom Kartenterminal-Hersteller für die Systemumgebungen bereitgestellt werden, die für den Einsatz des betreffenden Kartenterminals relevant sind. 
 	/// </summary>
+	[DebuggerStepThrough]
 	public sealed class CtApi : IDisposable
 	{
 		private readonly IntPtr libraryHandle; // Handle auf die DLL-Datei mit der herstellerspezifischen CT-API-Implementierung
@@ -49,7 +51,7 @@ namespace KaupischIT.CardReader
 		private readonly CT_data ctData;
 
 
-		/// <summary>Die Funktion CT_close bildet das Äquivalent zur Funktion CT_init. Sie beendet die Kommunikation zum jeweiligen CardTerminal,welches mit CT_init einer logischen Card-Terminal Number zugewiesen wurde. Die Funktion muss vor Ende des Programms aufgerufen werden, um ggf. belegte Ressourcen freizugeben.</summary>
+		/// <summary>Die Funktion CT_close bildet das Äquivalent zur Funktion CT_init. Sie beendet die Kommunikation zum jeweiligen CardTerminal, welches mit CT_init einer logischen Card-Terminal Number zugewiesen wurde. Die Funktion muss vor Ende des Programms aufgerufen werden, um ggf. belegte Ressourcen freizugeben.</summary>
 		/// <param name="ctn">Logische Card-Terminal Number</param>
 		public void Close(ushort ctn)
 			=> this.CheckReturnCode(this.ctClose(ctn));
@@ -64,20 +66,24 @@ namespace KaupischIT.CardReader
 		/// <param name="path">der Pfad zur DLL-Datei mit der herstellerspezifischen CT-API-Implementierung</param>
 		public CtApi(string path)
 		{
+			// die herstellerspezifische DLL mit der CT-API des zu verwendenden Geräts laden
 			this.libraryHandle = CtApi.LoadLibrary(path);
 			if (this.libraryHandle==IntPtr.Zero)
 				throw new FileLoadException(null,path);
 
+			// Pointer/Delegate für die CT_init-Funktion laden
 			IntPtr ctInitFunctionHandle = CtApi.GetProcAddress(this.libraryHandle,"CT_init");
 			if (ctInitFunctionHandle == IntPtr.Zero)
 				throw new InvalidOperationException("GetProcAddress CT_init");
 			this.ctInit = Marshal.GetDelegateForFunctionPointer<CT_init>(ctInitFunctionHandle);
 
+			// Pointer/Delegate für die CT_data-Funktion laden
 			IntPtr ctDataFunctionHandle = CtApi.GetProcAddress(this.libraryHandle,"CT_data");
 			if (ctDataFunctionHandle == IntPtr.Zero)
 				throw new InvalidOperationException("GetProcAddress CT_data");
 			this.ctData = Marshal.GetDelegateForFunctionPointer<CT_data>(ctDataFunctionHandle);
 
+			// Pointer/Delegate für die CT_close-Funktion laden
 			IntPtr ctCloseFunctionHandle = CtApi.GetProcAddress(this.libraryHandle,"CT_close");
 			if (ctCloseFunctionHandle == IntPtr.Zero)
 				throw new InvalidOperationException("GetProcAddress CT_close");
@@ -105,7 +111,7 @@ namespace KaupischIT.CardReader
 				case -127:// ERR_HOST
 					throw new CtException(returnCode,"Vom Host/Betriebssystem wurde dem HTSI ein Fehler signalisiert, was einen Funktionsabbruch zur Folge hat; Neuinitialisierung des CT erforderlich");
 				case -128:// ERR_HTSI
-					throw new CtException(returnCode,"nicht näher spezifizierter Fehler, den das HTSI nicht interpretieren kann und die zu einem Abbruch der Funktion geführt haben; Neuinitialisierung des CT erforderlich.");
+					throw new CtException(returnCode,"Nicht näher spezifizierter Fehler, den das HTSI nicht interpretieren kann und die zu einem Abbruch der Funktion geführt haben; Neuinitialisierung des CT erforderlich.");
 			}
 		}
 
