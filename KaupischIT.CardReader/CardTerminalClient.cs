@@ -63,7 +63,8 @@ namespace KaupischIT.CardReader
 
 
 		/// <summary> 
-		/// Versetzt das Gerät in einen definierten Grundzustand
+		/// Versetzt das Gerät in einen definierten Grundzustand. 
+		/// Bei Kartenterminals mit mehr als einer Schnittstelle werden die gesperrten Ports wieder freigegeben.
 		/// </summary>
 		public void ResetCT()
 		{
@@ -73,7 +74,13 @@ namespace KaupischIT.CardReader
 				command: new byte[]
 				{ 
 					// RESET CT (Kartenleser zurücksetzen)
-					0x20,0x11,0x00,0x00,0x00
+					0x20, // CLA '20'
+					0x11, // INS '11'
+					0x00, // (P1) Device ('00' = terminal, '01' = ICC1, '02' = ICC2)
+					0x00, // (P2) Resp. Type ('00' = no responses, '01' = entire ATR, '02' = only historical characters as response)
+					// (Lc) Empty
+					// (Data field) Empty
+					// (Le) Empty or '00'
 				})
 				.CheckStatusBytes(new Dictionary<string,string>
 				{
@@ -85,9 +92,10 @@ namespace KaupischIT.CardReader
 
 
 		/// <summary> 
-		/// Fordert eine eingelegte Chipkarte an und leitet folgende Auslesevorgänge ein
+		/// Fordert zum Einstecken einer Chipkarte auf - mit der Möglichkeit, eine Wartezeit anzugeben - und führt nach dem Einstecken einer Karte einen Reset durch.
+		/// Kartenterminals, die mit einem Display ausgestattet sind, bieten die Möglichkeit, eine Eingabeaufforderung anzuzeigen.
 		/// </summary>
-		public string RequestICC()
+		public string RequestICC(byte waitingPeriodInSeconds = 0)
 		{
 			return this.ExecuteCommand(
 				sad: 2, // source = Host
@@ -95,7 +103,13 @@ namespace KaupischIT.CardReader
 				command: new byte[]
 				{ 
 					// REQUEST ICC1 (Kartenanforderung)
-					0x20,0x12,0x01,0x00,0x00
+					0x20, // CLA '20'
+					0x12, // INS '12'
+					0x01, // (P1) Device '01' = ICC1, '02' = ICC2 (only B1 Professional) 
+					0x00, // (P2) Bits b8 - b5: '0' = standard display text No. 1, 'F' = no display message; Bits b4 - b1: '0' = no response data '1' = entire ATR '2' = only historical characters
+					0x01, // (Lc) Empty or length of data field 
+					waitingPeriodInSeconds, // (Data field) Empty or waiting period in seconds or TLV with the tags: '50' = display text coded as IA5 '80' = waiting period in seconds (coded integer) 
+					0x00  // (Le) Empty or '00'
 				})
 				.CheckStatusBytes(new Dictionary<string,string>
 				{
@@ -112,9 +126,10 @@ namespace KaupischIT.CardReader
 
 
 		/// <summary> 
-		/// Beendet einen Auslesevorgang und wirft die Chipkarte aus
+		/// Beendet einen Auslesevorgang und wirft die Chipkarte aus.
+		/// Es wird eine Meldung angezeigt, die zum Entfernen der Karte auffordert, deren Anzeigezeit durch den Timeout-Parameter definiert werden kann. 
 		/// </summary>
-		public string EjectICC()
+		public string EjectICC(byte waitingPeriodInSeconds = 0)
 		{
 			return this.ExecuteCommand(
 				sad: 2, // source = Host
@@ -122,7 +137,13 @@ namespace KaupischIT.CardReader
 				command: new byte[]
 				{ 
 					// EJECT ICC1 (Karte auswerfen)
-					0x20,0x15,0x01,0x00
+					0x20, // CLA '20'
+					0x15, // INS '15'
+					0x01, // (P1) Device ('01' = ICC1, '02' = ICC2)
+					0x00, // (P2) '00'  = standard display text No. 2; 'F0' = no display message
+					0x01, // (Lc) 0, 1 or length of data field 
+					waitingPeriodInSeconds, // (Parameter) If available, 1 byte will state the timeout until removal of the card or TLV structure '50' = display text coded as IA5 (limited set of characters) '80' =  waiting period in seconds (coded integer)
+					// (Le) empty
 				})
 				.CheckStatusBytes(new Dictionary<string,string>
 				{
@@ -146,8 +167,13 @@ namespace KaupischIT.CardReader
 				command: new byte[]
 				{
 					// SELECT FILE (HCA) (Health Care Application)
-					0x00,0xa4,0x04,0x0c,0x06,
-					0xd2,0x76,0x00,0x00,0x01,0x02
+					0x00, // CLA '00'
+					0xa4, // INS 'A4'
+					0x04, // (P1) selectionMode = Ordnerselektion mit applicationIdentifier
+					0x0c, // (P2) fileOccurrence + responseType = first occurrence, keine Antwortdaten
+					0x06, // (Lc) lenght of data field
+					0xd2,0x76,0x00,0x00,0x01,0x02 // (Data field) File ID HCA 'D27600000102'
+					// (Le) Empty or length of the expected response
 				})
 				.CheckStatusBytes(CardTerminalClient.selectFileStatusBytes)
 				.GetStatusBytes();
@@ -166,7 +192,13 @@ namespace KaupischIT.CardReader
 				command: new byte[]
 				{
 					// SELECT FILE (KVK)
-					0x00,0xa4,0x04,0x00,0x06,0xd2,0x76,0x00,0x00,0x01,0x01
+					0x00, // CLA '00'
+					0xa4, // INS 'A4'
+					0x04, // (P1) selectionMode = Ordnerselektion mit applicationIdentifier
+					0x00, // (P2)
+					0x06, // (Lc) length of data field
+					0xd2,0x76,0x00,0x00,0x01,0x01 // (Data field) File ID KVK 'D27600000101'
+					// (Le) Empty or length of the expected response
 				})
 				.CheckStatusBytes(CardTerminalClient.selectFileStatusBytes)
 				.GetStatusBytes();
@@ -194,8 +226,14 @@ namespace KaupischIT.CardReader
 				dad: 0, // destination = Card
 				command: new byte[]
 				 {
-					// READ BINARY (Personal Data) 
-					0x00,0xb0,0x81,0x00,0x00,0x00,0x00
+					 // READ BINARY (Personal Data) 
+					 0x00, // CLA '00'
+					 0xb0, // INS 'B0'
+					 0x81, // (P1) READ BINARY mit shortFileIdentifier: 128 + shortFileIdentifier, d.h. '80' + shortFileIdentifier (EF.PD = '01') 
+					 0x00, // (P2) Offset
+					 // (Lc) Empty
+					 // (Data field) Empty
+					 0x00,0x00,0x00  // (Le) Number of bytes to be read. If Le = 00 or 000000 applies, the file is read through to its end, with Le = 00 having a maximum of 256 bytes. 
 				})
 				.CheckStatusBytes(CardTerminalClient.readBinaryStatusBytes);
 
@@ -204,9 +242,15 @@ namespace KaupischIT.CardReader
 				sad: 2, // source = Host
 				dad: 0, // destination = Card
 				command: new byte[]
-				{ 
+				{
 					// READ BINARY (Insurance Data)
-					0x00,0xb0,0x82,0x00,0x00,0x00,0x00
+					0x00, // CLA '00'
+					0xb0, // INS 'B0'
+					0x82, // (P1) READ BINARY mit shortFileIdentifier: 128 + shortFileIdentifier, d.h. '80' + shortFileIdentifier (EF.VD = '02') 
+					0x00, // (P2) Offset
+					// (Lc) Empty
+					// (Data field) Empty
+					0x00,0x00,0x00  // (Le) Number of bytes to be read. If Le = 00 or 000000 applies, the file is read through to its end, with Le = 00 having a maximum of 256 bytes. 
 				})
 				.CheckStatusBytes(CardTerminalClient.readBinaryStatusBytes);
 
@@ -226,7 +270,11 @@ namespace KaupischIT.CardReader
 				command: new byte[]
 				{ 
 					// READ BINARY (KVK)
-					0x00,0xb0,0x00,0x00,0x00
+					0x00, // CLA '00'
+					0xb0, // INS 'B0'
+					0x00, // (P1)
+					0x00, // (P2)
+					0x00  // (Le)
 				})
 				.CheckStatusBytes(CardTerminalClient.readBinaryStatusBytes);
 
