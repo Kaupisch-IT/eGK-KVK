@@ -66,9 +66,9 @@ namespace KaupischIT.CardReader
 		/// Versetzt das Gerät in einen definierten Grundzustand. 
 		/// Bei Kartenterminals mit mehr als einer Schnittstelle werden die gesperrten Ports wieder freigegeben.
 		/// </summary>
-		public void ResetCT()
+		public byte[] ResetCT()
 		{
-			this.ExecuteCommand(
+			return this.ExecuteCommand(
 				sad: 2, // source = Host
 				dad: 1, // destination = Card Terminal
 				command: new byte[]
@@ -95,7 +95,7 @@ namespace KaupischIT.CardReader
 		/// Fordert zum Einstecken einer Chipkarte auf - mit der Möglichkeit, eine Wartezeit anzugeben - und führt nach dem Einstecken einer Karte einen Reset durch.
 		/// Kartenterminals, die mit einem Display ausgestattet sind, bieten die Möglichkeit, eine Eingabeaufforderung anzuzeigen.
 		/// </summary>
-		public string RequestICC(byte waitingPeriodInSeconds = 0)
+		public byte[] RequestICC(byte waitingPeriodInSeconds = 0)
 		{
 			return this.ExecuteCommand(
 				sad: 2, // source = Host
@@ -120,8 +120,7 @@ namespace KaupischIT.CardReader
 					{ "6400", "Error: Reset not successful" },
 					{ "6401", "Error: Process aborted by pressing of cancel key" },
 					{ "6900", "Error: Command with timer not supported" },
-				})
-				.GetStatusBytes();
+				});
 		}
 
 
@@ -129,7 +128,7 @@ namespace KaupischIT.CardReader
 		/// Beendet einen Auslesevorgang und wirft die Chipkarte aus.
 		/// Es wird eine Meldung angezeigt, die zum Entfernen der Karte auffordert, deren Anzeigezeit durch den Timeout-Parameter definiert werden kann. 
 		/// </summary>
-		public string EjectICC(byte waitingPeriodInSeconds = 0)
+		public byte[] EjectICC(byte waitingPeriodInSeconds = 0)
 		{
 			return this.ExecuteCommand(
 				sad: 2, // source = Host
@@ -150,15 +149,14 @@ namespace KaupischIT.CardReader
 					{ "9000", "Command successful" },
 					{ "9001", "Command successful, card removed" },
 					{ "6200", "Warning: Card not removed within specified time" },
-				})
-				.GetStatusBytes();
+				});
 		}
 
 
 		/// <summary>
 		/// Wählt den Container mit den eGK-Daten für folgende Auslesevorgänge aus.
 		/// </summary>
-		public string SelectEGK()
+		public byte[] SelectEGK()
 		{
 			// eGK-Anwendung selektieren
 			return this.ExecuteCommand(
@@ -175,15 +173,14 @@ namespace KaupischIT.CardReader
 					0xd2,0x76,0x00,0x00,0x01,0x02 // (Data field) File ID HCA 'D27600000102'
 					// (Le) Empty or length of the expected response
 				})
-				.CheckStatusBytes(CardTerminalClient.selectFileStatusBytes)
-				.GetStatusBytes();
+				.CheckStatusBytes(CardTerminalClient.selectFileStatusBytes);
 		}
 
 
 		/// <summary>
 		/// Wählt den Container mit den KVK-Daten für folgende Auslesevorgänge aus.
 		/// </summary>
-		public string SelectKVK()
+		public byte[] SelectKVK()
 		{
 			// KVK-Applikation selektieren
 			return this.ExecuteCommand(
@@ -200,8 +197,7 @@ namespace KaupischIT.CardReader
 					0xd2,0x76,0x00,0x00,0x01,0x01 // (Data field) File ID KVK 'D27600000101'
 					// (Le) Empty or length of the expected response
 				})
-				.CheckStatusBytes(CardTerminalClient.selectFileStatusBytes)
-				.GetStatusBytes();
+				.CheckStatusBytes(CardTerminalClient.selectFileStatusBytes);
 		}
 
 

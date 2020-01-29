@@ -18,17 +18,17 @@ namespace KaupischIT.CardReader
 
 				try
 				{
-					cardTerminalClient.SelectEGK();
-					result.EgkResult = cardTerminalClient.ReadEGK();
+					if (!cardTerminalClient.SelectEGK().StatusIsError())
+						result.EgkResult = cardTerminalClient.ReadEGK();
 				}
-				catch { }
+				catch (CtException) { }
 
 				try
 				{
-					cardTerminalClient.SelectKVK();
-					result.KvKResult = cardTerminalClient.ReadKVK();
+					if (!cardTerminalClient.SelectKVK().StatusIsError())
+						result.KvKResult = cardTerminalClient.ReadKVK();
 				}
-				catch { }
+				catch (CtException) { }
 
 				cardTerminalClient.EjectICC();
 			}
