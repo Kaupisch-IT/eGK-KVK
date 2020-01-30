@@ -31,6 +31,37 @@ namespace KaupischIT.CardReader
 
 
 		/// <summary>
+		/// Stellt eine Verbindung mit einem Chipkartenterminal her und liest (falls eingesteckt) die Versichertenstammdaten einer eGK oder KVK/PKV-Card aus
+		/// </summary>
+		/// <param name="path">der Pfad zur herstellerspezifischen DLL mit der CT-API-Implementierung</param>
+		/// <param name="portNumber">Portnummer der physikalischen Schnittstelle des Kartenterminals</param>
+		/// <param name="terminalID">die logische Kartenterminal-Nummer</param>
+		/// <param name="requestCardWaitingPeriodInSeconds">die Zeit (in Sekunden), die auf das Einstecken einer Chipkarte gewartet wird</param>
+		/// <param name="ejectCardWaitingPeriodInSeconds">die Zeit (in Sekunden), die gewartet wird, bis eine eingesteckte Chipkarte entnommen wurde</param>
+		/// <returns></returns>
+		public static CardResult ReadCard(string path,ushort portNumber = 1,ushort terminalID = 1,byte requestCardWaitingPeriodInSeconds = 0,byte ejectCardWaitingPeriodInSeconds = 0)
+		{
+			using (CardTerminalClient cardTerminalClient = new CardTerminalClient(path,portNumber,terminalID)) // eine neue Host/CT-Verbindung mithilfe der herstellerspezifischen CT-API-Bibliothek initiieren
+			{
+				cardTerminalClient.ResetCT(); // das Gerät in einen definierten Grundzustand versetzen
+				cardTerminalClient.RequestICC(requestCardWaitingPeriodInSeconds); // zum Einstecken einer Chipkarte auffordern (ggf. mit Wartezeit) und nach dem Einstecken einer Karte einen Reset durchführen
+
+				CardResult result = new CardResult();
+
+				if (!cardTerminalClient.SelectEGK().StatusIsError()) // Container mit den eGK-Daten für folgende Auslesevorgänge auswählen
+					result.EgkResult = cardTerminalClient.ReadEGK(); // ggf. eGK-Datensätze für die Patientendaten und die Versicherungsdaten auslesen
+
+				if (!cardTerminalClient.SelectKVK().StatusIsError()) // Container mit den KVK-Daten für folgende Auslesevorgänge auswählen
+					result.KvKResult = cardTerminalClient.ReadKVK(); // ggf. KVK-Datensatz auslesen
+
+				cardTerminalClient.EjectICC(ejectCardWaitingPeriodInSeconds); // Auslesevorgang beenden und Chipkarte auswerfen (ggf. mit Wartezeit)
+
+				return result;
+			}
+		}
+
+
+		/// <summary>
 		/// Sendet ein Kommando an ein Kartenterminal/eine Chipkarte und gibt die Antwort zurück
 		/// </summary>
 		/// <param name="dad">Destination Address - Empfänger des Kommandos</param>
@@ -95,6 +126,7 @@ namespace KaupischIT.CardReader
 		/// Fordert zum Einstecken einer Chipkarte auf - mit der Möglichkeit, eine Wartezeit anzugeben - und führt nach dem Einstecken einer Karte einen Reset durch.
 		/// Kartenterminals, die mit einem Display ausgestattet sind, bieten die Möglichkeit, eine Eingabeaufforderung anzuzeigen.
 		/// </summary>
+		/// <param name="waitingPeriodInSeconds">Zeitraum (in Sekunden), der gewartet wird, bis eine Chipkarte eingesteckt wurde.</param>
 		public byte[] RequestICC(byte waitingPeriodInSeconds = 0)
 		{
 			return this.ExecuteCommand(
@@ -128,6 +160,7 @@ namespace KaupischIT.CardReader
 		/// Beendet einen Auslesevorgang und wirft die Chipkarte aus.
 		/// Es wird eine Meldung angezeigt, die zum Entfernen der Karte auffordert, deren Anzeigezeit durch den Timeout-Parameter definiert werden kann. 
 		/// </summary>
+		/// <param name="waitingPeriodInSeconds">Zeitraum (in Sekunden), der gewartet wird, bis die eingesteckte Chipkarte entnommen wurde.</param>
 		public byte[] EjectICC(byte waitingPeriodInSeconds = 0)
 		{
 			return this.ExecuteCommand(

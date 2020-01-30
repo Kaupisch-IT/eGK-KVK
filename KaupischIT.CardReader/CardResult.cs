@@ -6,11 +6,21 @@ namespace KaupischIT.CardReader
 {
 	public class CardResult
 	{
-		/// <summary> Ruft die ausgelesenen Daten einer elektronischen Gesundheitskarte (eGK) ab. </summary>
+		/// <summary> 
+		/// Ruft die ausgelesenen Daten einer elektronischen Gesundheitskarte (eGK) ab. 
+		/// </summary>
 		public EgkResult EgkResult { get; set; }
 
-		/// <summary> Ruft die ausgelesenen Daten einer Krankenversichertenkarte (KVK) bzw. Card für Privatversicherte (PKV-Card) ab. </summary>
+
+		/// <summary> 
+		/// Ruft die ausgelesenen Daten einer Krankenversichertenkarte (KVK) bzw. Card für Privatversicherte (PKV-Card) ab. 
+		/// </summary>
 		public KvkResult KvKResult { get; set; }
+
+
+		/// <summary> Ruft ab, ob der Auslesevorgang für eine eGK oder eine KVK/PKV-Card erfolgreich war </summary>
+		public bool Success
+			=> this.EgkResult!=null || this.KvKResult!=null;
 
 
 		/// <summary> Gibt die Bezeichnung und Ort der ausstellenden Krankenkasse/des ausstellenden Kostenträgers an. </summary>
