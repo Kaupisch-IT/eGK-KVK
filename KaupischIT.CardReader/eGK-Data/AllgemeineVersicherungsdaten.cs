@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Xml.Serialization;
 
 namespace KaupischIT.CardReader.Egk.AllgemeineVersicherungsdaten
@@ -192,6 +193,7 @@ namespace KaupischIT.CardReader.Egk.AllgemeineVersicherungsdaten
 		public Beihilfeberechtigung Beihilfeberechtigung { get; set; }
 
 		[XmlElement("StationaereLeistungen")]
+		[SuppressMessage("Performance","CA1819:Properties should not return arrays")]
 		public StationaereLeistungen[] StationaereLeistungen { get; set; }
 	}
 
