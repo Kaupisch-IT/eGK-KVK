@@ -33,7 +33,7 @@ CardResult result = CardTerminalClient.ReadCard("ctpcsc32kv.dll", requestCardWai
 
 ## Anbindung an Kartenleseterminals
 
-Folgende Geräte wurden bisher mit der eGK- & KVK-API getestet:
+Folgende Geräte wurden bisher mit der eGK- & KVK-API getestet:  
 (:green_heart: = Daten konnten ausgelesen werden, :broken_heart: = Daten konnten _nicht_ ausgelesen werden)
 
 | Gerätename | CT-API-DLL | eGK | KVK/PKV |
