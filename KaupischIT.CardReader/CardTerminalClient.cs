@@ -7,7 +7,6 @@ namespace KaupischIT.CardReader
 	/// <summary>
 	/// Stellt Funktionen zum Zugriff auf die Dateien einer elektronischen Gesundheitskarte (eGK) oder Krankenversichertenkarte (KVK) bzw. Card für Privatversicherte (PKV-Card) bereit
 	/// </summary>
-	[DebuggerStepThrough]
 	public sealed class CardTerminalClient : IDisposable
 	{
 		private readonly CtApi cardTerminalApi; // Wrapper für die herstellerspezifische CT-API
@@ -48,11 +47,21 @@ namespace KaupischIT.CardReader
 
 				CardResult result = new CardResult();
 
-				if (!cardTerminalClient.SelectEGK().StatusIsError()) // Container mit den eGK-Daten für folgende Auslesevorgänge auswählen
-					result.EgkResult = cardTerminalClient.ReadEGK(); // ggf. eGK-Datensätze für die Patientendaten und die Versicherungsdaten auslesen
+				// Daten einer elektronischen Versichertenkarte (eGK) auslesen
+				try
+				{
+					if (!cardTerminalClient.SelectEGK().StatusIsError()) // Container mit den eGK-Daten für folgende Auslesevorgänge auswählen
+						result.EgkResult = cardTerminalClient.ReadEGK(); // ggf. eGK-Datensätze für die Patientendaten und die Versicherungsdaten auslesen
+				}
+				catch (CtException ex) when (ex.ErrorCode==-128) { } // ERR_HTSI
 
-				if (!cardTerminalClient.SelectKVK().StatusIsError()) // Container mit den KVK-Daten für folgende Auslesevorgänge auswählen
-					result.KvKResult = cardTerminalClient.ReadKVK(); // ggf. KVK-Datensatz auslesen
+				// Daten einer Krankenversichertenkarte (KVK) bzw. Card für Privatversicherte (PVK-Card) auslesen
+				try
+				{
+					if (!cardTerminalClient.SelectKVK().StatusIsError()) // Container mit den KVK-Daten für folgende Auslesevorgänge auswählen
+						result.KvKResult = cardTerminalClient.ReadKVK(); // ggf. KVK-Datensatz auslesen
+				}
+				catch (CtException ex) when (ex.ErrorCode==-128) { } // ERR_HTSI
 
 				cardTerminalClient.EjectICC(ejectCardWaitingPeriodInSeconds); // Auslesevorgang beenden und Chipkarte auswerfen (ggf. mit Wartezeit)
 
@@ -68,6 +77,7 @@ namespace KaupischIT.CardReader
 		/// <param name="sad">Source Address - Sender des Kommandos</param>
 		/// <param name="command">Chipkarten- bzw. Kartenterminal-Kommando</param>
 		/// <returns>eine Bytefolge mit der Antwort auf das Kommando</returns>
+		[DebuggerStepThrough]
 		private byte[] ExecuteCommand(byte dad,byte sad,byte[] command)
 		{
 			ushort responseLength = UInt16.MaxValue;
