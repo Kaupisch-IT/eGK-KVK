@@ -25,7 +25,7 @@ Für Kommandos gibt es zwei verschiedene Ziele: Das Terminal selbst oder die ein
 	* **ReadPD** liest den eGK-Datensatz für die Patientendaten aus.
 	* **ReadVD** liest den eGK-Datensatz für die Versicherungsdaten aus.
 
-Eine recht ausführliche Doku zu den eGK-Kommandos findet sich in [Integrationsanleitung medMobile](https://www.medline-online.com/fileadmin/medline_relaunch/Support/medMobile/medMobile_Integrationsanleitung.pdf) (via [medline - medMobile - Kartenlesegeräte für die Gesundheitskarte (eGK)](https://www.medline-online.com/service-support/medcompact.html)).
+Eine recht ausführliche Doku zu den eGK- und KVK-Kommandos findet sich im [Implementierungsleitfaden zur Einbindung der eGK in die Primärsysteme der Leistungserbringer (v 1.6.0](https://fachportal.gematik.de/spezifikationen/basis-rollout/gesundheitskarte/implementierungsleitfaden/).
 
 # Rückgabewerte
 Die beiden letzten Bytes des von der `Data`-Methode zurückgegebenen Bytecodes enthält immer den Status-Code des ausgeführten Kommandos. Mithilfe der `GetStatusBytes`-Methode kann dieser leicht ermittelt werden. Der Status-Code wird dabei in hexadezimaler Notation angezeigt.
@@ -175,8 +175,8 @@ private T Decompress<T>(byte[] compressedData)
 }
 ```
 
-Sonstiges:
+## Sonstiges
 * In der [Spezifikation für Multifunktionale Kartenterminals (MKT)](http://www.teletrust.de/publikationen/spezifikationen/mkt/) sind in [Teil 4 (CT-BCS - Anwendungsunabhängiger CardTerminal Basic Command Set)](http://www.teletrust.de/fileadmin/files/mkt1-0_t4.zip) die Kommandos und möglichen Rückgabe-Codes erklärt.
-* eGK-Musterkarten können kostenfrei unter [gematik (Bestellung Musterkarten)](https://fachportal.gematik.de/spezifikationen/basis-rollout/gesundheitskarte/spezifikation-fuer-musterkarten-und-testkarten/) beantragt werden.
-
->{ **[www.kaupisch-itc.de/impressum](http://www.kaupisch-it.de/index.php?option=com_content&view=article&id=59&Itemid=18)** }>
+* eGK-Test können unter [gematik Fachportal Service/Testkarten](https://fachportal.gematik.de/service/testkarten/) beantragt werden.
+* PKV-Card-Musterkarten (verhalten sich wie die alte KVK) können beim [Verband der Privaten
+Krankenversicherung](https://www.pkv.de/) beantragt werden.
