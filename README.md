@@ -88,7 +88,7 @@ Anhand der Rückgabewerte der `SelectEGK`- bzw. `SelectKVK`-Methoden kann erkann
 
 ### Beispielhafter Ablauf von Auslesevorgängen mit Rückgabecodes
 
-Aufruf von `ReadCard` mit bereits eingesteckter Karte (keine Wartezeiten angegeben):
+Aufruf von `ReadCard` mit __bereits eingesteckter eGK__ (keine Wartezeiten angegeben):
 ```
 ResetCT     9000     (Reset successful)
 RequestICC  6201     (Warning: ICC already present and activated)
@@ -99,7 +99,18 @@ SelectKVK   6a86     (Error: Command parameters not supported)
 EjectICC    6200     (Warning: Card not removed within specified time)
 ```
 
-RequestICC und EjectICC mit Wartezeit, KVK innherhalb der Wartezeit eingesteckt und entfernt:
+RequestICC und EjectICC mit Wartezeit, __eGK__ innherhalb der Wartezeit eingesteckt und entfernt:
+```
+ResetCT     9000  (Reset successful)
+RequestICC  9001  (Asynchronous ICC presented, reset successful)
+SelectEGK   9000  (Command successful - erfolgreiche Selektion eines Files)
+ReadEGK     9000  (Command successful - Datei gelesen)
+ReadEGK     9000  (Command successful - Datei gelesen)
+SelectKVK   6a86  (Error: Command parameters not supported)
+EjectICC    9001  (Command successful, card removed)
+```
+
+RequestICC und EjectICC mit Wartezeit, __KVK__ innherhalb der Wartezeit eingesteckt und entfernt:
 ```
 ResetCT     9000     (Reset successful)
 RequestICC  9000     (Synchronous ICC presented, reset successful)
@@ -109,7 +120,7 @@ ReadKVK     9000     (Command successful - Datei gelesen)
 EjectICC    9001     (Command successful, card removed)
 ```
 
-Keine Karte eingesteckt:
+__Keine Karte__ eingesteckt:
 ```
 ResetCT     9000     (Reset successful)
 RequestICC  6200     (Warning: no card presented within specified time)
