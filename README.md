@@ -46,6 +46,10 @@ Folgende Geräte wurden bisher getestet:
 
 CT-API-DLL: Gegebenenfalls muss der Programm- oder Treiber-Ordners des Herstellers nach DLL-Dateien durchsucht und z.B. mit dem [DLL Export Viewer](https://www.nirsoft.net/utils/dll_export_viewer.html) geguckt werden, welche DLL-Datei die drei Funktionen `CT_init`, `CT_close` und `CT_data` exportiert. Dass sollte dann die richtige DLL-Datei sein, die als Parameter an die `CardTerminalClient`-Klasse übergeben werden muss. 
 
+Test-/Musterkarten:
+* eGK-Testkarten können unter [gematik Fachportal Service/Testkarten](https://fachportal.gematik.de/service/testkarten/) beantragt werden.
+* PKV-Card-Musterkarten (verhalten sich wie die alte KVK) können beim [Verband der Privaten Krankenversicherung](https://www.pkv.de/) beantragt werden.
+
 
 ## Auslesen von Versichertenstammdaten (detaillierter)
 
