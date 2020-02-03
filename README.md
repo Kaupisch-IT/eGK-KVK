@@ -99,7 +99,7 @@ SelectKVK   6a86  (Error: Command parameters not supported)
 EjectICC    6200  (Warning: Card not removed within specified time)
 ```
 
-RequestICC und EjectICC mit Wartezeit, __eGK__ innherhalb der Wartezeit eingesteckt und entfernt:
+Aufruf von `ReadCard` mit Wartezeit, __eGK__ innherhalb der Wartezeit eingesteckt und entfernt:
 ```
 ResetCT     9000  (Reset successful)
 RequestICC  9001  (Asynchronous ICC presented, reset successful)
@@ -110,7 +110,7 @@ SelectKVK   6a86  (Error: Command parameters not supported)
 EjectICC    9001  (Command successful, card removed)
 ```
 
-RequestICC und EjectICC mit Wartezeit, __KVK__ innherhalb der Wartezeit eingesteckt und entfernt:
+Aufruf von `ReadCard` mit Wartezeit, __KVK__ innherhalb der Wartezeit eingesteckt und entfernt:
 ```
 ResetCT     9000  (Reset successful)
 RequestICC  9000  (Synchronous ICC presented, reset successful)
@@ -120,7 +120,7 @@ ReadKVK     9000  (Command successful - Datei gelesen)
 EjectICC    9001  (Command successful, card removed)
 ```
 
-__Keine Karte__ eingesteckt:
+Aufruf von `ReadCard`, __keine Karte__ eingesteckt:
 ```
 ResetCT     9000     (Reset successful)
 RequestICC  6200     (Warning: no card presented within specified time)
