@@ -107,6 +107,7 @@ namespace KaupischIT.CardReader
 		/// Versetzt das Gerät in einen definierten Grundzustand. 
 		/// Bei Kartenterminals mit mehr als einer Schnittstelle werden die gesperrten Ports wieder freigegeben.
 		/// </summary>
+		[DebuggerStepThrough]
 		public byte[] ResetCT()
 		{
 			return this.ExecuteCommand(
@@ -137,6 +138,7 @@ namespace KaupischIT.CardReader
 		/// Kartenterminals, die mit einem Display ausgestattet sind, bieten die Möglichkeit, eine Eingabeaufforderung anzuzeigen.
 		/// </summary>
 		/// <param name="waitingPeriodInSeconds">Zeitraum (in Sekunden), der gewartet wird, bis eine Chipkarte eingesteckt wurde.</param>
+		[DebuggerStepThrough]
 		public byte[] RequestICC(byte waitingPeriodInSeconds = 0)
 		{
 			return this.ExecuteCommand(
@@ -171,6 +173,7 @@ namespace KaupischIT.CardReader
 		/// Es wird eine Meldung angezeigt, die zum Entfernen der Karte auffordert, deren Anzeigezeit durch den Timeout-Parameter definiert werden kann. 
 		/// </summary>
 		/// <param name="waitingPeriodInSeconds">Zeitraum (in Sekunden), der gewartet wird, bis die eingesteckte Chipkarte entnommen wurde.</param>
+		[DebuggerStepThrough]
 		public byte[] EjectICC(byte waitingPeriodInSeconds = 0)
 		{
 			return this.ExecuteCommand(
@@ -199,6 +202,7 @@ namespace KaupischIT.CardReader
 		/// <summary>
 		/// Wählt den Container mit den eGK-Daten für folgende Auslesevorgänge aus.
 		/// </summary>
+		[DebuggerStepThrough]
 		public byte[] SelectEGK()
 		{
 			// eGK-Anwendung selektieren
@@ -223,6 +227,7 @@ namespace KaupischIT.CardReader
 		/// <summary>
 		/// Wählt den Container mit den KVK-Daten für folgende Auslesevorgänge aus.
 		/// </summary>
+		[DebuggerStepThrough]
 		public byte[] SelectKVK()
 		{
 			// KVK-Applikation selektieren
@@ -257,6 +262,7 @@ namespace KaupischIT.CardReader
 		/// <summary>
 		/// Liest die eGK-Datensätze für die Patientendaten und die Versicherungsdaten aus.
 		/// </summary>
+		[DebuggerStepThrough]
 		public EgkResult ReadEGK()
 		{
 			// Personendaten (PD) lesen
@@ -300,6 +306,7 @@ namespace KaupischIT.CardReader
 		/// <summary>
 		/// Liest den KVK-Datensatz aus.
 		/// </summary>
+		[DebuggerStepThrough]
 		public KvkResult ReadKVK()
 		{
 			// KVK-Template lesen
