@@ -12,7 +12,7 @@ Die `CardTerminalClient.ReadCard`-Methode stellt eine Verbindung mit einem Chipk
 
 Wenn eine eGK eingelesen wurde, kann über das `EgkResult` auf die _Persönlichen Versichertendaten_ (PD), die _Allgemeinen Versicherungsdaten_ (VD) und die _Geschützten Versichertendaten_ (GVD) aus den Versichertenstammdaten zugegriffen werden; wenn eine KVK eingelesen wurde, kann über das `KvkResult` auf die Krankenversichertendaten zugegriffen werden (eine PKV-Card verhält sich genau so, wie eine KVK).
 
-Zum Aufbau der Verbindung zu einem Kartenterminal muss der Pfad zur herstellerspezifischen DLL mit der CT-API-Implementierung angegeben werden (Die Suchreihenfolge der DLL entspricht der normalen DLL-Suchreihenfolge - also erst Anwendungsverzeichnis, dann System-Verzeichnis, dann Windows-Verzeichnis usw.)
+Für die korrekte Ausführung muss die jeweilige **CTAPI-Bibliothek des verwendeten Chipkarten-Herstellers** eingebunden werden. Zum Aufbau der Verbindung zu einem Kartenterminal muss daher der Pfad zur herstellerspezifischen DLL mit der CT-API-Implementierung angegeben werden (Die Suchreihenfolge der DLL entspricht der normalen DLL-Suchreihenfolge - also erst Anwendungsverzeichnis, dann System-Verzeichnis, dann Windows-Verzeichnis usw.)
 ```csharp
 CardResult result = CardTerminalClient.ReadCard("ctacs.dll");
 if (result.Success)
@@ -28,8 +28,23 @@ CardResult result = CardTerminalClient.ReadCard("ctorg32.dll",portNumber: 4);
 
 In der Regel unterstützen die Kartenlesegeräte auch die Angabe einer Zeitspanne (in Sekunden), die auf das Einstecken einer Chipkarte gewartet (`RequestICC`) wird bzw. die gewartet wird, bis eine eingesteckte Chipkarte entnommen wurde (`EjectICC`).
 ```csharp
-CardResult result = CardTerminalClient.ReadCard("ctpcsc32kv.dll",requestCardWaitingPeriodInSeconds: 10,ejectCardWaitingPeriodInSeconds: 10);
+CardResult result = CardTerminalClient.ReadCard("ctpcsc32kv.dll", requestCardWaitingPeriodInSeconds: 10, ejectCardWaitingPeriodInSeconds: 10);
 ```
+
+## Anbindung an die jeweiligen Kartenleseterminals
+
+Folgende Geräte wurden bisher getestet:
+
+| Gerätename | CT-API-DLL | eGK | KVK/PKV |
+| ------------- |-------------| :-----:| :-----:|
+| Orga 6141 | `CTORG32.dll` | :green_heart: | :green_heart: |
+| Cherry ST2052 | `ctpcsc32kv.dll` | :green_heart: | :green_heart: |
+| Reinert SCT CyberJack | `ctrsct32.dll` | :green_heart: | :green_heart: |
+| ACS PocketMate | `ctacs.dll` | :green_heart: | :broken_heart: |
+| Cherry 1504 | `ctcym.dll` | :green_heart: | :broken_heart: |
+
+CT-API-DLL: Gegebenenfalls muss der Programm- oder Treiber-Ordners des Herstellers nach DLL-Dateien durchsucht und z.B. mit dem [DLL Export Viewer](https://www.nirsoft.net/utils/dll_export_viewer.html) geguckt werden, welche DLL-Datei die drei Funktionen `CT_init`, `CT_close` und `CT_data` exportiert. Dass sollte dann die richtige DLL-Datei sein, die als Parameter an die `CardTerminalClient`-Klasse übergeben werden muss. 
+
 
 ## Auslesen von Versichertenstammdaten (detaillierter)
 
@@ -69,21 +84,6 @@ public static CardResult ReadCard(string path,ushort portNumber = 1,ushort termi
 Hinweis: Bei nicht eingesteckter Karte signalsiert der `RequestICC`-Befehl in der Regel keinen Fehler, sondern nur eine Warnung (6200 - Warning: no card presented within specified time); ebenso wird eine Warnung ausgegeben, wenn bereits eine Karte steckte (6201 - Warning: ICC already present and activated).
 
 Anhand der Rückgabewerte der `SelectEGK`- bzw. `SelectKVK`-Methoden kann erkannt werden, ob eGK- bzw. KVK-Daten eingelesen werden kann (also ob es sich bei der eingesteckten Karte um eine elektronische Gesundheitskarte oder um eine Krankenversichertenkarte/Card für Privatversicherte handelt). Einige Geräte quittieren eine Nichtunterstützung der Auslesebefehle jedoch nicht durch entsprechende Rückgabewerte, sondern verursachen eine HTSI-Exception. 
-
-## Anbindung an die jeweiligen Kartenleseterminals
-
-Für die korrekte Ausführung muss die jeweilige **CTAPI-Bibliothek des verwendeten Chipkarten-Herstellers** eingebunden werden. 
-Dazu muss der Pfad zur DLL-Datei, die die CT-API des zu verwendenen Kartenlese-Terminals implementiert, als Parameter angegeben werden.
-
-Beispielsweise ist das:
-
- - Cherry ST2052: `ctpcsc32kv.dll`
- - Orga 6141: `CTORG32.dll`
- - Reinert SCT CyberJack: `ctrsct32.dll`
- - ACS PocketMate: `ctacs.dll`
- - Cherry1504: `ctcym.dll`
-
-Gegebenenfalls muss der Programm- oder Treiber-Ordners des Herstellers nach DLL-Dateien durchsucht und z.B. mit dem [DLL Export Viewer](https://www.nirsoft.net/utils/dll_export_viewer.html) geguckt werden, welche DLL-Datei die drei Funktionen `CT_init`, `CT_close` und `CT_data` exportiert. Dass sollte dann die richtige DLL-Datei sein, die als Parameter an die `CardTerminalClient`-Klasse übergeben werden muss. 
 
 ## Implementierungsdetails
 
