@@ -1,39 +1,74 @@
 # eGK- & KVK-API (via CTAPI)
 
-Der Zugriff auf Chipkarten - hier die **elektronische Gesundheitskarte (eGK)** oder die **Krankenversichertenkarte (KVK)** - mithilfe der [CT-API](https://www.tuvit.de/de/aktuelles/white-paper-downloads/card-terminal-application-programing-interface-fuer-chipkartenanwendungen/) ("CardTerminal Application Programming Interface") ist an sich nicht schwer. Der Hersteller des Kartenterminals liefert eine Programmbibliothek (DLL) mit, die standardisierte Schnittstellen implementiert. Das eigentlich Knifflige ist das Durchwühlen sämtlicher Spezifikationen, um die Rückgabewerte korrekt zu interpretieren. Die KVK- & eGK-API hilft hierbei und stellt eine einfache Möglichkeit dar, um Krankversichertenkarten und elektronische Gesundheitskarten auszulesen.
+Für den Zugriff die **elektronische Gesundheitskarte (eGK)** oder die **Krankenversichertenkarte (KVK)** bzw. **Card für Privatversicherte (PKV-Card)** gibt es die [CT-API](https://www.tuvit.de/de/aktuelles/white-paper-downloads/card-terminal-application-programing-interface-fuer-chipkartenanwendungen/) ("CardTerminal Application Programming Interface"). Dafür liefert der Hersteller des Kartenterminals eine (Kartenterminal-spezifische) Programmbibliothek (DLL) mit, die standardisierte Schnittstellen implementiert.
 
-## Benutzung der Codes
-Zunächst muss eine Verbindung zum Kartenterminal aufgebaut werden. Dies geschieht mithilfe der gerätespezifischen Implementierung der CT-API. Hierbei wird nicht mehr gemacht, als die drei Aufrufe der `Init`-, `Data`- und `Close`-Methode zu kapseln.
+Zwischen den beiden Kartentypen bestehen gravierende Unterschiede, sowohl, was die Hardware betrifft (Speicher- versus Prozessorkarte) als auch bezüglich der Datenstruktur. Während die Daten auf der KVK ASN.1-kodiert in einem einzigen linearen File abgelegt sind, besitzt die eGK ein hierarchisches Filesystem und verwendet für die Fachdaten, welche auf der eGK
+gzip-komprimiert abgelegt sind, das XML-Format. Der Einlesevorgang für die eGK muss daher anderen Algorithmen folgen als der für die KVK.
 
-Anschließend können die entsprechenden Befehle an das Kartenterminal gesendet und die Rückgabewerte ausgewerten werden:
+Die eGK- & KVK-API stellt eine einfache Möglichkeit dar, um Krankversichertenkarten und elektronische Gesundheitskarten auszulesen.
+
+## Auslesen von Versichertenstammdaten
+Die `CardTerminalClient.ReadCard`-Methode stellt eine Verbindung mit einem Chipkartenterminal her und liest (falls eingesteckt) die Versichertenstammdaten einer eGK oder KVK/PKV-Card aus. Das zurückgegebene `CardResult`-Objekt stellt Informationen bereit, die sich sowohl auf einer eGK als auch auf einer KVK befinden (Kostenträger und Basis-Informationen des Versicherten). 
+
+Wenn eine eGK eingelesen wurde, kann über das `EgkResult` auf die _Persönlichen Versichertendaten_ (PD), die _Allgemeinen Versicherungsdaten_ (VD) und die _Geschützten Versichertendaten_ (GVD) aus den Versichertenstammdaten zugegriffen werden; wenn eine KVK eingelesen wurde, kann über das `KvkResult` auf die Krankenversichertendaten zugegriffen werden (eine PKV-Card verhält sich genau so, wie eine KVK).
+
+Zum Aufbau der Verbindung zu einem Kartenterminal muss der Pfad zur herstellerspezifischen DLL mit der CT-API-Implementierung angegeben werden (Die Suchreihenfolge der DLL entspricht der normalen DLL-Suchreihenfolge - also erst Anwendungsverzeichnis, dann System-Verzeichnis, dann Windows-Verzeichnis usw.)
 ```csharp
-using (CardTerminalClient cardTerminalClient = new CardTerminalClient("ctacs.dll"))
+CardResult result = CardTerminalClient.ReadCard("ctacs.dll");
+if (result.Success)
 {
-    cardTerminalClient.ResetCT();
-
-    string result = cardTerminalClient.RequestICC();
-    if (result=="9000")
-    {
-        cardTerminalClient.SelectKVK();
-        KvkResult kvkResult = cardTerminalClient.ReadKVK();
-
-        string json = JsonConvert.SerializeObject(kvkResult);
-        MessageBox.Show(json);
-    }
-    else
-    {
-        cardTerminalClient.SelectEGK();
-        EgkResult egkResult = cardTerminalClient.ReadEGK();
-
-        string json = JsonConvert.SerializeObject(egkResult);
-        MessageBox.Show(json);
-    }
-
-    cardTerminalClient.EjectICC();
+   // ausgelesene Ergebnisse auswerten
 }
 ```
 
-Anhand des Rückgabewertes des `RequestICC`-Kommandos kann erkannt werden, ob es sich bei der eingesteckten Chipkarte um eine Krankenversichertenkarte oder eine elektronische Gesundheitskarte handelt. Anschließend kann mithilfe der Methode `ReadKVK` bzw. `ReadEGK` der Datenbereich ausgelesen werden.
+Manche Kartenterminals (z.B. das _ingenico ORGA 6141_) registrieren einen COM-Port. Dieser muss dann ggf. mit spezifiziert werden.
+```csharp
+CardResult result = CardTerminalClient.ReadCard("ctorg32.dll",portNumber: 4);
+```
+
+In der Regel unterstützen die Kartenlesegeräte auch die Angabe einer Zeitspanne (in Sekunden), die auf das Einstecken einer Chipkarte gewartet (`RequestICC`) wird bzw. die gewartet wird, bis eine eingesteckte Chipkarte entnommen wurde (`EjectICC`).
+```csharp
+CardResult result = CardTerminalClient.ReadCard("ctpcsc32kv.dll",requestCardWaitingPeriodInSeconds: 10,ejectCardWaitingPeriodInSeconds: 10);
+```
+
+## Auslesen von Versichertenstammdaten (detaillierter)
+
+Die `ReadCard`-Methode ist folgendermaßen implementiert:
+```csharp
+public static CardResult ReadCard(string path,ushort portNumber = 1,ushort terminalID = 1,byte requestCardWaitingPeriodInSeconds = 0,byte ejectCardWaitingPeriodInSeconds = 0)
+{
+   using (CardTerminalClient cardTerminalClient = new CardTerminalClient(path,portNumber,terminalID)) // eine neue Host/CT-Verbindung mithilfe der herstellerspezifischen CT-API-Bibliothek initiieren
+   {
+      cardTerminalClient.ResetCT(); // das Gerät in einen definierten Grundzustand versetzen
+      cardTerminalClient.RequestICC(requestCardWaitingPeriodInSeconds); // zum Einstecken einer Chipkarte auffordern (ggf. mit Wartezeit) und nach dem Einstecken einer Karte einen Reset durchführen
+
+      CardResult result = new CardResult();
+
+      // Daten einer elektronischen Versichertenkarte (eGK) auslesen
+      try
+      {
+         if (!cardTerminalClient.SelectEGK().StatusIsError()) // Container mit den eGK-Daten für folgende Auslesevorgänge auswählen
+            result.EgkResult = cardTerminalClient.ReadEGK(); // ggf. eGK-Datensätze für die Patientendaten und die Versicherungsdaten auslesen
+      }
+      catch (CtException ex) when (ex.ErrorCode==-128) { } // ERR_HTSI
+
+      // Daten einer Krankenversichertenkarte (KVK) bzw. Card für Privatversicherte (PVK-Card) auslesen
+      try
+      {
+         if (!cardTerminalClient.SelectKVK().StatusIsError()) // Container mit den KVK-Daten für folgende Auslesevorgänge auswählen
+            result.KvKResult = cardTerminalClient.ReadKVK(); // ggf. KVK-Datensatz auslesen
+      }
+      catch (CtException ex) when (ex.ErrorCode==-128) { } // ERR_HTSI
+
+      cardTerminalClient.EjectICC(ejectCardWaitingPeriodInSeconds); // Auslesevorgang beenden und Chipkarte auswerfen (ggf. mit Wartezeit)
+
+      return result;
+   }
+}
+```
+Hinweis: Bei nicht eingesteckter Karte signalsiert der `RequestICC`-Befehl in der Regel keinen Fehler, sondern nur eine Warnung (6200 - Warning: no card presented within specified time); ebenso wird eine Warnung ausgegeben, wenn bereits eine Karte steckte (6201 - Warning: ICC already present and activated).
+
+Anhand der Rückgabewerte der `SelectEGK`- bzw. `SelectKVK`-Methoden kann erkannt werden, ob eGK- bzw. KVK-Daten eingelesen werden kann (also ob es sich bei der eingesteckten Karte um eine elektronische Gesundheitskarte oder um eine Krankenversichertenkarte/Card für Privatversicherte handelt). Einige Geräte quittieren eine Nichtunterstützung der Auslesebefehle jedoch nicht durch entsprechende Rückgabewerte, sondern verursachen eine HTSI-Exception. 
 
 ## Anbindung an die jeweiligen Kartenleseterminals
 
