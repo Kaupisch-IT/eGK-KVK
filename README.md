@@ -37,11 +37,12 @@ Folgende Geräte wurden bisher getestet:
 
 | Gerätename | CT-API-DLL | eGK | KVK/PKV |
 | ------------- |-------------| :-----:| :-----:|
-| Orga 6141 | `CTORG32.dll` | :green_heart: | :green_heart: |
-| Cherry ST2052 | `ctpcsc32kv.dll` | :green_heart: | :green_heart: |
-| Reinert SCT CyberJack | `ctrsct32.dll` | :green_heart: | :green_heart: |
-| ACS PocketMate | `ctacs.dll` | :green_heart: | :broken_heart: |
-| Cherry 1504 | `ctcym.dll` | :green_heart: | :broken_heart: |
+| ingenico ORGA 6141 | `CTORG32.dll` | :green_heart: | :green_heart: |
+| Cherry eHealth Terminal ST-2052 | `ctpcsc32kv.dll` | :green_heart: | :green_heart: |
+| Cherry eHealth Keyboard G87-1504 | `ctcym.dll` | :green_heart: | :broken_heart: |
+| REINER SCT cyberJack e-com plus | `ctrsct32.dll` | :green_heart: | :green_heart: |
+| REINER SCT cyberJack RFID | `ctrsct32.dll` | :green_heart: | :broken_heart: |
+| ACS ACR39U PocketMate II | `ctacs.dll` | :green_heart: | :broken_heart: |
 
 CT-API-DLL: Gegebenenfalls muss der Programm- oder Treiber-Ordners des Herstellers nach DLL-Dateien durchsucht und z.B. mit dem [DLL Export Viewer](https://www.nirsoft.net/utils/dll_export_viewer.html) geguckt werden, welche DLL-Datei die drei Funktionen `CT_init`, `CT_close` und `CT_data` exportiert. Dass sollte dann die richtige DLL-Datei sein, die als Parameter an die `CardTerminalClient`-Klasse übergeben werden muss. 
 
