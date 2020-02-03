@@ -9,39 +9,7 @@ Die CT-API besteht aus drei Methoden:
 	* Die Länge und den Bytecode des eigentlichen Kommandos
 	* Die Länge und den Zeiger auf das erste Element für den Rückgabe-Bytecode.
 
-Die `ICardTerminalApi`-Schnittstelle dient dem Aufruf der nativen CT-API-Methoden der jeweiligen Gerätehersteller. Beispielsweise für ein _Cherry MTK+ ST2052_:
-```csharp
-public class CherrySt2052Api : ICardTerminalApi
-{
-   [DllImport("ctpcsc32kv.dll",EntryPoint = "CT_init")]
-   private static extern sbyte CT_init(ushort ctn,ushort pn);
-
-   [DllImport("ctpcsc32kv.dll",EntryPoint = "CT_close")]
-   private static extern sbyte CT_close(ushort ctn);
-
-   [DllImport("ctpcsc32kv.dll",EntryPoint = "CT_data")]
-   private static extern sbyte CT_data(ushort ctn,ref byte dad,ref byte sad,ushort lenc,ref byte command,ref ushort ulenr,ref byte response);
-
-
-   public sbyte Init(ushort ctn,ushort pn)
-   {
-      return CherrySt2052Api.CT_init(ctn,pn);
-   }
-
-   public sbyte Close(ushort ctn)
-   {
-      return CherrySt2052Api.CT_close(ctn);
-   }
-
-   public sbyte Data(ushort ctn,ref byte dad,ref byte sad,ushort lenc,ref byte command,ref ushort ulenr,ref byte response)
-   {
-      return CherrySt2052Api.CT_data(ctn,ref dad,ref sad,lenc,ref command,ref ulenr,ref response);
-   }
-}
-```
-
-
-
+Die `CtApi`-Schnittstelle dient dem Aufruf der nativen CT-API-Methoden der jeweiligen Gerätehersteller. Im Konstruktor muss der Pfad zur jeweiligen CT-API-DLL des Kartenterminal-Herstellers angegeben werden. 
 
 # Kommandos
 Für Kommandos gibt es zwei verschiedene Ziele: Das Terminal selbst oder die eingesteckte Karte.
@@ -59,41 +27,13 @@ Für Kommandos gibt es zwei verschiedene Ziele: Das Terminal selbst oder die ein
 
 Eine recht ausführliche Doku zu den eGK-Kommandos findet sich in [Integrationsanleitung medMobile](https://www.medline-online.com/fileadmin/medline_relaunch/Support/medMobile/medMobile_Integrationsanleitung.pdf) (via [medline - medMobile - Kartenlesegeräte für die Gesundheitskarte (eGK)](https://www.medline-online.com/service-support/medcompact.html)).
 
-Die `CommandSet`-Klasse enthält alle verfügbaren Kommandos, deren Ziel und Quelle sowie Bytecode. Ein `Command` wird in der `CardTerminalClient`-Klasse dann folgendermaßen verarbeitet:
-```csharp
-public byte[] ExecuteCommand(Command command)
-{
-   ushort responseLength = ushort.MaxValue;
-   byte[] response = new byte[responseLength];
-
-   byte sourceAddress = 2;
-   byte destinationAddress = command.DestinationAddress;
-   byte[] bytecode = command.Bytecode;
-
-   CtReturnCode returnCode = (CtReturnCode)this.cardTerminalApi.Data(this.terminalID,ref destinationAddress,ref sourceAddress,(ushort)bytecode.Length,ref bytecode[0],ref responseLength,ref response[0]);
-   if (returnCode==CtReturnCode.OK)
-   {
-      byte[] result = new byte[responseLength];
-      Array.Copy(response,result,responseLength);
-      return result;
-   }
-   else
-      throw new Exception(returnCode.ToString());
-}
-```
-
-
-
-
 # Rückgabewerte
 Die beiden letzten Bytes des von der `Data`-Methode zurückgegebenen Bytecodes enthält immer den Status-Code des ausgeführten Kommandos. Mithilfe der `GetStatusBytes`-Methode kann dieser leicht ermittelt werden. Der Status-Code wird dabei in hexadezimaler Notation angezeigt.
-Die `ExpectStatusBytes`-Methode hilft dabei, bei nicht erwarteten Statuscodes eine Ausnahme auszulösen.
-```csharp
-public string RequestICC()
-{
-   return this.ExecuteCommand(CommandSet.RequestICC).ExpectStatusBytes("9000","9001").GetStatusBytes();
-}
-```
+Die `ExpectStatusBytes`-Methode hilft dabei, die zurückgegebenen Statuscodes zu interpretieren. Das erste Byte kodiert dabei den Ausgang einer Operation:
+* `61`, `90` - Process completed - Normal Processing
+* `62`, `63` - Process completed - Warning
+* `64`, `65` - Process aborted - Execution Error
+* `67`..`6f` - Process aborted - Checking Error
 
 ## Krankenversichertenkarte (KVK)
 Zum Auslesen der Krankenversichertendaten muss nur ein Bereich auf der Karte ausgelesen werden:
@@ -113,7 +53,7 @@ Dann kommen die eigentlichen Daten (siehe [MKT-Teil 5: SYN – ATR und Datenbere
 
 Als Codierungstechnik für Datenobjekte werden die "Basic Encoding Rules (BER)" der ISO-Codierungskonvention "Abstract Syntax Notation One (ASN.1)" verwendet. Ein Datenobjekt besteht danach aus:
 * einem Datenobjekt-Kennzeichen ("Tag")
-* einem Längenangabe ("Length") und
+* einer Längenangabe ("Length") und
 * einem Datenobjekt-Wert ("Value").
 
 Die Auflistung der **Tags** mit Bedeutungen und Min-/Max-Längen findet man in [Anhang 3 MKT-Anforderungen für Versichertenkarten, 1.6.3 Datenstruktur des Application-file und Prüfvorgaben](https://www.teletrust.de/publikationen/spezifikationen/mkt/).
@@ -183,69 +123,55 @@ Die Daten selbst werden als XML-Daten gemäß vorgegebenem XML-Schema, gzip-komp
 Die Schemadateien kann man z.B. unter [Release 0.5.3 Basis-Rollout](https://fachportal.gematik.de/spezifikationen/basis-rollout/) herunterladen (ganz unten "Für Hersteller bietet die gematik zudem Schnittstellendefinitionen im XSD- und WSDL-Format an").
 Aus den xsd-Dateien kann man mit dem [XML Schema Definition-Tool (Xsd.exe)](http://msdn.microsoft.com/de-de/library/x6c1kb0s.aspx) entsprechende Klassen generieren lassen.
 
-Aufgrund verschiedener Schemata für die auf Gesundheitskarte enthaltenen, XML-kodierten Daten (die Version kann aus dem Attribut `CDM_VERSION` ausgelesen werden; momentan werden die Versionen 5.1.0 und 5.2.0 unterstützt) gibt es einerseits mehrere Typen für die Nutzdaten - z.B. `PersoenlicheVersichertendaten51` (für eGKs der Version 5.1.0) und `PersoenlicheVersichertendaten52` (für eGKs der Version 5.2.0). Andererseits gibt es Schnittstellen, die den kleinsten gemeinsamen Nenner der Versionen abbilden - im Beispiel `IAllgemeineVersicherungsdaten`.
+Die auf der Gesundheitskarte enthaltenen, XML-kodierten Daten sind in verschiedenen Schemata-Versionen gespeichert (die Version kann aus dem Attribut `CDM_VERSION` ausgelesen werden; momentan werden die Versionen 5.1.0 und 5.2.0 unterstützt). Bei der Deserialisierung (Methode `EgkResult.Decompress`) werden die verschiedenen Namespaces ignoriert und die EGK-Daten in die gleichen Data-Transfer-Objekte übertragen (Klassen im Ordner `eGK-Data`). 
 
-Implementiert ist dies in der `EgkResult`-Klasse:
 ```csharp
 private void DecodePD(byte[] bytes)
 {
-	int length = (bytes[0]<<8) + bytes[1];
+    int length = (bytes[0]<<8) + bytes[1];
 
-	byte[] compressedData = new byte[length];
-	Array.Copy(bytes,2,compressedData,0,compressedData.Length);
-
-	this.PersoenlicheVersichertendaten = this.Decompress<IPersoenlicheVersichertendaten>(compressedData,new Dictionary<string,Type>
-	{
-		{  "5.1.0", typeof(PersoenlicheVersichertendaten51) },
-		{  "5.2.0", typeof(PersoenlicheVersichertendaten52) },
-	});
-}
-		
-
-private void DecodeVD(byte[]() bytes)
-{
-	int offsetStartVD = (bytes[0]<<8) + bytes[1];
-	int offsetEndVD = (bytes[2]<<8) + bytes[3];
-	int offsetStartGVD = (bytes[4]<<8) + bytes[5];
-	int offsetEndGVD = (bytes[6]<<8) + bytes[7];
-
-	byte[] compressedDataVD = new byte[offsetEndVD-offsetStartVD];
-	Array.Copy(bytes,offsetStartVD,compressedDataVD,0,compressedDataVD.Length);
-	this.AllgemeineVersicherungsdaten = this.Decompress<IAllgemeineVersicherungsdaten>(compressedDataVD,new Dictionary<string,Type>
-	{
-		{  "5.1.0", typeof(AllgemeineVersicherungsdaten51) },
-		{  "5.2.0", typeof(AllgemeineVersicherungsdaten52) },
-	});
-#if false
-	byte[] compressedDataGVD = new byte[offsetEndGVD-offsetStartGVD];
-	Array.Copy(bytes,offsetStartGVD,compressedDataGVD,0,compressedDataGVD.Length);
-	this.GeschuetzteVersichertendaten = this.Decompress<IGeschuetzteVersichertendaten>(compressedDataGVD,new Dictionary<string,Type>
-	{
-		{  "5.1.0", typeof(GeschuetzteVersichertendaten51) },
-		{  "5.2.0", typeof(GeschuetzteVersichertendaten52) },
-	});
-#endif
+    byte[] compressedData = new byte[length];
+    Array.Copy(bytes,2,compressedData,0,compressedData.Length);
+    
+    this.PersoenlicheVersichertendaten = this.Decompress<PersoenlicheVersichertendaten>(compressedData);
 }
 
 
-private T Decompress<T>(byte[] compressedData,Dictionary<string,Type> actualTypeMapping)
+private void DecodeVD(byte[] bytes)
 {
-	using (MemoryStream memoryStream = new MemoryStream(compressedData))
-	using (GZipStream gzipStream = new GZipStream(memoryStream,CompressionMode.Decompress))
-	using (StreamReader streamReader = new StreamReader(gzipStream,Encoding.GetEncoding("ISO-8859-15")))
-	{
-		string xmlContent = streamReader.ReadToEnd();
-		XmlDocument xmlDocument = new XmlDocument();
-		xmlDocument.LoadXml(xmlContent);
+    int offsetStartVD = (bytes[0]<<8) + bytes[1];
+    int offsetEndVD = (bytes[2]<<8) + bytes[3];
+    int offsetStartGVD = (bytes[4]<<8) + bytes[5];
+    int offsetEndGVD = (bytes[6]<<8) + bytes[7];
 
-		string version = xmlDocument.SelectSingleNode("//@CDM_VERSION").Value;
-		if (!actualTypeMapping.ContainsKey(version))
-			throw new NotImplementedException(version);
+    byte[] compressedDataVD = new byte[offsetEndVD-offsetStartVD];
+    if (compressedDataVD.Length>0)
+    {
+        Array.Copy(bytes,offsetStartVD,compressedDataVD,0,compressedDataVD.Length);
+        this.AllgemeineVersicherungsdaten = this.Decompress<AllgemeineVersicherungsdaten>(compressedDataVD);
+    }
 
-		XmlSerializer xmlSerializer = new XmlSerializer(actualTypeMapping[version]);
-		using (TextReader textReader = new StringReader(xmlContent))
-			return (T)xmlSerializer.Deserialize(textReader);
-	}
+    byte[] compressedDataGVD = new byte[offsetEndGVD-offsetStartGVD];
+    if (compressedDataGVD.Length>0)
+    {
+        Array.Copy(bytes,offsetStartGVD,compressedDataGVD,0,compressedDataGVD.Length);
+        this.GeschuetzteVersichertendaten = this.Decompress<GeschuetzteVersichertendaten>(compressedDataGVD);
+    }
+}
+
+private T Decompress<T>(byte[] compressedData)
+{
+    using (MemoryStream memoryStream = new MemoryStream(compressedData))
+    using (GZipStream gzipStream = new GZipStream(memoryStream,CompressionMode.Decompress))
+    using (StreamReader streamReader = new StreamReader(gzipStream,Encoding.GetEncoding("ISO-8859-15")))
+    {
+        string xmlContent = streamReader.ReadToEnd(); 
+        
+        XmlSerializer xmlSerializer = new XmlSerializer(typeof(T));
+        using (TextReader textReader = new StringReader(xmlContent))
+        using (XmlTextReader xmlTextReader = new XmlTextReader(textReader) { Namespaces = false })
+            return (T)xmlSerializer.Deserialize(xmlTextReader);
+    }
 }
 ```
 
