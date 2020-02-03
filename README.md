@@ -86,6 +86,41 @@ Hinweis: Bei nicht eingesteckter Karte signalsiert der `RequestICC`-Befehl in de
 
 Anhand der Rückgabewerte der `SelectEGK`- bzw. `SelectKVK`-Methoden kann erkannt werden, ob eGK- bzw. KVK-Daten eingelesen werden kann (also ob es sich bei der eingesteckten Karte um eine elektronische Gesundheitskarte oder um eine Krankenversichertenkarte/Card für Privatversicherte handelt). Einige Geräte quittieren eine Nichtunterstützung der Auslesebefehle jedoch nicht durch entsprechende Rückgabewerte, sondern verursachen eine HTSI-Exception. 
 
+### Beispielhafter Ablauf von Auslesevorgängen mit Rückgabecodes
+
+Aufruf von `ReadCard` mit bereits eingesteckter Karte (keine Wartezeiten angegeben):
+```
+ResetCT     9000     (Reset successful)
+RequestICC  6201     (Warning: ICC already present and activated)
+SelectEGK   9000     (Command successful - erfolgreiche Selektion eines Files)
+ReadEGK     9000     (Command successful - Datei gelesen)
+ReadEGK     9000     (Command successful - Datei gelesen)
+SelectKVK   6a86     (Error: Command parameters not supported)
+EjectICC    6200     (Warning: Card not removed within specified time)
+```
+
+RequestICC und EjectICC mit Wartezeit, KVK innherhalb der Wartezeit eingesteckt und entfernt:
+```
+ResetCT     9000     (Reset successful)
+RequestICC  9000     (Synchronous ICC presented, reset successful)
+SelectEGK   6a00     (Error: Falsche Parameter P1, P2)
+SelectKVK   9000     (Command successful - erfolgreiche Selektion eines Files)
+ReadKVK     9000     (Command successful - Datei gelesen)
+EjectICC    9001     (Command successful, card removed)
+```
+
+Keine Karte eingesteckt:
+```
+ResetCT     9000     (Reset successful)
+RequestICC  6200     (Warning: no card presented within specified time)
+Ausnahme ausgelöst: "KaupischIT.CardReader.CtException" in KaupischIT.CardReader.dll
+Nicht näher spezifizierter Fehler, den das HTSI nicht interpretieren kann und die zu einem Abbruch der Funktion geführt haben; Neuinitialisierung des CT erforderlich.
+Ausnahme ausgelöst: "KaupischIT.CardReader.CtException" in KaupischIT.CardReader.dll
+Nicht näher spezifizierter Fehler, den das HTSI nicht interpretieren kann und die zu einem Abbruch der Funktion geführt haben; Neuinitialisierung des CT erforderlich.
+EjectICC    9001     (Command successful, card removed)
+```
+Rückgabecodes unterscheiden sich ggf. je nach Gerätehersteller.
+
 ## Implementierungsdetails
 
 Die ausgeführten Befehle, verwendete Spezifikationen und angewandten Algorithmen können im **[Dokumentations-Bereich](Documentation.md)** nachgelesen werden.
