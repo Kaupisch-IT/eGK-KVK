@@ -90,13 +90,13 @@ Anhand der Rückgabewerte der `SelectEGK`- bzw. `SelectKVK`-Methoden kann erkann
 
 Aufruf von `ReadCard` mit __bereits eingesteckter eGK__ (keine Wartezeiten angegeben):
 ```
-ResetCT     9000     (Reset successful)
-RequestICC  6201     (Warning: ICC already present and activated)
-SelectEGK   9000     (Command successful - erfolgreiche Selektion eines Files)
-ReadEGK     9000     (Command successful - Datei gelesen)
-ReadEGK     9000     (Command successful - Datei gelesen)
-SelectKVK   6a86     (Error: Command parameters not supported)
-EjectICC    6200     (Warning: Card not removed within specified time)
+ResetCT     9000  (Reset successful)
+RequestICC  6201  (Warning: ICC already present and activated)
+SelectEGK   9000  (Command successful - erfolgreiche Selektion eines Files)
+ReadEGK     9000  (Command successful - Datei gelesen)
+ReadEGK     9000  (Command successful - Datei gelesen)
+SelectKVK   6a86  (Error: Command parameters not supported)
+EjectICC    6200  (Warning: Card not removed within specified time)
 ```
 
 RequestICC und EjectICC mit Wartezeit, __eGK__ innherhalb der Wartezeit eingesteckt und entfernt:
@@ -112,12 +112,12 @@ EjectICC    9001  (Command successful, card removed)
 
 RequestICC und EjectICC mit Wartezeit, __KVK__ innherhalb der Wartezeit eingesteckt und entfernt:
 ```
-ResetCT     9000     (Reset successful)
-RequestICC  9000     (Synchronous ICC presented, reset successful)
-SelectEGK   6a00     (Error: Falsche Parameter P1, P2)
-SelectKVK   9000     (Command successful - erfolgreiche Selektion eines Files)
-ReadKVK     9000     (Command successful - Datei gelesen)
-EjectICC    9001     (Command successful, card removed)
+ResetCT     9000  (Reset successful)
+RequestICC  9000  (Synchronous ICC presented, reset successful)
+SelectEGK   6a00  (Error: Falsche Parameter P1, P2)
+SelectKVK   9000  (Command successful - erfolgreiche Selektion eines Files)
+ReadKVK     9000  (Command successful - Datei gelesen)
+EjectICC    9001  (Command successful, card removed)
 ```
 
 __Keine Karte__ eingesteckt:
