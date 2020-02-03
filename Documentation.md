@@ -176,7 +176,7 @@ private T Decompress<T>(byte[] compressedData)
 ```
 
 ## Sonstiges
-* In der [Spezifikation für Multifunktionale Kartenterminals (MKT)](http://www.teletrust.de/publikationen/spezifikationen/mkt/) sind in [Teil 4 (CT-BCS - Anwendungsunabhängiger CardTerminal Basic Command Set)](http://www.teletrust.de/fileadmin/files/mkt1-0_t4.zip) die Kommandos und möglichen Rückgabe-Codes erklärt.
+* Eine sehr detaillierte Dokumentation sämtlicher Karten(terminal)-Kommandos und der Rückgabewerte befindet sich in der [TeleTrusT-SICCT-Spezifikation (Secure Interoperable ChipCard Terminal)](https://www.teletrust.de/projekte/sicct/).
 * eGK-Test können unter [gematik Fachportal Service/Testkarten](https://fachportal.gematik.de/service/testkarten/) beantragt werden.
 * PKV-Card-Musterkarten (verhalten sich wie die alte KVK) können beim [Verband der Privaten
 Krankenversicherung](https://www.pkv.de/) beantragt werden.
