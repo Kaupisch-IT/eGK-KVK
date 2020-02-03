@@ -31,13 +31,14 @@ In der Regel unterstützen die Kartenlesegeräte auch die Angabe einer Zeitspann
 CardResult result = CardTerminalClient.ReadCard("ctpcsc32kv.dll", requestCardWaitingPeriodInSeconds: 10, ejectCardWaitingPeriodInSeconds: 10);
 ```
 
-## Anbindung an die jeweiligen Kartenleseterminals
+## Anbindung an Kartenleseterminals
 
-Folgende Geräte wurden bisher getestet:
+Folgende Geräte wurden bisher mit der eGK- & KVK-API getestet:
+(:green_heart: = Daten konnten ausgelesen werden, :broken_heart: = Daten konnten _nicht_ ausgelesen werden)
 
 | Gerätename | CT-API-DLL | eGK | KVK/PKV |
 | ------------- |-------------| :-----:| :-----:|
-| ingenico ORGA 6141 | `CTORG32.dll` | :green_heart: | :green_heart: |
+| ingenico ORGA 6141 (USB-Modus) | `ctorg32.dll` | :green_heart: | :green_heart: |
 | Cherry eHealth Terminal ST-2052 | `ctpcsc32kv.dll` | :green_heart: | :green_heart: |
 | Cherry eHealth Keyboard G87-1504 | `ctcym.dll` | :green_heart: | :broken_heart: |
 | REINER SCT cyberJack e-com plus | `ctrsct32.dll` | :green_heart: | :green_heart: |
