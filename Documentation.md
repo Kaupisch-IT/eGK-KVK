@@ -29,7 +29,7 @@ Eine recht ausführliche Doku zu den eGK- und KVK-Kommandos findet sich im [Impl
 
 # Rückgabewerte
 Die beiden letzten Bytes des von der `Data`-Methode zurückgegebenen Bytecodes enthält immer den Status-Code des ausgeführten Kommandos. Mithilfe der `GetStatusBytes`-Methode kann dieser leicht ermittelt werden. Der Status-Code wird dabei in hexadezimaler Notation angezeigt.
-Die `ExpectStatusBytes`-Methode hilft dabei, die zurückgegebenen Statuscodes zu interpretieren. Das erste Byte kodiert dabei den Ausgang einer Operation:
+Die `CheckStatusBytes`-Methode hilft dabei, die zurückgegebenen Statuscodes zu interpretieren. Das erste Byte kodiert dabei den Ausgang einer Operation:
 * `61`, `90` - Process completed - Normal Processing
 * `62`, `63` - Process completed - Warning
 * `64`, `65` - Process aborted - Execution Error
@@ -40,7 +40,7 @@ Zum Auslesen der Krankenversichertendaten muss nur ein Bereich auf der Karte aus
 ```csharp
 public KvkResult ReadKVK()
 {
-   var bytes = this.ExecuteCommand(CommandSet.ReadKVK).ExpectStatusBytes("9000","6282");
+   var bytes = this.ExecuteCommand( /* [...] READ BINARY (KVK) */).CheckStatusBytes( /* [...] */);
    return new KvkResult(bytes);
 }
 ```
@@ -107,14 +107,14 @@ Die Daten der eGK bestehen aus den Patientendaten (PD) und den Versichertendaten
 ```csharp
 public EgkResult ReadEGK()
 {
-   byte[] pdData = this.ExecuteCommand(CommandSet.ReadPD).ExpectStatusBytes("9000","6282");
-   byte[] vdData = this.ExecuteCommand(CommandSet.ReadVD).ExpectStatusBytes("9000","6282");
+   byte[] pdData = this.ExecuteCommand( /* [...] READ BINARY (PD) */).CheckStatusBytes( /* [...] */);
+   byte[] vdData = this.ExecuteCommand( /* [...] READ BINARY (VD) */).CheckStatusBytes( /* [...] */);
    return new EgkResult(pdData,vdData);
 }
 ```
 
 Der zurückgegebene Bytecode der Patientendaten (`pdData`; Name, Anschrift) enthält 2 Bytes Längenabgabe für den Inhalt, dann ein ZIP-Komprimiertes XML-Dokument (ISO-8859-15 codiert).
-Der Bytecode mit den Versichertendaten (`vdData `) enthält jeweils 2 Bytes Offset für Start & Ende der allgemeinen Versicherungsdaten (Kostenträger & Versicherungsschutz), sowie je 2 Bytes Offset für Start & Ende der geschützten Versichertendaten (Zuzahlungsstatus & besondere Kennzeichen; diese lassen sich in den Musterkarten noch Auslesen, bei den "echten" eGKarten kommt man aber nicht mehr einfach ran).
+Der Bytecode mit den Versichertendaten (`vdData`) enthält jeweils 2 Bytes Offset für Start & Ende der allgemeinen Versicherungsdaten (Kostenträger & Versicherungsschutz), sowie je 2 Bytes Offset für Start & Ende der geschützten Versichertendaten (Zuzahlungsstatus & besondere Kennzeichen; diese lassen sich in den Musterkarten noch Auslesen, bei den "echten" eGKarten kommt man aber nicht mehr einfach ran).
 
 Dokumentation dazu gibt es unter [Implementierungsleitfaden zur Einbindung der eGK in die Primärsysteme der Leistungserbringer](https://fachportal.gematik.de/spezifikationen/basis-rollout/gesundheitskarte/implementierungsleitfaden/). Unter 4.2.3 "Datei EF.PD" und 4.2.4 "Datei EF.VD" steht, wie jeweils das Byte-Array aufgebaut ist.
 
