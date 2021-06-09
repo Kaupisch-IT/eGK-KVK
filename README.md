@@ -21,19 +21,19 @@ if (result.Success)
 }
 ```
 
-Manche Kartenterminals (z.B. das _ingenico ORGA 6141_) registrieren einen COM-Port. Dieser muss dann ggf. mit spezifiziert werden.
+Manche Kartenterminals (z.B. das _ingenico ORGA 6141_) registrieren einen **COM-Port**. Dieser muss dann ggf. mit spezifiziert werden.
 ```csharp
 CardResult result = CardTerminalClient.ReadCard("ctorg32.dll",portNumber: 4);
 ```
 
-In der Regel unterstützen die Kartenlesegeräte auch die Angabe einer Zeitspanne (in Sekunden), die auf das Einstecken einer Chipkarte gewartet (`RequestICC`) wird bzw. die gewartet wird, bis eine eingesteckte Chipkarte entnommen wurde (`EjectICC`).
+In der Regel unterstützen die Kartenlesegeräte auch die Angabe einer **Wartezeit** (Zeitspanne in Sekunden), die auf das Einstecken einer Chipkarte (`RequestICC`) gewartet wird bzw. die gewartet wird, bis eine eingesteckte Chipkarte entnommen wurde (`EjectICC`).
 ```csharp
 CardResult result = CardTerminalClient.ReadCard("ctpcsc32kv.dll", requestCardWaitingPeriodInSeconds: 10, ejectCardWaitingPeriodInSeconds: 10);
 ```
 
 ## Anbindung an Kartenleseterminals
 
-Folgende Geräte wurden bisher mit der eGK- & KVK-API getestet:  
+Folgende Geräte wurden bisher mit der eGK- & KVK-API getestet. [Weitere getestete Geräte können gern mit aufgenommen werden.](https://github.com/Kaupisch-IT/eGK-KVK/issues/2)  
 (:green_heart: = Daten konnten ausgelesen werden, :broken_heart: = Daten konnten _nicht_ ausgelesen werden)
 
 | Gerätename | CT-API-DLL | eGK | KVK/PKV |
@@ -45,11 +45,11 @@ Folgende Geräte wurden bisher mit der eGK- & KVK-API getestet:
 | REINER SCT cyberJack RFID | `ctrsct32.dll` | :green_heart: | :broken_heart: |
 | ACS ACR39U PocketMate II | `ctacs.dll` | :green_heart: | :broken_heart: |
 
-CT-API-DLL: Gegebenenfalls muss der Programm- oder Treiber-Ordners des Herstellers nach DLL-Dateien durchsucht und z.B. mit dem [DLL Export Viewer](https://www.nirsoft.net/utils/dll_export_viewer.html) geguckt werden, welche DLL-Datei die drei Funktionen `CT_init`, `CT_close` und `CT_data` exportiert. Dass sollte dann die richtige DLL-Datei sein, die als Parameter an die `CardTerminalClient`-Klasse übergeben werden muss. 
+**CT-API-DLL**: Gegebenenfalls muss der Programm- oder Treiber-Ordners des Herstellers nach DLL-Dateien durchsucht und z.B. mit dem [DLL Export Viewer](https://www.nirsoft.net/utils/dll_export_viewer.html) geguckt werden, welche DLL-Datei die drei Funktionen `CT_init`, `CT_close` und `CT_data` exportiert. Dass sollte dann die richtige DLL-Datei sein, die als Parameter an die `CardTerminalClient`-Klasse übergeben werden muss. 
 
 Test-/Musterkarten:
-* eGK-Testkarten können unter [gematik Fachportal Service/Testkarten](https://fachportal.gematik.de/service/testkarten/) beantragt werden.
-* PKV-Card-Musterkarten (verhalten sich wie die alte KVK) können beim [Verband der Privaten Krankenversicherung](https://www.pkv.de/) beantragt werden.
+* **eGK-Testkarten** können unter [gematik Fachportal Service/Testkarten](https://fachportal.gematik.de/service/testkarten/) beantragt werden.
+* **PKV-Card-Musterkarten** (verhalten sich wie die alte KVK) können beim [Verband der Privaten Krankenversicherung](https://www.pkv.de/) beantragt werden.
 
 
 ## Auslesen von Versichertenstammdaten (detaillierter)
@@ -87,7 +87,7 @@ public static CardResult ReadCard(string path,ushort portNumber = 1,ushort termi
    }
 }
 ```
-Hinweis: Bei nicht eingesteckter Karte signalsiert der `RequestICC`-Befehl in der Regel keinen Fehler, sondern nur eine Warnung (6200 - Warning: no card presented within specified time); ebenso wird eine Warnung ausgegeben, wenn bereits eine Karte steckte (6201 - Warning: ICC already present and activated).
+Hinweis: Bei nicht eingesteckter Karte signalsiert der `RequestICC`-Befehl in der Regel keinen Fehler, sondern nur eine Warnung *(6200 - Warning: no card presented within specified time)*; ebenso wird eine Warnung ausgegeben, wenn bereits eine Karte steckte *(6201 - Warning: ICC already present and activated)*.
 
 Anhand der Rückgabewerte der `SelectEGK`- bzw. `SelectKVK`-Methoden kann erkannt werden, ob eGK- bzw. KVK-Daten eingelesen werden kann (also ob es sich bei der eingesteckten Karte um eine elektronische Gesundheitskarte oder um eine Krankenversichertenkarte/Card für Privatversicherte handelt). Einige Geräte quittieren eine Nichtunterstützung der Auslesebefehle jedoch nicht durch entsprechende Rückgabewerte, sondern verursachen eine HTSI-Exception. 
 
