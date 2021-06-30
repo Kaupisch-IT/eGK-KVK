@@ -67,16 +67,16 @@ namespace KaupischIT.CardReader
 			int offsetEndGVD = (bytes[6]<<8) + bytes[7];
 
 			// Nutzdaten mit den allgemeinen Versicherungsdaten (VD) extrahieren und deserialisieren
-			byte[] compressedDataVD = new byte[offsetEndVD-offsetStartVD];
-			if (compressedDataVD.Length>0)
+			byte[] compressedDataVD = new byte[Math.Min(offsetEndVD+1,bytes.Length)-offsetStartVD];
+			if (offsetStartVD!=offsetEndVD)
 			{
 				Array.Copy(bytes,offsetStartVD,compressedDataVD,0,compressedDataVD.Length);
 				this.AllgemeineVersicherungsdaten = this.Decompress<AllgemeineVersicherungsdaten>(compressedDataVD);
 			}
 
 			// Nutzdaten mit den geschützten Versichertendaten (GVD) extrahieren und deserialisieren
-			byte[] compressedDataGVD = new byte[offsetEndGVD-offsetStartGVD];
-			if (compressedDataGVD.Length>0)
+			byte[] compressedDataGVD = new byte[Math.Min(offsetEndGVD+1,bytes.Length)-offsetStartGVD];
+			if (offsetStartGVD!=offsetEndGVD)
 			{
 				Array.Copy(bytes,offsetStartGVD,compressedDataGVD,0,compressedDataGVD.Length);
 				this.GeschuetzteVersichertendaten = this.Decompress<GeschuetzteVersichertendaten>(compressedDataGVD);

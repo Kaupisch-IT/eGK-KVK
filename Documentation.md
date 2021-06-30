@@ -5,11 +5,11 @@ Die CT-API besteht aus drei Methoden:
 * **Close** zum Schließen der Verbindung zu einem Kartenleseterminal. Übergabeparameter ist die ID des Terminals, dessen Verbindung geschlossen werden soll. _**Achtung:** Manche Geräte gehen in einen Fehlerzustand über und geben dann nur undefinierte Werte zurück, wenn nicht immer ordentlich `Close` aufgerufen wird. Dann hilft oft nur das Trennen und Wiederverbinden der USB-Verbindung_
 * **Data** ist das eigentlich "Herzstück" der CT-API. Hiermit werden [Kommandos](#kommandos) verschickt und Daten angefordert. Die Parameter sind:
 	* Die ID des Kartenterminals, an das ein Kommando geschickt werden soll
-	* Das Ziel (Kartenkommandos = 0, Terminalkommandos = 1) und die Quelle (PC = 2) des Kommandos 
+	* Das Ziel (Kartenkommandos = 0, Terminalkommandos = 1) und die Quelle (PC = 2) des Kommandos
 	* Die Länge und den Bytecode des eigentlichen Kommandos
 	* Die Länge und den Zeiger auf das erste Element für den Rückgabe-Bytecode.
 
-Die `CtApi`-Schnittstelle dient dem Aufruf der nativen CT-API-Methoden der jeweiligen Gerätehersteller. Im Konstruktor muss der Pfad zur jeweiligen CT-API-DLL des Kartenterminal-Herstellers angegeben werden. 
+Die `CtApi`-Schnittstelle dient dem Aufruf der nativen CT-API-Methoden der jeweiligen Gerätehersteller. Im Konstruktor muss der Pfad zur jeweiligen CT-API-DLL des Kartenterminal-Herstellers angegeben werden.
 
 # Kommandos
 Für Kommandos gibt es zwei verschiedene Ziele: Das Terminal selbst oder die eingesteckte Karte.
@@ -144,15 +144,15 @@ private void DecodeVD(byte[] bytes)
     int offsetStartGVD = (bytes[4]<<8) + bytes[5];
     int offsetEndGVD = (bytes[6]<<8) + bytes[7];
 
-    byte[] compressedDataVD = new byte[offsetEndVD-offsetStartVD];
-    if (compressedDataVD.Length>0)
+    byte[] compressedDataVD = new byte[Math.Min(offsetEndVD+1,bytes.Length)-offsetStartVD];
+    if (offsetStartVD!=offsetEndVD)
     {
         Array.Copy(bytes,offsetStartVD,compressedDataVD,0,compressedDataVD.Length);
         this.AllgemeineVersicherungsdaten = this.Decompress<AllgemeineVersicherungsdaten>(compressedDataVD);
     }
 
-    byte[] compressedDataGVD = new byte[offsetEndGVD-offsetStartGVD];
-    if (compressedDataGVD.Length>0)
+    byte[] compressedDataGVD = new byte[Math.Min(offsetEndGVD+1,bytes.Length)-offsetStartGVD];
+    if (offsetStartGVD!=offsetEndGVD)
     {
         Array.Copy(bytes,offsetStartGVD,compressedDataGVD,0,compressedDataGVD.Length);
         this.GeschuetzteVersichertendaten = this.Decompress<GeschuetzteVersichertendaten>(compressedDataGVD);
