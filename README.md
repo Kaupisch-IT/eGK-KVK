@@ -40,6 +40,7 @@ Folgende Geräte wurden bisher mit der eGK- & KVK-API getestet. [Weitere geteste
 | ------------- |-------------| :-----:| :-----:|
 | ingenico ORGA 6141 (USB-Modus) | `ctorg32.dll` | :green_heart: | :green_heart: |
 | Cherry eHealth Terminal ST-2052 | `ctpcsc32kv.dll` | :green_heart: | :green_heart: |
+| Cherry eHealth Terminal ST-2100 | `ctpcsc32kv.dll` | :green_heart: | :green_heart: |
 | Cherry eHealth Keyboard G87-1504 | `ctcym.dll` | :green_heart: | :broken_heart: |
 | REINER SCT cyberJack e-com plus | `ctrsct32.dll` | :green_heart: | :green_heart: |
 | REINER SCT cyberJack RFID | `ctrsct32.dll` | :green_heart: | :broken_heart: |
