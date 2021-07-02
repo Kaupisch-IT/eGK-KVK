@@ -5,10 +5,10 @@ using System.Text;
 namespace KaupischIT.CardReader
 {
 	/// <summary>
-	/// Stellt Daten einer Krankenversichertenkarte (KVK) bzw. Card für Privatversicherte (PKV-Card) bereit
+	/// Stellt Daten Card für Privatversicherte (PKV-Card) bereit
 	/// </summary>
 	[DebuggerDisplay("{VorName} {FamilienName}, {KrankenKassenName}")]
-	public class KvkResult
+	public class PkvResult
 	{
 		private readonly Dictionary<byte,string> values; // beinhaltet die ausgelesenen Schlüssel-Wert-Paare der KVK-Daten
 
@@ -17,7 +17,7 @@ namespace KaupischIT.CardReader
 		/// Initialisiert eine neue Instanz der KvkResult-Klasse und dekodiert die übergebenen Krankenversichertendaten
 		/// </summary>
 		/// <param name="bytes">die Rohdaten aus dem KVK-Template der Krankenversichertenkarte</param>
-		public KvkResult(byte[] bytes)
+		public PkvResult(byte[] bytes)
 		{
 			this.values = this.Decode(bytes);
 		}
@@ -89,29 +89,26 @@ namespace KaupischIT.CardReader
 		public string KrankenKassenName
 			=> this[0x80];
 
-		/// <summary> Gibt die Kassennummer oder das Institutionskennzeichen an. </summary>
-		public string KrankenKassenNummer
+		/// <summary> Konstante 1 (ausgenullt) </summary>
+		public string Konstante1
 			=> this[0x81];
 
-		/// <summary> Gibt die VKNR ("Vertragskassennummer der Kassenärztlichen Vereinigungen") bzw. das WOP-Kennzeichen ("Wohnortprinzip") an. </summary>
+		/// <summary> Konstante 2 (ausgenullt) </summary>
 		public string VKNR
 			=> this[0x8F];
 
-		/// <summary> Gibt die Krankenversichertennummer an. </summary>
-		public string VersichertenNummer
+		/// <summary> Gibt die Versicherungsnummer (Vertragsnummer) an. </summary>
+		public string VersicherungsNummer
 			=> this[0x82];
 
 		/// <summary> 
-		/// Gibt den Versichertenstatus an. 
-		/// 1 = Versicherungspflichtige und -berechtigte
-		/// 3 = Familienversicherte
-		/// 5 = Rentner in der Krankenversicherung der Rentner und deren familienversicherten Angehörige
+		/// Gibt die Personennummer (Vertragsunternummer der versicherten Person) an. 
 		/// </summary>
-		public string VersichertenStatus
+		public string PersonenNummer
 			=> this[0x83];
 
-		/// <summary> Gibt das Kennzeichen bei Teilnehmern an einem Disease-Management-Programm an. </summary>
-		public string StatusErgänzung
+		/// <summary> Konstante 3 (wird mit einer "1" belegt) </summary>
+		public string Konstante3
 			=> this[0x90];
 
 		/// <summary> Gibt den Titel (optional) an. </summary>

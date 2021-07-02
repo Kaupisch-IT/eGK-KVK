@@ -55,11 +55,11 @@ namespace KaupischIT.CardReader
 				}
 				catch (CtException ex) when (ex.ErrorCode==-128) { } // ERR_HTSI
 
-				// Daten einer Krankenversichertenkarte (KVK) bzw. Card für Privatversicherte (PVK-Card) auslesen
+				// Daten einer Card für Privatversicherte (PVK-Card) bzw. Krankenversichertenkarte (KVK) auslesen
 				try
 				{
-					if (!cardTerminalClient.SelectKVK().StatusIsError()) // Container mit den KVK-Daten für folgende Auslesevorgänge auswählen
-						result.KvKResult = cardTerminalClient.ReadKVK(); // ggf. KVK-Datensatz auslesen
+					if (!cardTerminalClient.SelectKVK().StatusIsError()) // Container mit den Krankenversichertendaten für folgende Auslesevorgänge auswählen
+						result.PkvResult = cardTerminalClient.ReadPKV(); // ggf. PKV-Card-Datensatz auslesen
 				}
 				catch (CtException ex) when (ex.ErrorCode==-128) { } // ERR_HTSI
 
@@ -307,7 +307,7 @@ namespace KaupischIT.CardReader
 		/// Liest den KVK-Datensatz aus.
 		/// </summary>
 		[DebuggerStepThrough]
-		public KvkResult ReadKVK()
+		public PkvResult ReadPKV()
 		{
 			// KVK-Template lesen
 			byte[] kvkData = this.ExecuteCommand(
@@ -324,7 +324,7 @@ namespace KaupischIT.CardReader
 				})
 				.CheckStatusBytes(CardTerminalClient.readBinaryStatusBytes);
 
-			return new KvkResult(kvkData);
+			return new PkvResult(kvkData);
 		}
 
 

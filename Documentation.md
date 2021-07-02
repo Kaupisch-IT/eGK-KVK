@@ -35,13 +35,15 @@ Die `CheckStatusBytes`-Methode hilft dabei, die zurückgegebenen Statuscodes zu 
 * `64`, `65` - Process aborted - Execution Error
 * `67`..`6f` - Process aborted - Checking Error
 
-## Krankenversichertenkarte (KVK)
+## Card für Privatversicherte (PKV-Card) & Krankenversichertenkarte (KVK)
+Das Auslesen der Daten einer Card für Privatversicherte (PKV-Card) orientiert sich am Vorgehen für das Auslesen einer Krankenversichertenkarte (die bis 2014 gültig waren). Lediglich ein paar wenige Felder in der Datenstruktur unterscheiden sich (siehe [diesen Kommentar](https://github.com/Kaupisch-IT/eGK-KVK/issues/4#issuecomment-872982702))
+
 Zum Auslesen der Krankenversichertendaten muss nur ein Bereich auf der Karte ausgelesen werden:
 ```csharp
-public KvkResult ReadKVK()
+public PkvResult ReadPKV()
 {
    var bytes = this.ExecuteCommand( /* [...] READ BINARY (KVK) */).CheckStatusBytes( /* [...] */);
-   return new KvkResult(bytes);
+   return new PkvResult(bytes);
 }
 ```
 
@@ -103,7 +105,7 @@ private int ReadLength(byte[] bytes,ref int i)
 
 
 ## Elektronische Gesundheitskarte (eGK)
-Die Daten der eGK bestehen aus den Patientendaten (PD) und den Versichertendaten (VD), die mit zwei separaten Kommandos ausgelesen werden können. 
+Die Daten der eGK bestehen aus den Patientendaten (PD) und den Versichertendaten (VD), die mit zwei separaten Kommandos ausgelesen werden können.
 ```csharp
 public EgkResult ReadEGK()
 {
@@ -123,7 +125,7 @@ Die Daten selbst werden als XML-Daten gemäß vorgegebenem XML-Schema, gzip-komp
 Die Schemadateien kann man z.B. unter [Release 0.5.3 Basis-Rollout](https://fachportal.gematik.de/spezifikationen/basis-rollout/) herunterladen (ganz unten "Für Hersteller bietet die gematik zudem Schnittstellendefinitionen im XSD- und WSDL-Format an").
 Aus den xsd-Dateien kann man mit dem [XML Schema Definition-Tool (Xsd.exe)](http://msdn.microsoft.com/de-de/library/x6c1kb0s.aspx) entsprechende Klassen generieren lassen.
 
-Die auf der Gesundheitskarte enthaltenen, XML-kodierten Daten sind in verschiedenen Schemata-Versionen gespeichert (die Version kann aus dem Attribut `CDM_VERSION` ausgelesen werden; momentan werden die Versionen 5.1.0 und 5.2.0 unterstützt). Bei der Deserialisierung (Methode `EgkResult.Decompress`) werden die verschiedenen Namespaces ignoriert und die EGK-Daten in die gleichen Data-Transfer-Objekte übertragen (Klassen im Ordner `eGK-Data`). 
+Die auf der Gesundheitskarte enthaltenen, XML-kodierten Daten sind in verschiedenen Schemata-Versionen gespeichert (die Version kann aus dem Attribut `CDM_VERSION` ausgelesen werden; momentan werden die Versionen 5.1.0 und 5.2.0 unterstützt). Bei der Deserialisierung (Methode `EgkResult.Decompress`) werden die verschiedenen Namespaces ignoriert und die EGK-Daten in die gleichen Data-Transfer-Objekte übertragen (Klassen im Ordner `eGK-Data`).
 
 ```csharp
 private void DecodePD(byte[] bytes)
@@ -132,7 +134,7 @@ private void DecodePD(byte[] bytes)
 
     byte[] compressedData = new byte[length];
     Array.Copy(bytes,2,compressedData,0,compressedData.Length);
-    
+
     this.PersoenlicheVersichertendaten = this.Decompress<PersoenlicheVersichertendaten>(compressedData);
 }
 
@@ -165,8 +167,8 @@ private T Decompress<T>(byte[] compressedData)
     using (GZipStream gzipStream = new GZipStream(memoryStream,CompressionMode.Decompress))
     using (StreamReader streamReader = new StreamReader(gzipStream,Encoding.GetEncoding("ISO-8859-15")))
     {
-        string xmlContent = streamReader.ReadToEnd(); 
-        
+        string xmlContent = streamReader.ReadToEnd();
+
         XmlSerializer xmlSerializer = new XmlSerializer(typeof(T));
         using (TextReader textReader = new StringReader(xmlContent))
         using (XmlTextReader xmlTextReader = new XmlTextReader(textReader) { Namespaces = false })

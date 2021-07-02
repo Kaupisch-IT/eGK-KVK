@@ -54,7 +54,7 @@
     <Compile Include="eGK-Data\PersoenlicheVersichertendaten.cs" />
     <Compile Include="EgkResult.cs" />
     <Compile Include="Extensions.cs" />
-    <Compile Include="KvkResult.cs" />
+    <Compile Include="PkvResult.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
