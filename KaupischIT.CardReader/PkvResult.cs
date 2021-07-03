@@ -97,12 +97,16 @@ namespace KaupischIT.CardReader
 		public string VKNR
 			=> this[0x8F];
 
-		/// <summary> Gibt die Versicherungsnummer (Vertragsnummer) an. </summary>
+		/// <summary> 
+		/// Gibt die Versicherungsnummer (Vertragsnummer) an. 
+		/// Die Versicherungsnummer ist eine von dem Versicherungsunternehmen vergebene Nummer zur eindeutigen Identifikation eines jeden einzelnen Versicherungsvertrages.
+		/// </summary>
 		public string VersicherungsNummer
 			=> this[0x82];
 
 		/// <summary> 
-		/// Gibt die Personennummer (Vertragsunternummer der versicherten Person) an. 
+		/// Gibt die Personennummer (Vertragsunternummer der versicherten Person) an.
+		/// Die Personennummer ist eine von dem Versicherungsunternehmen vergebene Nummer zur eindeutigen Identifikation einer versicherten Person innerhalb eines Versicherungsvertrages.
 		/// </summary>
 		public string PersonenNummer
 			=> this[0x83];
