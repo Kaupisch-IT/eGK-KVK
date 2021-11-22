@@ -21,7 +21,7 @@ if (result.Success)
 }
 ```
 
-Manche Kartenterminals (z.B. das _ingenico ORGA 6141_) registrieren einen **COM-Port**. Dieser muss dann ggf. mit spezifiziert werden.
+Manche Kartenterminals (z.B. das _ingenico ORGA 6141_ oder _ingenico ORGA 930 M_) registrieren einen **COM-Port**. Dieser muss dann ggf. mit spezifiziert werden.
 ```csharp
 CardResult result = CardTerminalClient.ReadCard("ctorg32.dll",portNumber: 4);
 ```
@@ -33,12 +33,13 @@ CardResult result = CardTerminalClient.ReadCard("ctpcsc32kv.dll", requestCardWai
 
 ## Anbindung an Kartenleseterminals
 
-Folgende Geräte wurden bisher mit der eGK- & KVK-API getestet. [Weitere getestete Geräte können gern mit aufgenommen werden.](https://github.com/Kaupisch-IT/eGK-KVK/issues/2)
+Folgende Geräte wurden bisher mit der eGK- & KVK-API getestet.<sup> [Weitere getestete Geräte können gern mit aufgenommen werden.](https://github.com/Kaupisch-IT/eGK-KVK/issues/2) </sup>  
 (:green_heart: = Daten konnten ausgelesen werden, :broken_heart: = Daten konnten _nicht_ ausgelesen werden)
 
 | Gerätename | CT-API-DLL | eGK | PKV-Card/KVK |
 | ------------- |-------------| :-----:| :-----:|
-| ingenico ORGA 6141 (USB-Modus) | `ctorg32.dll` | :green_heart: | :green_heart: |
+| ingenico ORGA 6141 (USB-Modus) | `ctorg32.dll`<sup>*)</sup> | :green_heart: | :green_heart: |
+| ingenico ORGA 930 M (USB-Modus) | `ctorg32.dll`<sup>*)</sup> | :green_heart: | :green_heart: |
 | Cherry eHealth Terminal ST-2052 | `ctpcsc32kv.dll` | :green_heart: | :green_heart: |
 | Cherry eHealth Terminal ST-2100 | `ctpcsc32kv.dll` | :green_heart: | :green_heart: |
 | Cherry SmartTerminal ST-1144  | `ctcym.dll`/`CTChyCTApiSp.dll` | :green_heart: | :green_heart: |
@@ -46,13 +47,15 @@ Folgende Geräte wurden bisher mit der eGK- & KVK-API getestet. [Weitere geteste
 | REINER SCT cyberJack e-com plus | `ctrsct32.dll` | :green_heart: | :green_heart: |
 | REINER SCT cyberJack RFID | `ctrsct32.dll` | :green_heart: | :broken_heart: |
 | ACS ACR39U PocketMate II | `ctacs.dll` | :green_heart: | :broken_heart: |
-| HID Omnikey 3021 USB | `ctcym.dll`/`CTChyCTApiSp.dll`<sup>*)</sup> | :green_heart: | :broken_heart: |
-| HID Omnikey 3121 USB | `ctcym.dll`/`CTChyCTApiSp.dll`<sup>*)</sup> | :green_heart: | :broken_heart: |
-| CSL USB SmartCard Reader | `ctcym.dll`/`CTChyCTApiSp.dll`<sup>*)</sup> | :green_heart: | :broken_heart: |
+| HID Omnikey 3021 USB | `ctcym.dll`/`CTChyCTApiSp.dll`<sup>**)</sup> | :green_heart: | :broken_heart: |
+| HID Omnikey 3121 USB | `ctcym.dll`/`CTChyCTApiSp.dll`<sup>**)</sup> | :green_heart: | :broken_heart: |
+| CSL USB SmartCard Reader | `ctcym.dll`/`CTChyCTApiSp.dll`<sup>**)</sup> | :green_heart: | :broken_heart: |
 
+<sup>*) Die Angabe des Parameters `portNumber` (Nummer des COM-Ports) ist hier notwendig.</sup>
+   
 **CT-API-DLL**: Gegebenenfalls muss der Programm- oder Treiber-Ordners des Herstellers nach DLL-Dateien durchsucht und z.B. mit dem [DLL Export Viewer](https://www.nirsoft.net/utils/dll_export_viewer.html) geguckt werden, welche DLL-Datei die drei Funktionen `CT_init`, `CT_close` und `CT_data` exportiert. Dass sollte dann die richtige DLL-Datei sein, die als Parameter an die `CardTerminalClient`-Klasse übergeben werden muss.
 
-<sup>*)</sup> Einige Kartelesegeräte stellen keine eigene CT-API-Anbindung (mehr) zur Verfügung, allerdings scheint die CT-API-Implementierung aus den *[Cherry](https://cherry.de/download/de/download.php) CardReaderTools* auch für andere Lesegeräte verwendbar zu sein (zumindest zum Auslesen der eGK).
+<sup>**) Einige Kartelesegeräte stellen keine eigene CT-API-Anbindung (mehr) zur Verfügung, allerdings scheint die CT-API-Implementierung aus den *[Cherry](https://cherry.de/download/de/download.php) CardReaderTools* auch für andere Lesegeräte verwendbar zu sein (zumindest zum Auslesen der eGK).</sup>
 
 Test-/Musterkarten:
 * **eGK-Testkarten** können unter [gematik Fachportal Service/Testkarten](https://fachportal.gematik.de/service/testkarten/) beantragt werden.
