@@ -43,9 +43,10 @@ Folgende Geräte wurden bisher mit der eGK- & KVK-API getestet.<sup> [Weitere ge
 | Cherry eHealth Terminal ST-2052 | `ctpcsc32kv.dll` | :green_heart: | :green_heart: |
 | Cherry eHealth Terminal ST-2100 | `ctpcsc32kv.dll` | :green_heart: | :green_heart: |
 | Cherry SmartTerminal ST-1144  | `ctcym.dll`/`CTChyCTApiSp.dll` | :green_heart: | :green_heart: |
-| Cherry eHealth Keyboard G87-1504 | `ctcym.dll` | :green_heart: | :broken_heart: |
+| Cherry eHealth Keyboard G87-1504 | `ctcym.dll`<sup>[Details](https://github.com/Kaupisch-IT/eGK-KVK/issues/2#issuecomment-1008163064)</sup> | :green_heart: | :green_heart: |
 | REINER SCT cyberJack e-com plus | `ctrsct32.dll` | :green_heart: | :green_heart: |
 | REINER SCT cyberJack RFID | `ctrsct32.dll` | :green_heart: | :broken_heart: |
+| SCR 3310 SCM USB SmartCard Leser | `CTPCSC31kv.dll`<sup>[Details](https://github.com/Kaupisch-IT/eGK-KVK/issues/2#issuecomment-1008163064)</sup> | :green_heart: | :green_heart: |
 | ACS ACR39U PocketMate II | `ctacs.dll` | :green_heart: | :broken_heart: |
 | HID Omnikey 3021 USB | `ctcym.dll`/`CTChyCTApiSp.dll`<sup>**)</sup> | :green_heart: | :broken_heart: |
 | HID Omnikey 3121 USB | `ctcym.dll`/`CTChyCTApiSp.dll`<sup>**)</sup> | :green_heart: | :broken_heart: |
