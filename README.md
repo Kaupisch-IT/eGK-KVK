@@ -1,18 +1,18 @@
 # eGK- & PKV-Card/KVK-API (via CTAPI)
 
-Für den Zugriff die **elektronische Gesundheitskarte (eGK)** oder die **Card für Privatversicherte (PKV-Card)** (und bis 2014 auch die *Krankenversichertenkarte (KVK)*) gibt es die [CT-API](https://www.tuvit.de/de/aktuelles/white-paper-downloads/card-terminal-application-programing-interface-fuer-chipkartenanwendungen/) ("CardTerminal Application Programming Interface"). Dafür liefert der Hersteller des Kartenterminals eine (Kartenterminal-spezifische) Programmbibliothek (DLL) mit, die standardisierte Schnittstellen implementiert.
+Für den Zugriff die **elektronische Gesundheitskarte (eGK)** oder die **Card für Privatversicherte (PKV-Card)** (und bis 2014 auch die *Krankenversichertenkarte (KVK)*) gibt es die [CT-API](https://www.tuvit.de/de/aktuelles/white-paper-downloads/card-terminal-application-programing-interface-fuer-chipkartenanwendungen/) („CardTerminal Application Programming Interface“). Dafür liefert der Hersteller des Kartenterminals eine (Kartenterminal-spezifische) Programmbibliothek (DLL) mit, welche die standardisierte Schnittstellen implementiert.
 
-Zwischen den beiden Kartentypen bestehen gravierende Unterschiede, sowohl, was die Hardware betrifft (Speicher- versus Prozessorkarte) als auch bezüglich der Datenstruktur. Während die Daten auf der PKV-Card/KVK ASN.1-kodiert in einem einzigen linearen File abgelegt sind, besitzt die eGK ein hierarchisches Filesystem und verwendet für die Fachdaten, welche auf der eGK
+Zwischen den beiden Kartentypen bestehen gravierende Unterschiede, sowohl was die Hardware betrifft (Speicher- versus Prozessorkarte) als auch bezüglich der Datenstruktur. Während die Daten auf der PKV-Card/KVK ASN.1-kodiert in einem einzigen linearen File abgelegt sind, besitzt die eGK ein hierarchisches Filesystem und verwendet für die Fachdaten, welche auf der eGK
 gzip-komprimiert abgelegt sind, das XML-Format. Der Einlesevorgang für die eGK muss daher anderen Algorithmen folgen als der für die KVK.
 
-Die eGK- & PKV-Card/KVK-API stellt eine einfache Möglichkeit dar, um die elektronische Gesundheitskarte und die Card für Privatversicherte auszulesen.
+Die _Kaupisch IT eGK- & PKV-Card/KVK-API_ stellt eine einfache Möglichkeit dar, um die elektronische Gesundheitskarte und die Card für Privatversicherte auszulesen.
 
 ## Auslesen von Versichertenstammdaten
 Die `CardTerminalClient.ReadCard`-Methode stellt eine Verbindung mit einem Chipkartenterminal her und liest (falls eingesteckt) die Versichertenstammdaten einer eGK oder KVK/PKV-Card aus. Das zurückgegebene `CardResult`-Objekt stellt Informationen bereit, die sich sowohl auf einer eGK als auch auf einer PKV-Card befinden (Kostenträger und Basis-Informationen des Versicherten).
 
 Wenn eine eGK eingelesen wurde, kann über das `EgkResult` auf die _Persönlichen Versichertendaten_ (PD), die _Allgemeinen Versicherungsdaten_ (VD) und die _Geschützten Versichertendaten_ (GVD) aus den Versichertenstammdaten zugegriffen werden; wenn eine PKV-Card eingelesen wurde, kann über das `PkvResult` auf die Krankenversichertendaten zugegriffen werden (eine KVK hat sich genau so verhalten, wie eine PKV-Card).
 
-Für die korrekte Ausführung muss die jeweilige **CTAPI-Bibliothek des verwendeten Chipkarten-Herstellers** eingebunden werden. Zum Aufbau der Verbindung zu einem Kartenterminal muss daher der Pfad zur herstellerspezifischen DLL mit der CT-API-Implementierung angegeben werden (Die Suchreihenfolge der DLL entspricht der normalen DLL-Suchreihenfolge - also erst Anwendungsverzeichnis, dann System-Verzeichnis, dann Windows-Verzeichnis usw.)
+Für die korrekte Ausführung muss die jeweilige **CTAPI-Bibliothek des verwendeten Chipkarten-Herstellers** eingebunden werden. Zum Aufbau der Verbindung zu einem Kartenterminal muss daher der Pfad zur herstellerspezifischen DLL mit der CT-API-Implementierung angegeben werden. (Die Suchreihenfolge der DLL entspricht der normalen DLL-Suchreihenfolge - also erst Anwendungsverzeichnis, dann System-Verzeichnis, dann Windows-Verzeichnis usw.)
 ```csharp
 CardResult result = CardTerminalClient.ReadCard("ctacs.dll");
 if (result.Success)
@@ -21,7 +21,7 @@ if (result.Success)
 }
 ```
 
-Manche Kartenterminals (z.B. das _ingenico ORGA 6141_ oder _ingenico ORGA 930 M_) registrieren einen **COM-Port**. Dieser muss dann ggf. mit spezifiziert werden.
+Manche Kartenterminals (z.B. das _ingenico ORGA 6141_ oder _ingenico ORGA 930 M_) registrieren einen **COM-Port**. Dieser muss dann ggf. ebenfalls mit angegeben werden.
 ```csharp
 CardResult result = CardTerminalClient.ReadCard("ctorg32.dll",portNumber: 4);
 ```
@@ -54,7 +54,7 @@ Folgende Geräte wurden bisher mit der eGK- & KVK-API getestet.<sup> [Weitere ge
 
 <sup>*) Die Angabe des Parameters `portNumber` (Nummer des COM-Ports) ist hier notwendig.</sup>
    
-**CT-API-DLL**: Gegebenenfalls muss der Programm- oder Treiber-Ordners des Herstellers nach DLL-Dateien durchsucht und z.B. mit dem [DLL Export Viewer](https://www.nirsoft.net/utils/dll_export_viewer.html) geguckt werden, welche DLL-Datei die drei Funktionen `CT_init`, `CT_close` und `CT_data` exportiert. Dass sollte dann die richtige DLL-Datei sein, die als Parameter an die `CardTerminalClient`-Klasse übergeben werden muss.
+**CT-API-DLL**: Gegebenenfalls muss der Programm- oder Treiber-Ordners des Herstellers nach DLL-Dateien durchsucht und z.B. mit dem [DLL Export Viewer](https://www.nirsoft.net/utils/dll_export_viewer.html) geguckt werden, welche DLL-Datei die drei Funktionen `CT_init`, `CT_close` und `CT_data` exportiert. Das sollte dann die richtige DLL-Datei sein, die als Parameter an die `CardTerminalClient`-Klasse übergeben werden muss.
 
 <sup>**) Einige Kartelesegeräte stellen keine eigene CT-API-Anbindung (mehr) zur Verfügung, allerdings scheint die CT-API-Implementierung aus den *[Cherry](https://cherry.de/download/de/download.php) CardReaderTools* auch für andere Lesegeräte verwendbar zu sein (zumindest zum Auslesen der eGK).</sup>
 
@@ -98,7 +98,7 @@ public static CardResult ReadCard(string path,ushort portNumber = 1,ushort termi
    }
 }
 ```
-Hinweis: Bei nicht eingesteckter Karte signalsiert der `RequestICC`-Befehl in der Regel keinen Fehler, sondern nur eine Warnung *(6200 - Warning: no card presented within specified time)*; ebenso wird eine Warnung ausgegeben, wenn bereits eine Karte steckte *(6201 - Warning: ICC already present and activated)*.
+Hinweis: Bei nicht eingesteckter Karte signalisiert der `RequestICC`-Befehl in der Regel keinen Fehler, sondern nur eine Warnung *(6200 - Warning: no card presented within specified time)*; ebenso wird eine Warnung ausgegeben, wenn bereits eine Karte steckte *(6201 - Warning: ICC already present and activated)*.
 
 Anhand der Rückgabewerte der `SelectEGK`- bzw. `SelectKVK`-Methoden kann erkannt werden, ob eGK- bzw. PKV-Card/KVK-Daten eingelesen werden kann (also ob es sich bei der eingesteckten Karte um eine elektronische Gesundheitskarte oder um eine Card für Privatversicherte/Krankenversichertenkarte handelt). Einige Geräte quittieren eine Nichtunterstützung der Auslesebefehle jedoch nicht durch entsprechende Rückgabewerte, sondern verursachen eine HTSI-Exception.
 
