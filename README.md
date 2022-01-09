@@ -56,7 +56,7 @@ Folgende Geräte wurden bisher mit der eGK- & KVK-API getestet.<sup> [Weitere ge
    
 **CT-API-DLL**: Gegebenenfalls muss der Programm- oder Treiber-Ordners des Herstellers nach DLL-Dateien durchsucht und z.B. mit dem [DLL Export Viewer](https://www.nirsoft.net/utils/dll_export_viewer.html) geguckt werden, welche DLL-Datei die drei Funktionen `CT_init`, `CT_close` und `CT_data` exportiert. Das sollte dann die richtige DLL-Datei sein, die als Parameter an die `CardTerminalClient`-Klasse übergeben werden muss.
 
-<sup>**) Einige Kartelesegeräte stellen keine eigene CT-API-Anbindung (mehr) zur Verfügung, allerdings scheint die CT-API-Implementierung aus den *[Cherry](https://cherry.de/download/de/download.php) CardReaderTools* auch für andere Lesegeräte verwendbar zu sein (zumindest zum Auslesen der eGK).</sup>
+<sup>**) Einige Kartelesegeräte stellen keine eigene CT-API-Anbindung (mehr) zur Verfügung [Beispiel](https://github.com/Kaupisch-IT/eGK-KVK/issues/1#issuecomment-884084617), allerdings scheint die CT-API-Implementierung aus den *[Cherry](https://cherry.de/download/de/download.php) CardReaderTools* auch für andere Lesegeräte verwendbar zu sein (zumindest zum Auslesen der eGK).</sup>
 
 Test-/Musterkarten:
 * **eGK-Testkarten** können unter [gematik Fachportal Service/Testkarten](https://fachportal.gematik.de/service/testkarten/) beantragt werden.
