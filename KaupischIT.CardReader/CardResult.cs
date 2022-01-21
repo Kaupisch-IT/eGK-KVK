@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 
 namespace KaupischIT.CardReader
@@ -33,7 +34,7 @@ namespace KaupischIT.CardReader
 
 		/// <summary> Die Versicherten-ID ist der 10-stellige unveränderliche Teil der 30-stelligen Krankenversichertennummer. </summary>
 		public string VersichertenID
-			=> this.PkvResult?.VersicherungsNummer 
+			=> this.PkvResult?.VersicherungsNummer
 			?? this.EgkResult?.PersoenlicheVersichertendaten?.Versicherter?.Versicherten_ID;
 
 		/// <summary> Gibt die Versichertenart (Mitglied, Familienversicherter oder Rentner ) des Versicherten gemäß Schlüsseltabelle an. </summary>
@@ -42,19 +43,19 @@ namespace KaupischIT.CardReader
 
 		/// <summary> Gibt die akademischen Grade der Person an, z.B. "Dr.". </summary>
 		public string Titel
-			=> this.PkvResult?.Titel 
+			=> this.PkvResult?.Titel
 			?? this.EgkResult?.PersoenlicheVersichertendaten?.Versicherter?.Person?.Titel;
 
 		/// <summary>
 		/// Alle Vornamen der Person (max. 5) werden eingegeben. Mehrere Vornamen werden durch Leerzeichen oder Bindestrich getrennt.
 		/// </summary>
 		public string Vorname
-			=> this.PkvResult?.VorName 
+			=> this.PkvResult?.VorName
 			?? this.EgkResult?.PersoenlicheVersichertendaten?.Versicherter?.Person?.Vorname;
 
 		/// <summary> Gibt den Nachnamen der Person an. </summary>
 		public string Nachname
-			=> this.PkvResult?.FamilienName 
+			=> this.PkvResult?.FamilienName
 			?? this.EgkResult?.PersoenlicheVersichertendaten?.Versicherter?.Person?.Nachname;
 
 		/// <summary>
@@ -66,7 +67,7 @@ namespace KaupischIT.CardReader
 
 		/// <summary> Gibt die Namenszusätze der Person an, z.B: Freiherr, gemäß entsprechender Schlüsseltabelle. </summary>
 		public string Namenszusatz_Vorsatzwort
-			=> this.PkvResult?.NamensZusatz_VorsatzWort 
+			=> this.PkvResult?.NamensZusatz_VorsatzWort
 			?? Join(this.EgkResult?.PersoenlicheVersichertendaten?.Versicherter?.Person?.Namenszusatz,this.EgkResult?.PersoenlicheVersichertendaten?.Versicherter?.Person?.Vorsatzwort);
 
 		/// <summary> 
@@ -74,12 +75,20 @@ namespace KaupischIT.CardReader
 		/// ACHTUNG: Das Format kann sich je nach Kartentyp unterscheiden (eGK: YYYYMMDD, PVK-Card: MMDDYYYY, KVK: DDMMYYYY)
 		/// </summary>
 		public string Geburtsdatum
-			=> this.PkvResult?.GeburtsDatum 
+			=> this.PkvResult?.GeburtsDatum
 			?? this.EgkResult?.PersoenlicheVersichertendaten?.Versicherter?.Person?.Geburtsdatum;
+
+		/// <summary> 
+		/// Gibt das in ein DateTime-Objekt umgewandelte Geburtsdatum des Versicherten an, das die unterschiedlichen Datumsformate (je nach Kartenart) berücksichtigt
+		/// </summary>
+		public DateTime? GeburtsdatumParsed
+			=> (DateTime.TryParseExact(this.PkvResult?.GeburtsDatum,"MMddyyyy",CultureInfo.InvariantCulture,DateTimeStyles.None,out DateTime result) ? result : (DateTime?)null)
+			?? (DateTime.TryParseExact(this.PkvResult?.GeburtsDatum,"ddMMyyyy",CultureInfo.InvariantCulture,DateTimeStyles.None,out result) ? result : (DateTime?)null)
+			?? (DateTime.TryParseExact(this.EgkResult?.PersoenlicheVersichertendaten?.Versicherter?.Person?.Geburtsdatum,"yyyyMMdd",CultureInfo.InvariantCulture,DateTimeStyles.None,out result) ? result : (DateTime?)null);
 
 		/// <summary> Gibt den Namen der Straße der Person an. </summary>
 		public string Strasse_Hausnummer
-			=> this.PkvResult?.StraßenName_HausNummer 
+			=> this.PkvResult?.StraßenName_HausNummer
 			?? Join(this.EgkResult?.PersoenlicheVersichertendaten?.Versicherter?.Person?.StrassenAdresse?.Strasse,this.EgkResult?.PersoenlicheVersichertendaten?.Versicherter?.Person?.StrassenAdresse?.Hausnummer);
 
 		/// <summary> Gibt das Land zu der Straßen- oder Postfachadresse an (wenn nicht vorhanden: Deutschland). </summary>
@@ -89,12 +98,12 @@ namespace KaupischIT.CardReader
 
 		/// <summary> Gibt die Postleitzahl der Straßen- oder Postfachadresse an. </summary>
 		public string Postleitzahl
-			=> this.PkvResult?.Postleitzahl 
+			=> this.PkvResult?.Postleitzahl
 			?? this.EgkResult?.PersoenlicheVersichertendaten?.Versicherter?.Person?.StrassenAdresse?.Postleitzahl;
 
 		/// <summary> Gibt den Ort zur Straßen- oder Postfachadresse an. </summary>
 		public string Ort
-			=> this.PkvResult?.OrtsName 
+			=> this.PkvResult?.OrtsName
 			?? this.EgkResult?.PersoenlicheVersichertendaten?.Versicherter?.Person?.StrassenAdresse?.Ort;
 
 		/// <summary> 
