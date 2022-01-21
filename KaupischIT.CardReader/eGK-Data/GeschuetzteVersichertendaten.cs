@@ -3,6 +3,9 @@ using System.Xml.Serialization;
 
 namespace KaupischIT.CardReader.Egk.GeschuetzteVersichertendaten
 {
+	/// <summary>
+	/// Container für Geschützte Versichertendaten (GVD)
+	/// </summary>
 	[Serializable]
 	[XmlType(AnonymousType = true)]
 	[XmlRoot("UC_GeschuetzteVersichertendatenXML",IsNullable = false)]
@@ -42,22 +45,14 @@ namespace KaupischIT.CardReader.Egk.GeschuetzteVersichertendaten
 		public string DMP_Kennzeichnung { get; set; }
 
 		/// <summary> 
-		/// Gibt an, ob für den Versicherten ein ärztlicher Selektivvertrag vorliegt.
-		/// Dieses Datenfeld ist besonders schützenswert und daher nicht frei auslesbar, sondern nur berechtigten Personen zugänglich.
-		/// Schlüsselverzeichnis:
-		/// 1 = ärztlicher Selektivvertrag liegt vor
-		/// 0 = ärztlicher Selektivvertrag liegt nicht vor
-		/// 9 = ärztliches Selektivvertragskennzeichen wird nicht genutzt
+		/// Gibt an, ob für den Versicherten Selektivverträge vorliegen.
 		/// (nur v5.2)
 		/// </summary>
 		[XmlElement("Selektivvertraege")]
 		public Selektivvertraege Selektivvertraege { get; set; }
 
 		/// <summary> 
-		/// Dieses Feld dient ausschließlich zur Angabe des ruhenden Leistungsanpruchs nach § 16 Abs. 3a und § 16 Abs. 1 bis 3 SGB V.
-		/// Mögliche Ausprägungen des ruhenden Leistungsanspruchs sind:
-		/// 1 = vollständig
-		/// 2 = eingeschränkt
+		/// Angabe des ruhenden Leistungsanpruchs
 		/// (nur v5.2)
 		/// </summary>
 		[XmlElement("RuhenderLeistungsanspruch")]

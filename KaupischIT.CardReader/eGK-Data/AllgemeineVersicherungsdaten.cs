@@ -4,12 +4,14 @@ using System.Xml.Serialization;
 
 namespace KaupischIT.CardReader.Egk.AllgemeineVersicherungsdaten
 {
+	/// <summary>
+	/// Container für Allgemeine Versicherungsdaten (VD)
+	/// </summary>
 	[Serializable]
 	[XmlType(AnonymousType = true)]
 	[XmlRoot("UC_AllgemeineVersicherungsdatenXML",IsNullable = false)]
 	public class AllgemeineVersicherungsdaten
 	{
-		/// <summary> Die Versicherten-ID ist der 10-stellige unveränderliche Teil der 30-stelligen Krankenversichertennummer. </summary>
 		[XmlElement("Versicherter")]
 		public Versicherter Versicherter { get; set; }
 
@@ -23,10 +25,6 @@ namespace KaupischIT.CardReader.Egk.AllgemeineVersicherungsdaten
 	[XmlType(AnonymousType = true)]
 	public class Versicherter
 	{
-		/// <summary>
-		/// Gibt den Beginn des Versicherungsschutzes (hier: Leistungsanspruch) des Versicherten bei dem unter Klasse Kostenträger angegebenen Kostenträger an. 
-		/// Format: YYYYMMDD (ISO-8601)
-		/// </summary>
 		[XmlElement("Versicherungsschutz")]
 		public Versicherungsschutz Versicherungsschutz { get; set; }
 
@@ -58,7 +56,7 @@ namespace KaupischIT.CardReader.Egk.AllgemeineVersicherungsdaten
 		[XmlElement("Ende")]
 		public string Ende { get; set; }
 
-		/// <summary> Gibt den Kostenträger des Versicherten an. Es handelt sich um das bundesweit gültige Institutions-Kennzeichen (IK) des jeweiligen Kostenträgers. </summary>
+		/// <summary> Gibt den Kostenträger des Versicherten an. </summary>
 		[XmlElement("Kostentraeger")]
 		public Kostentraeger Kostentraeger { get; set; }
 	}
@@ -122,7 +120,6 @@ namespace KaupischIT.CardReader.Egk.AllgemeineVersicherungsdaten
 		[XmlElement("Versichertenstatus_RSA")]
 		public string Versichertenstatus_RSA { get; set; }
 
-		/// <summary> Gibt an, ob der Versicherte die Kostenerstattung für ambulante Behandlung nach § 13 SGB V gewählt hat. </summary>
 		[XmlElement("Zusatzinfos_Abrechnung_GKV")]
 		public Zusatzinfos_Abrechnung_GKV Zusatzinfos_Abrechnung_GKV { get; set; }
 	}
@@ -184,10 +181,7 @@ namespace KaupischIT.CardReader.Egk.AllgemeineVersicherungsdaten
 		public string PKV_Verbandstarif { get; set; }
 
 		/// <summary>
-		/// Gibt den Anspruch des Versicherten auf Beihilfe an. Mögliche Werte:
-		/// 01 = Beihilfe
-		/// 02 = Postbeamtenkrankenkasse (PBeaKK)
-		/// 03 = Krankenversorgung der Bundesbahnbeamten (KVB)
+		/// Gibt den Anspruch des Versicherten auf Beihilfe an.
 		/// </summary>
 		[XmlElement("Beihilfeberechtigung")]
 		public Beihilfeberechtigung Beihilfeberechtigung { get; set; }

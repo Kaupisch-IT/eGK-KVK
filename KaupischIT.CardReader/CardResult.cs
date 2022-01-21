@@ -69,7 +69,10 @@ namespace KaupischIT.CardReader
 			=> this.PkvResult?.NamensZusatz_VorsatzWort 
 			?? Join(this.EgkResult?.PersoenlicheVersichertendaten?.Versicherter?.Person?.Namenszusatz,this.EgkResult?.PersoenlicheVersichertendaten?.Versicherter?.Person?.Vorsatzwort);
 
-		/// <summary> Gibt das Geburtsdatum des Versicherten in dem Format "YYYYMMDD" (ISO-8601)  an. </summary>
+		/// <summary> 
+		/// Gibt das Geburtsdatum des Versicherten an.
+		/// ACHTUNG: Das Format kann sich je nach Kartentyp unterscheiden (eGK: YYYYMMDD, PVK-Card: MMDDYYYY, KVK: DDMMYYYY)
+		/// </summary>
 		public string Geburtsdatum
 			=> this.PkvResult?.GeburtsDatum 
 			?? this.EgkResult?.PersoenlicheVersichertendaten?.Versicherter?.Person?.Geburtsdatum;
@@ -94,7 +97,10 @@ namespace KaupischIT.CardReader
 			=> this.PkvResult?.OrtsName 
 			?? this.EgkResult?.PersoenlicheVersichertendaten?.Versicherter?.Person?.StrassenAdresse?.Ort;
 
-		/// <summary> Gibt bei befristeter Gültigkeit der Karte den Monat des Fristablaufs an. Üblich bei ausreichend langer Mitgliedschaft sind Gültigkeitsdauern von fünf bis zehn Jahren oder auch mehr. </summary>	
+		/// <summary> 
+		/// Gibt bei befristeter Gültigkeit der Karte den Monat des Fristablaufs an. Üblich bei ausreichend langer Mitgliedschaft sind Gültigkeitsdauern von fünf bis zehn Jahren oder auch mehr. 
+		/// ACHTUNG: Das Format kann sich je nach Kartentyp unterscheiden (eGK: YYYYMMDD, PKV-Card & KVK: MMYY) 
+		/// </summary>	
 		public string VersicherungsschutzEnde
 			=> this.PkvResult?.GültigkeitsDatum
 			?? this.EgkResult?.AllgemeineVersicherungsdaten?.Versicherter?.Versicherungsschutz?.Ende;

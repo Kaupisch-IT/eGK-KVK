@@ -4,13 +4,15 @@ using System.Xml.Serialization;
 
 namespace KaupischIT.CardReader.Egk.PersoenlicheVersichertendaten
 {
+	/// <summary>
+	/// Container für Persönliche Versichertendaten (PD)
+	/// </summary>
 	[Serializable]
 	[XmlType(AnonymousType = true)]
 	[XmlRoot("UC_PersoenlicheVersichertendatenXML",IsNullable = false)]
 	[DebuggerDisplay("{Versicherter.Versicherten_ID} {Versicherter.Person.Vorname} {Versicherter.Person.Nachname}")]
 	public class PersoenlicheVersichertendaten
 	{
-		/// <summary> Die Versicherten-ID ist der 10-stellige unveränderliche Teil der 30-stelligen Krankenversichertennummer. </summary>
 		[XmlElement("Versicherter")]
 		public Versicherter Versicherter { get; set; }
 
@@ -29,7 +31,6 @@ namespace KaupischIT.CardReader.Egk.PersoenlicheVersichertendaten
 		[XmlElement("Versicherten_ID")]
 		public string Versicherten_ID { get; set; }
 
-		/// <summary> Gibt das Geburtsdatum des Versicherten in dem Format "YYYYMMDD" (ISO-8601)  an. </summary>
 		[XmlElement("Person")]
 		public Person Person { get; set; }
 	}
@@ -75,11 +76,11 @@ namespace KaupischIT.CardReader.Egk.PersoenlicheVersichertendaten
 		[XmlElement("Titel")]
 		public string Titel { get; set; }
 
-		/// <summary> Gibt die Postleitzahl der Straßen- oder Postfachadresse an. </summary>
+		/// <summary> Gibt die Postfachadresse an. </summary>
 		[XmlElement("PostfachAdresse")]
 		public PostfachAdresse PostfachAdresse { get; set; }
 
-		/// <summary> Gibt die Postleitzahl der Straßen- oder Postfachadresse an. </summary>
+		/// <summary> Gibt die Straßenadresse an. </summary>
 		[XmlElement("StrassenAdresse")]
 		public StrassenAdresse StrassenAdresse { get; set; }
 	}

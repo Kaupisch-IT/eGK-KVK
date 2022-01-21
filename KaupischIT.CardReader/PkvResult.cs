@@ -131,7 +131,10 @@ namespace KaupischIT.CardReader
 		public string FamilienName
 			=> this[0x87];
 
-		/// <summary> Gibt das Geburtsdatum an. </summary>
+		/// <summary>
+		/// Gibt das Geburtsdatum an. 
+		/// ACHTUNG: Das Format kann sich je nach Kartentyp unterscheiden (PVK-Card: MMDDYYYY, KVK: DDMMYYYY)
+		/// </summary>
 		public string GeburtsDatum
 			=> this[0x88];
 
@@ -151,7 +154,10 @@ namespace KaupischIT.CardReader
 		public string OrtsName
 			=> this[0x8C];
 
-		/// <summary> Gibt bei befristeter Gültigkeit der Karte den Monat des Fristablaufs an. Üblich bei ausreichend langer Mitgliedschaft sind Gültigkeitsdauern von fünf bis zehn Jahren oder auch mehr. </summary>	
+		/// <summary>
+		/// Gibt bei befristeter Gültigkeit der Karte den Monat des Fristablaufs an. Üblich bei ausreichend langer Mitgliedschaft sind Gültigkeitsdauern von fünf bis zehn Jahren oder auch mehr. 
+		/// Format: MMYY
+		/// </summary>	
 		public string GültigkeitsDatum
 			=> this[0x8D];
 	}
